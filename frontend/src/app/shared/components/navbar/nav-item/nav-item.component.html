@@ -1,0 +1,16 @@
+<a *ngIf="!dropdown"
+    [routerLink]="baseLink + '/' + link"
+    class="nav-link text-black px-3 py-2"
+>
+    {{ name }}
+</a>
+<a
+    *ngIf="dropdown"
+    class="nav-link text-black px-3 py-2 d-flex justify-content-between align-items-center"
+>
+    {{ name }}
+    <i 
+        [@rotate]="isExpanded ? 'shown' : 'hidden'"
+        class="fa fa-angle-right"
+    ></i>
+</a>

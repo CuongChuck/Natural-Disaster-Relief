@@ -1,0 +1,30 @@
+<nav-item
+    [name]="name"
+    [dropdown]="true"
+    [isExpanded]="isExpanded"
+    data-bs-toggle="collapse"
+    [attr.href]="'#' + name + 'Menu'"
+    (click)="isExpanded = !isExpanded"
+    role="button"
+    aria-expanded="false"
+    [attr.aria-controls]="name + 'Menu'"
+/>
+<ul 
+    class="collapse ps-4" 
+    [attr.id]="name + 'Menu'"
+>
+    <li *ngFor="let child of itemList" class="nav-item">
+        <nav-item
+            *ngIf="!child.children.length"
+            [name]="child.name"
+            [baseLink]="baseLink"
+            [link]="child.link"
+        />
+        <dropdown-list-item
+            *ngIf="child.children.length"
+            [itemList]="child.children"
+            [name]="child.name"
+            [baseLink]="baseLink + '/' + child.link"
+        />
+    </li>
+</ul>
