@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 const env = require('../../../../core/config/env');
 
-const IUserSignIn = require('./users.interface-signin.js');
+const IUserSignInService = require('./users.interface-signin');
 const { db } = require('../../../../core/models');
 
-class UserSignInJwtService extends IUserSignIn {
+class UserSignInJwtService extends IUserSignInService {
   constructor({ userRepository }) {
     super();
     this.userRepository = userRepository;

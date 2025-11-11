@@ -1,6 +1,6 @@
-class IUserSignIn {
+class IUserSignInService {
   constructor() {
-    if (new.target === IUserSignIn) {
+    if (new.target === IUserSignInService) {
       throw new Error('Cannot instantiate interface.');
     }
   }
@@ -10,4 +10,4 @@ class IUserSignIn {
   }
 }
 
-module.exports = IUserSignIn;
+module.exports = IUserSignInService;
