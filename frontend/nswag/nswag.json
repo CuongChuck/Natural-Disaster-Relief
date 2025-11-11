@@ -1,0 +1,38 @@
+{
+  "runtime": "Net60",
+  "documentGenerator": {
+    "fromSwagger": {
+      "url": "https://localhost:5001/swagger/v1/swagger.json"
+    }
+  },
+  "codeGenerators": {
+    "openApiToTypeScriptClient": {
+      "className": "{controller}ServiceProxy",
+      "moduleName": "",
+      "namespace": "",
+      "typeScriptVersion": 4.9,
+      "template": "Angular",
+      "httpClass": "HttpClient",
+      "injectionTokenType": "OpaqueToken",
+      "rxJsVersion": 7,
+      "dateTimeType": "string",
+      "output": "src/shared/service-proxies/service-proxies.ts",
+      "generateClientClasses": true,
+      "generateClientInterfaces": false,
+      "generateOptionalParameters": true,
+      "generateDefaultValues": true,
+      "typeStyle": "Interface",
+      "enumStyle": "Enum",
+      "wrapDtoExceptions": true,
+      "useAbortSignal": true,
+      "serviceHost": "",
+      "baseUrlTokenName": "API_BASE_URL",
+      "queryNullValue": "",
+      "protectedMethods": [],
+      "useGetBaseUrlMethod": true,
+      "generateConstructorInterface": false,
+      "markOptionalProperties": true,
+      "nullValue": "undefined"
+    }
+  }
+}

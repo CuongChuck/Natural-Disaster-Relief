@@ -1,0 +1,30 @@
+<!-- Toggle button -->
+<button class="btn btn-primary m-3" type="button"
+        data-bs-toggle="offcanvas" data-bs-target="#sidebar"
+        aria-controls="sidebar">
+  ☰ Menu <i class="fa fa-angle-down"></i>
+</button>
+
+<!-- Sidebar -->
+<div class="offcanvas offcanvas-start bg-white text-black" tabindex="-1" id="sidebar">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title">Relief Dashboard</h5>
+        <button type="button" class="btn-close btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <ul class="nav flex-column">
+        <li *ngFor="let item of tags" class="nav-item">
+            <nav-item
+                *ngIf="!item.children.length"
+                [name]="item.name"
+                [link]="item.link"
+            />
+            <dropdown-list-item
+                *ngIf="item.children.length"
+                [itemList]="item.children"
+                [name]="item.name"
+                [baseLink]="'/' + item.link"
+            />
+        </li>
+    </ul>
+</div>
