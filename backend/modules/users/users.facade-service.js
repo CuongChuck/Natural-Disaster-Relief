@@ -1,11 +1,15 @@
 class UserFacadeService {
-  constructor({ userRegisterJwtService, userSignInJwtService }) {
+  constructor({ userRegisterJwtService, userSignInJwtService, userEditService }) {
     this.registerStrategy = {
       jwt: userRegisterJwtService
     };
 
     this.signInStrategy = {
       jwt: userSignInJwtService
+    };
+
+    this.editStrategy = {
+      main: userEditService
     };
   }
 
@@ -20,7 +24,7 @@ class UserFacadeService {
         role: data.role
       });
       return {
-        message: `User registered via ${data.strategy} strategy`,
+        message: `User registered via ${data.strategy} strategy successfully`,
         user, token
       };
     }
@@ -31,15 +35,15 @@ class UserFacadeService {
 
   async signInUser(data) {
     try {
-      const strategy = this.signInStrategy(data.strategy);
+      const strategy = this.signInStrategy[data.strategy];
       const { user, token } = await strategy.signInUser({
         username: data.username,
         password: data.password
       });
       return {
-        message: `User signed in via ${data.strategy} strategy`,
+        message: `User signed in via ${data.strategy} strategy successfully`,
         user, token
-      }
+      };
     }
     catch (err) {
       throw err;
@@ -48,7 +52,17 @@ class UserFacadeService {
 
   async editUser(data) {
     try {
-
+      const strategy = this.editStrategy['main'];
+      const user = await strategy.editUser({
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password
+      });
+      return {
+        message: `User signed in via ${data.strategy} strategy successfully`,
+        user
+      };
     }
     catch (err) {
       throw err;

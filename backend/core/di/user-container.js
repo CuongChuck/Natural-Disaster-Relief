@@ -5,6 +5,7 @@ const UserSqlRepository = require('../../modules/users/repository/users.sql-repo
 const UserFacadeService = require('../../modules/users/users.facade-service');
 const UserRegisterJwtService = require('../../modules/users/service/register/users.register-jwt-service');
 const UserSignInJwtService = require('../../modules/users/service/signin/users.signin-jwt-service');
+const UserEditService = require('../../modules/users/service/edit/users.edit-service');
 const UserController = require('../../modules/users/users.controller');
 
 const container = createContainer();
@@ -17,6 +18,7 @@ container.register({
   userFacade: asClass(UserFacadeService).scoped(),
   userRegisterJwtService: asClass(UserRegisterJwtService).scoped(),
   userSignInJwtService: asClass(UserSignInJwtService).scoped(),
+  userEditService: asClass(UserEditService).scoped(),
   userController: asClass(UserController).scoped()
 });
 

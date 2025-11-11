@@ -12,6 +12,10 @@ class IUserRepository {
   async findByUsername() {
     throw new Error('Method not implemented.');
   }
+
+  async updateUser() {
+    throw new Error('Method not implemented.');
+  }
 }
 
 module.exports = IUserRepository;

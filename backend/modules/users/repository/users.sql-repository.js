@@ -19,10 +19,25 @@ class UserSqlRepository extends IUserRepository {
 
   async findByUsername(username, transaction) {
     try {
-      return await this.userModel.findOne({ where: { username: username } });
+      return await this.userModel.findOne({ where: { username: username } }, { transaction });
     }
     catch (err) {
       throw new Error("User retrieval failed: " + err.message);
+    }
+  }
+
+  async updateUser({ id, name, username, email, password }, transaction) {
+    try {
+      await this.userModel.update({
+        name: name,
+        username: username,
+        email: email,
+        password: password
+      }, { transaction });
+      return await this.userModel.findByPk(id, { transaction });
+    }
+    catch (err) {
+      throw new Error("User profile update failed: " + err.message);
     }
   }
 }
