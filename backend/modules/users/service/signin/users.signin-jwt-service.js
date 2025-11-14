@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const env = require('../../../../core/config/env');
+const fs = require('fs');
 
 const IUserSignInService = require('./users.interface-signin');
 const { db } = require('../../../../core/models');
@@ -12,12 +12,13 @@ class UserSignInJwtService extends IUserSignInService {
 
   async signInUser({ username, password }) {
     const transaction = db.sequelize.transaction();
+    const privateKey = fs.readFileSync('../../../../private.key');
     try {
       const user = await this.userRepository.findByUsername(username, transaction);
       await transaction.commit();
       return { user, token: jwt.sign(
         { id: user.id, role: user.role },
-        env.PRIVATE_KEY,
+          privateKey,
         { expiresIn: '2h', algorithm: 'RS256' }
       ) };
     }
