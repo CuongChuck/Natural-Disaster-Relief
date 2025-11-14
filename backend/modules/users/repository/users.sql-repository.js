@@ -40,6 +40,15 @@ class UserSqlRepository extends IUserRepository {
       throw new Error("User profile update failed: " + err.message);
     }
   }
+
+  async deleteUser({ id }, transaction) {
+    try {
+      await this.userModel.delete({ where: { id: id } }, { transaction });
+    }
+    catch (err) {
+      throw new Error("User deletion failed: " + err.message);
+    }
+  }
 }
 
 module.exports = UserSqlRepository;

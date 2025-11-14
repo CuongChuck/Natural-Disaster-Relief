@@ -43,6 +43,16 @@ class UserController {
       res.status(500).json({ error: err.message });
     }
   };
+
+  delete = async (req, res, next) => {
+    try {
+      const result = await this.userFacade.deleteUser(req.body);
+      res.status(200).json({ message: result.message });
+    }
+    catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
 }
 
 module.exports = UserController;

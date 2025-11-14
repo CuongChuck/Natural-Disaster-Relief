@@ -1,5 +1,12 @@
 class UserFacadeService {
-  constructor({ userRegisterJwtService, userSignInJwtService, userEditService }) {
+  constructor({
+                userRegisterJwtService,
+                userSignInJwtService,
+                userEditService,
+                userAdminEditService,
+                userDeleteService,
+                userAdminDeleteService
+  }) {
     this.registerStrategy = {
       jwt: userRegisterJwtService
     };
@@ -9,7 +16,13 @@ class UserFacadeService {
     };
 
     this.editStrategy = {
-      main: userEditService
+      admin: userAdminEditService,
+      nonAdmin: userEditService
+    };
+
+    this.deleteStrategy = {
+      admin: userAdminDeleteService,
+      nonAdmin: userDeleteService
     };
   }
 
@@ -54,6 +67,7 @@ class UserFacadeService {
     try {
       const strategy = this.editStrategy['main'];
       const user = await strategy.editUser({
+        token: data.token,
         name: data.name,
         username: data.username,
         email: data.email,
@@ -63,6 +77,18 @@ class UserFacadeService {
         message: `User signed in via ${data.strategy} strategy successfully`,
         user
       };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+  async deleteUser(data) {
+    try {
+      const strategyId = data.strategy === 'admin' ? data.strategy : 'nonAdmin';
+      const strategy = this.deleteStrategy[strategyId];
+      await strategy.deleteUser({ token: data.token });
+      return { message: `User deleted via ${strategyId} strategy successfully` };
     }
     catch (err) {
       throw err;
