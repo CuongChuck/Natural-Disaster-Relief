@@ -1,5 +1,6 @@
 'use strict';
-module.exports = (sequelize, DataTypes, Model) => {
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
   class User extends Model {
     /**
      * Helper method for defining associations.
@@ -9,9 +10,15 @@ module.exports = (sequelize, DataTypes, Model) => {
     static associate(models) {
       User.hasMany(models['Supply']);
       User.hasMany(models['Request']);
+      User.belongsToMany(models['Event'], { through: 'UserEvent' });
     }
   }
   User.init({
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      primaryKey: true,
+      autoIncrement: true
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -26,6 +33,7 @@ module.exports = (sequelize, DataTypes, Model) => {
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         isEmail: true
       }
@@ -34,13 +42,34 @@ module.exports = (sequelize, DataTypes, Model) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isNumeric: true,
+        len: [10,10]
+      }
+    },
+    ward: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city_province: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     role: {
-      type: DataTypes.ENUM('admin', 'recipient', 'donor', 'volunteer'),
+      type: DataTypes.ENUM('ADMIN', 'RECIPIENT', 'DONOR', 'VOLUNTEER'),
       allowNull: false
     }
   }, {
     sequelize,
     modelName: 'User',
+    tableName: 'Users'
   });
   return User;
 };
