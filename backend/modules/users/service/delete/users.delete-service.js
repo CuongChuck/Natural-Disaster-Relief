@@ -1,8 +1,8 @@
-const fs = require('fs');
-const jwt = require('jsonwebtoken');
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
 
-const IUserDeleteService = require('./users.interface-delete');
-const { db } = require('../../../../core/models');
+import IUserDeleteService from './users.interface-delete.js';
+import db from '../../../../core/models/index.js';
 
 class UserDeleteService extends IUserDeleteService {
   constructor({ userRepository }) {
@@ -25,4 +25,4 @@ class UserDeleteService extends IUserDeleteService {
   }
 }
 
-module.exports = UserDeleteService;
+export default UserDeleteService;

@@ -1,5 +1,5 @@
-const IUserDeleteService = require('./users.interface-delete');
-const { db } = require('../../../../core/models');
+import IUserDeleteService from './users.interface-delete.js';
+import db from '../../../../core/models/index.js';
 
 class UserAdminDeleteService extends IUserDeleteService {
   constructor({ userRepository }) {
@@ -20,4 +20,4 @@ class UserAdminDeleteService extends IUserDeleteService {
   }
 }
 
-module.exports = UserAdminDeleteService;
+export default UserAdminDeleteService;
