@@ -5,17 +5,17 @@ class IUserRepository {
     }
   }
 
-  async createUser() {
+  async createUser(data, transaction) {
     throw new Error('Method not implemented.');
   }
 
-  async findByUsername() {
+  async findByUsername(data, transaction) {
     throw new Error('Method not implemented.');
   }
 
-  async updateUser() {
+  async updateUser(data, transaction) {
     throw new Error('Method not implemented.');
   }
 }
 
-module.exports = IUserRepository;
+export default IUserRepository;
