@@ -56,7 +56,7 @@ class UserFacadeService {
 
   async editUser(data) {
     try {
-      const strategy = this.editStrategy['main'];
+      const strategy = this.editStrategy[data.strategy];
       const user = await strategy.editUser(data);
       return {
         message: `User signed in via ${data.strategy} strategy successfully`,
