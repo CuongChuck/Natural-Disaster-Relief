@@ -1,25 +1,33 @@
-const IUserRepository = require('../users.interface-repository');
-const bcrypt = require('bcryptjs');
+import IUserRepository from './users.interface-repository.js';
 
 class UserSqlRepository extends IUserRepository {
-  constructor({ userModel }) {
+  constructor({ User }) {
     super();
-    this.userModel = userModel;
+    this.User = User;
   }
 
-  async createUser({ name, username, email, password, role }, transaction){
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async createUser(data, transaction){
     try {
-      return await this.userModel.create({ name: name, username: username, email: email, password: hashedPassword, role: role }, { transaction });
+      return await this.User.create({
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        ward: data.ward,
+        district: data.district,
+        city_province: data.city_province,
+        role: data.role
+      }, { transaction });
     }
     catch (err) {
       throw new Error("User creation failed: " + err.message);
     }
   }
 
-  async findByUsername(username, transaction) {
+  async findByUsername(data, transaction) {
     try {
-      return await this.userModel.findOne({ where: { username: username } }, { transaction });
+      return await this.User.findOne({ where: { username: data.username } }, { transaction });
     }
     catch (err) {
       throw new Error("User retrieval failed: " + err.message);
@@ -28,13 +36,13 @@ class UserSqlRepository extends IUserRepository {
 
   async updateUser({ id, name, username, email, password }, transaction) {
     try {
-      await this.userModel.update({
+      await this.User.update({
         name: name,
         username: username,
         email: email,
         password: password
       }, { transaction });
-      return await this.userModel.findByPk(id, { transaction });
+      return await this.User.findByPk(id, { transaction });
     }
     catch (err) {
       throw new Error("User profile update failed: " + err.message);
@@ -43,7 +51,7 @@ class UserSqlRepository extends IUserRepository {
 
   async deleteUser({ id }, transaction) {
     try {
-      await this.userModel.delete({ where: { id: id } }, { transaction });
+      await this.User.delete({ where: { id: id } }, { transaction });
     }
     catch (err) {
       throw new Error("User deletion failed: " + err.message);
@@ -51,4 +59,4 @@ class UserSqlRepository extends IUserRepository {
   }
 }
 
-module.exports = UserSqlRepository;
+export default UserSqlRepository;
