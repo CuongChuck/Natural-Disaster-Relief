@@ -33,7 +33,10 @@ class UserController {
 
   edit = async (req, res, next) => {
     try {
-      const result = await this.userFacade.editUser(req.body);
+      const token = req.headers['token'];
+      const data = req.body;
+      data.token = token;
+      const result = await this.userFacade.editUser(data);
       res.status(200).json({
         message: result.message,
         user: result.user
@@ -55,4 +58,4 @@ class UserController {
   };
 }
 
-module.exports = UserController;
+export default UserController;
