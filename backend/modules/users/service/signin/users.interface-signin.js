@@ -5,9 +5,9 @@ class IUserSignInService {
     }
   }
 
-  async signInUser() {
+  async signInUser(data) {
     throw new Error('Method not implemented.');
   }
 }
 
-module.exports = IUserSignInService;
+export default IUserSignInService;

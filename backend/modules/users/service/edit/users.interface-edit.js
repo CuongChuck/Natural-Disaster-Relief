@@ -5,9 +5,9 @@ class IUserEditService {
     }
   }
 
-  async editUser() {
+  async editUser(data) {
     throw new Error('Method not implemented.');
   }
 }
 
-module.exports = IUserEditService;
+export default IUserEditService;

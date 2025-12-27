@@ -10,4 +10,4 @@ class IUserDeleteService {
   }
 }
 
-module.exports = IUserDeleteService;
+export default IUserDeleteService;

@@ -5,9 +5,9 @@ class IUserRegisterService {
     }
   }
 
-  async registerUser() {
+  async registerUser(data) {
     throw new Error('Method not implemented.');
   }
 }
 
-module.exports = IUserRegisterService;
+export default IUserRegisterService;
