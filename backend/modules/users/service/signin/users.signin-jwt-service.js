@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
 import bcrypt from 'bcryptjs';
-import { fileURLToPath } from 'url';
-import path from 'path';
 
 import IUserSignInService from './users.interface-signin.js';
 import db from '../../../../core/models/index.js';
@@ -16,9 +13,7 @@ class UserSignInJwtService extends IUserSignInService {
   async signInUser(data) {
     const transaction = await db.sequelize.transaction();
     try {
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = path.dirname(__filename);
-      const privateKey = fs.readFileSync(path.resolve(__dirname, '../../../../private.key'), 'utf-8');
+      const privateKey = process.env.PRIVATE_KEY;
       const user = await this.userRepository.findByUsername(data, transaction);
       if (!user) {
         throw new Error("Username or password is incorrect.");

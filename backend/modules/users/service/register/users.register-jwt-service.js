@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import path from 'path';
 
 import IUserRegisterService from './users.interface-register.js';
 import db from '../../../../core/models/index.js';
@@ -16,9 +13,7 @@ class UserRegisterJwtService extends IUserRegisterService {
   async registerUser(data) {
     const transaction = await db.sequelize.transaction();
     try {
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = path.dirname(__filename);
-      const privateKey = fs.readFileSync(path.resolve(__dirname, '../../../../private.key'), 'utf-8');
+      const privateKey = process.env.PRIVATE_KEY;
       data.password = await bcrypt.hash(data.password, 10);
       const user = await this.userRepository.createUser(data, transaction);
       await transaction.commit();
