@@ -1,12 +1,13 @@
-const express = require('express');
+import express from 'express';
 
-const container = require('../../core/di/user-container');
+import container from '../../core/di/user-container.js';
 
 const router = express.Router();
 const userController = container.resolve('userController');
 
-router.post('/register', userController.register);
-router.get('/auth', userController.signIn);
-router.put('/edit', userController.edit);
+router.post('/user/register', userController.register);
+router.get('/user/auth', userController.signIn);
+router.put('/user/edit', userController.edit);
+router.put('/user/delete', userController.delete);
 
-module.exports = router;
+export default router;
