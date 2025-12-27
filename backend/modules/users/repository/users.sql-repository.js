@@ -34,15 +34,20 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  async updateUser({ id, name, username, email, password }, transaction) {
+  async updateUser(data, transaction) {
     try {
       await this.User.update({
-        name: name,
-        username: username,
-        email: email,
-        password: password
-      }, { transaction });
-      return await this.User.findByPk(id, { transaction });
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        ward: data.ward,
+        district: data.district,
+        city_province: data.city_province,
+        role: data.role
+      }, { where: { id: data.id }, transaction });
+      return await this.User.findByPk(data.id, { transaction });
     }
     catch (err) {
       throw new Error("User profile update failed: " + err.message);
