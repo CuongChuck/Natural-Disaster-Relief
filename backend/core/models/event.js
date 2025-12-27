@@ -1,8 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
   class Event extends Model {
     /**
      * Helper method for defining associations.
@@ -11,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Event.belongsToMany(models['Supply'], { through: 'SupplyEvent' });
+      Event.belongsToMany(models['User'], { through: 'UserEvent' });
     }
   }
   Event.init({
@@ -22,8 +21,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false
     },
-    location: {
-      type: DataTypes.TEXT,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    ward: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city_province: {
+      type: DataTypes.STRING,
       allowNull: false
     }
   }, {
