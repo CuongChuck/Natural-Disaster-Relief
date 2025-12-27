@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: Natural Disaster Relief System API
+  version: 1.0.0
+  description: API documentation for Natural Disaster Relief System
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /user/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: User signed in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User registered via jwt strategy successfully"
+                  token:
+                    type: string
+                    description: RS256 JWT token
+                  user:
+                    $ref: '#/components/schemas/User'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /user/auth:
+    get:
+      summary: User login
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                strategy:
+                  type: string
+      responses:
+        200:
+          description: User signed in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User signed via jwt strategy successfully"
+                  token:
+                    type: string
+                    description: RS256 JWT token
+                  user:
+                    $ref: '#/components/schemas/User'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        email: { type: string }
+        password: { type: string }
+        strategy: { type: string }
+        name: { type: string }
+        username: { type: string }
+        phone: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+        role: { type: string }
