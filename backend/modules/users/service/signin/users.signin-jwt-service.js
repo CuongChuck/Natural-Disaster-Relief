@@ -1,8 +1,11 @@
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
+import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import bcrypt from 'bcryptjs';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const IUserSignInService = require('./users.interface-signin');
-const { db } = require('../../../../core/models');
+import IUserSignInService from './users.interface-signin.js';
+import db from '../../../../core/models/index.js';
 
 class UserSignInJwtService extends IUserSignInService {
   constructor({ userRepository }) {
@@ -10,11 +13,20 @@ class UserSignInJwtService extends IUserSignInService {
     this.userRepository = userRepository;
   }
 
-  async signInUser({ username, password }) {
-    const transaction = db.sequelize.transaction();
-    const privateKey = fs.readFileSync('../../../../private.key');
+  async signInUser(data) {
+    const transaction = await db.sequelize.transaction();
     try {
-      const user = await this.userRepository.findByUsername(username, transaction);
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      const privateKey = fs.readFileSync(path.resolve(__dirname, '../../../../private.key'), 'utf-8');
+      const user = await this.userRepository.findByUsername(data, transaction);
+      if (!user) {
+        throw new Error("Username or password is incorrect.");
+      }
+      const isMatch = await bcrypt.compare(data.password, user.password);
+      if (!isMatch) {
+        throw new Error("Username or password is incorrect.");
+      }
       await transaction.commit();
       return { user, token: jwt.sign(
         { id: user.id, role: user.role },
@@ -29,4 +41,4 @@ class UserSignInJwtService extends IUserSignInService {
   }
 }
 
-module.exports = UserSignInJwtService;
+export default UserSignInJwtService;

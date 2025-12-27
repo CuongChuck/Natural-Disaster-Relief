@@ -1,8 +1,11 @@
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const IUserRegisterService = require('./users.interface-register');
-const { db } = require('../../../../core/models');
+import IUserRegisterService from './users.interface-register.js';
+import db from '../../../../core/models/index.js';
 
 class UserRegisterJwtService extends IUserRegisterService {
   constructor({ userRepository }) {
@@ -10,11 +13,14 @@ class UserRegisterJwtService extends IUserRegisterService {
     this.userRepository = userRepository;
   }
 
-  async registerUser({ name, username, email, password, role }) {
+  async registerUser(data) {
     const transaction = await db.sequelize.transaction();
-    const privateKey = fs.readFileSync('../../../../private.key');
     try {
-      const user = await this.userRepository.createUser({ name, username, email, password, role }, transaction);
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      const privateKey = fs.readFileSync(path.resolve(__dirname, '../../../../private.key'), 'utf-8');
+      data.password = await bcrypt.hash(data.password, 10);
+      const user = await this.userRepository.createUser(data, transaction);
       await transaction.commit();
       return { user, token: jwt.sign(
         { id: user.id, role: user.role },
@@ -29,4 +35,4 @@ class UserRegisterJwtService extends IUserRegisterService {
   }
 }
 
-module.exports = UserRegisterJwtService;
+export default UserRegisterJwtService;
