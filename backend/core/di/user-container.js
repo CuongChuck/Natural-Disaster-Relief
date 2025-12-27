@@ -1,23 +1,26 @@
-const { createContainer, asClass, asValue } = require('awilix');
+import { createContainer, asClass, asValue } from 'awilix';
 
-const { User } = require('../models');
-const UserSqlRepository = require('../../modules/users/repository/users.sql-repository');
-const UserFacadeService = require('../../modules/users/users.facade-service');
-const UserRegisterJwtService = require('../../modules/users/service/register/users.register-jwt-service');
-const UserSignInJwtService = require('../../modules/users/service/signin/users.signin-jwt-service');
-const UserEditService = require('../../modules/users/service/edit/users.edit-service');
-const UserAdminEditService = require('../../modules/users/service/edit/users.admin-edit-service');
-const UserDeleteService = require('../../modules/users/service/delete/users.delete-service');
-const UserAdminDeleteService = require('../../modules/users/service/delete/users.admin-delete-service');
-const UserController = require('../../modules/users/users.controller');
+import db from '../models/index.js';
+import UserSqlRepository from '../../modules/users/repository/users.sql-repository.js';
+import UserFacadeService from '../../modules/users/users.facade-service.js';
+import UserRegisterJwtService from '../../modules/users/service/register/users.register-jwt-service.js';
+import UserSignInJwtService from '../../modules/users/service/signin/users.signin-jwt-service.js';
+import UserEditService from '../../modules/users/service/edit/users.edit-service.js';
+import UserAdminEditService from '../../modules/users/service/edit/users.admin-edit-service.js';
+import UserDeleteService from '../../modules/users/service/delete/users.delete-service.js';
+import UserAdminDeleteService from '../../modules/users/service/delete/users.admin-delete-service.js';
+import UserController from '../../modules/users/users.controller.js';
 
 const container = createContainer();
 
 container.register({
   container: asValue(container),
 
-  userModel: asValue(User),
-  IUserRepository: asClass(UserSqlRepository).scoped(),
+  ...Object.keys(db).reduce((acc, key) => {
+    acc[key] = asValue(db[key]);
+    return acc;
+  }, {}),
+  userRepository: asClass(UserSqlRepository).scoped(),
   userFacade: asClass(UserFacadeService).scoped(),
   userRegisterJwtService: asClass(UserRegisterJwtService).scoped(),
   userSignInJwtService: asClass(UserSignInJwtService).scoped(),
@@ -28,4 +31,4 @@ container.register({
   userController: asClass(UserController).scoped()
 });
 
-module.exports = container;
+export default container;
