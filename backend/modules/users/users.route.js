@@ -8,6 +8,6 @@ const userController = container.resolve('userController');
 router.post('/user/register', userController.register);
 router.get('/user/auth', userController.signIn);
 router.put('/user/edit', userController.edit);
-router.put('/user/delete', userController.delete);
+router.delete('/user/delete', userController.delete);
 
 export default router;
