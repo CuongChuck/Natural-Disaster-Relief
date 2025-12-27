@@ -1,8 +1,8 @@
-const fs = require('fs');
-const jwt = require('jsonwebtoken');
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
 
-const IUserEditService = require('./users.interface-edit');
-const { db } = require('../../../../core/models');
+import IUserEditService from './users.interface-edit.js';
+import db from '../../../../core/models/index.js';
 
 class UserEditService extends IUserEditService {
   constructor({ userRepository }) {
@@ -10,18 +10,13 @@ class UserEditService extends IUserEditService {
     this.userRepository = userRepository;
   }
 
-  async editUser({ token, name, username, email, password }) {
-    const transaction = db.sequelize.transaction();
+  async editUser(data) {
+    const transaction = await db.sequelize.transaction();
     try {
       const publicKey = fs.readFileSync('../../../../public.pem');
       const decodedPayload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
-      const user = await this.userRepository.updateUser({
-        id: decodedPayload.id,
-        name: name,
-        username: username,
-        email: email,
-        password: password
-      }, { transaction });
+      data.id = decodedPayload.id;
+      const user = await this.userRepository.updateUser(data, { transaction });
       await transaction.commit();
       return user;
     }
@@ -32,4 +27,4 @@ class UserEditService extends IUserEditService {
   }
 }
 
-module.exports = UserEditService;
+export default UserEditService;

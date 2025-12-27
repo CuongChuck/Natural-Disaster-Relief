@@ -1,5 +1,5 @@
-const IUserEditService = require('./users.interface-edit');
-const { db } = require('../../../../core/models');
+import IUserEditService from './users.interface-edit.js';
+import db from '../../../../core/models/index.js';
 
 class UserAdminEditService extends IUserEditService {
   constructor({ userRepository }) {
@@ -7,10 +7,10 @@ class UserAdminEditService extends IUserEditService {
     this.userRepository = userRepository;
   }
 
-  async editUser({ id, name, username, email, password }) {
-    const transaction = db.sequelize.transaction();
+  async editUser(data) {
+    const transaction = await db.sequelize.transaction();
     try {
-      const user = await this.userRepository.updateUser({ id, name, username, email, password }, transaction);
+      const user = await this.userRepository.updateUser(data, transaction);
       await transaction.commit();
       return user;
     }
@@ -21,4 +21,4 @@ class UserAdminEditService extends IUserEditService {
   }
 }
 
-module.exports = UserAdminEditService;
+export default UserAdminEditService;
