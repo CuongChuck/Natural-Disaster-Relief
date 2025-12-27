@@ -3,7 +3,7 @@
     "username": "anonymous",
     "password": "w~J4].e5k6%j",
     "database": "NDRS_development",
-    "host": "127.0.0.1",
+    "host": "db",
     "dialect": "mysql"
   },
   "test": {
