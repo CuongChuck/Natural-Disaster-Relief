@@ -1,8 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
   class Request extends Model {
     /**
      * Helper method for defining associations.
@@ -16,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Request.init({
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     quantity: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -28,8 +29,24 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    location: {
-      type: DataTypes.TEXT,
+    status: {
+      type: DataTypes.ENUM("PENDING, ACTIVE, REJECTED"),
+      allowNull: false
+    },
+    priority: {
+      type: DataTypes.ENUM("LOW, MEDIUM, HIGH, URGENT"),
+      allowNull: false
+    },
+    ward: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city_province: {
+      type: DataTypes.STRING,
       allowNull: false
     }
   }, {

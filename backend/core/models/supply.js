@@ -1,8 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
   class Supply extends Model {
     /**
      * Helper method for defining associations.
@@ -17,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Supply.init({
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     quantity: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -29,12 +30,39 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    expectedDestination: {
-      type: DataTypes.TEXT,
+    count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isPositive(value) {
+          if (value <= 0) {
+            throw new Error('Count must be a positive integer');
+          }
+        }
+      }
+    },
+    expected_ward: {
+      type: DataTypes.STRING,
       allowNull: false
     },
-    actualDestination: {
-      type: DataTypes.TEXT,
+    expected_district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    expected_city_province: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    ward: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city_province: {
+      type: DataTypes.STRING,
       allowNull: false
     }
   }, {
