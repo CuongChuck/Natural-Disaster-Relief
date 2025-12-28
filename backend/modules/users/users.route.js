@@ -6,7 +6,7 @@ const router = express.Router();
 const userController = container.resolve('userController');
 
 router.post('/user/register', userController.register);
-router.get('/user/auth', userController.signIn);
+router.post('/user/auth', userController.signIn);
 router.put('/user/edit', userController.edit);
 router.delete('/user/delete', userController.delete);
 
