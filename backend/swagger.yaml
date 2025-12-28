@@ -118,6 +118,36 @@ paths:
                   message:
                     type: string
 
+  /units:
+    get:
+      summary: Get all units
+      tags:
+        - Units
+      responses:
+        200:
+          description: Get all units successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Units retrieved via all strategy successfully"
+                  units:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Unit'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
 components:
   schemas:
     UserRequest:
@@ -148,6 +178,12 @@ components:
         role: { type: string }
 
     Category:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+    
+    Unit:
       type: object
       properties:
         id: { type: integer }
