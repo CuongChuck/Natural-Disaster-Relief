@@ -5,8 +5,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import errorHandler from './core/middleware/error-handler.js';
-import userRoutes from './modules/users/users.route.js';
 import { PORT } from './core/config/env.js';
+
+import userRoutes from './modules/users/users.route.js';
+import categoryRoutes from './modules/category/category.route.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(errorHandler);
 app.use('/', userRoutes);
+app.use('/', categoryRoutes);
 
 const swaggerPath = path.join(__dirname, './swagger.yaml');
 const swaggerSpec = yamljs.load(swaggerPath);
