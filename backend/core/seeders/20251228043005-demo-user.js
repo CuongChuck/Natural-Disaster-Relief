@@ -6,7 +6,7 @@ export async function up(queryInterface, Sequelize) {
     {
       email: 'a@mail.com',
       username: 'admin',
-      password: '$2b$10$7CWJwII9CQvV5Rs6Ou/PR.F2wBXzIZ5GTQT6rdMqpb.54jisYI1iu',
+      password: '$2b$10$jnjn1yHc.4XqOL7.WT8.0uBfHF53/a/bakX7DzJm1fU/kcEJQgpaW',
       name: 'admin',
       phone: "0123456789",
       ward: "string",
@@ -19,7 +19,7 @@ export async function up(queryInterface, Sequelize) {
     {
       email: 'b@mail.com',
       username: 'vol1',
-      password: '$2b$10$bll/CsO/R.6ab.xaoFvxz.YhM46GqcelOvgfsmqgrrhAQZVeLPa5q',
+      password: '$2b$10$pX5cmQ1.cWiWM5UNc8NA/eNgmyDkD7LoQ3YlM7KqFXlQHHY5KtMGq',
       name: 'volunteer',
       phone: "0987654321",
       ward: "string",
