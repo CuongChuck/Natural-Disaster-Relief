@@ -8,13 +8,25 @@ export default (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Supply.belongsTo(models['User'], { as: 'donor' });
+      Supply.belongsTo(models['User']);
       Supply.belongsTo(models['Category']);
       Supply.belongsTo(models['Unit']);
       Supply.belongsToMany(models['Event'], { through: 'SupplyEvent' });
     }
   }
   Supply.init({
+    CategoryId: {
+      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      allowNull: false
+    },
+    UnitId: {
+      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      allowNull: false
+    },
+    UserId: {
+      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      allowNull: false
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -54,16 +66,13 @@ export default (sequelize, DataTypes) => {
       allowNull: false
     },
     ward: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     district: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     city_province: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     }
   }, {
     sequelize,

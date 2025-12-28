@@ -8,7 +8,7 @@ export async function up(queryInterface, Sequelize) {
       autoIncrement: true,
       type: Sequelize.INTEGER.UNSIGNED.ZEROFILL
     },
-    categoryId: {
+    CategoryId: {
       type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
       allowNull: false,
       references: {
@@ -18,7 +18,7 @@ export async function up(queryInterface, Sequelize) {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     },
-    unitId: {
+    UnitId: {
       type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
       allowNull: false,
       references: {
@@ -28,7 +28,7 @@ export async function up(queryInterface, Sequelize) {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     },
-    donorId: {
+    UserId: {
       type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
       allowNull: false,
       references: {
@@ -40,6 +40,10 @@ export async function up(queryInterface, Sequelize) {
     },
     name: {
       type: Sequelize.STRING,
+      allowNull: false
+    },
+    quantity: {
+      type: Sequelize.FLOAT,
       allowNull: false
     },
     count: {
@@ -59,16 +63,13 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false
     },
     ward: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.STRING
     },
     district: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.STRING
     },
     city_province: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.STRING
     },
     createdAt: {
       allowNull: false,

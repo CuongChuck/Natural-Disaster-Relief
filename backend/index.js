@@ -9,6 +9,8 @@ import { PORT } from './core/config/env.js';
 
 import userRoutes from './modules/users/users.route.js';
 import categoryRoutes from './modules/category/category.route.js';
+import unitRoutes from './modules/unit/unit.route.js';
+import supplyRoutes from './modules/supply/supply.route.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +21,8 @@ app.use(express.json());
 app.use(errorHandler);
 app.use('/', userRoutes);
 app.use('/', categoryRoutes);
+app.use('/', unitRoutes);
+app.use('/', supplyRoutes);
 
 const swaggerPath = path.join(__dirname, './swagger.yaml');
 const swaggerSpec = yamljs.load(swaggerPath);

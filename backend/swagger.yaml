@@ -63,7 +63,7 @@ paths:
                 strategy:
                   type: string
       responses:
-        200:
+        201:
           description: User signed in successfully
           content:
             application/json:
@@ -148,14 +148,174 @@ paths:
                   message:
                     type: string
 
+  /supplies:
+    get:
+      summary: Get all supply offers
+      tags:
+        - Supplies
+      responses:
+        200:
+          description: Get all supply offers successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supplies retrieved via all strategy successfully"
+                  supplies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Supply'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /supply:
+    post:
+      summary: Create a new supply offer
+      tags:
+        - Supplies
+      security:
+        - customTokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyRequest'
+      responses:
+        201:
+          description: Create a new supply offer successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supplies created via normal strategy successfully"
+                  supply:
+                    $ref: '#/components/schemas/Supply'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /supply/{id}:
+    put:
+      summary: Edit a supply offer
+      tags:
+        - Supplies
+      security:
+        - customTokenAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyRequest'
+      responses:
+        201:
+          description: Edit a supply offer successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supplies edit via nonAdmin strategy successfully"
+                  supply:
+                    $ref: '#/components/schemas/Supply'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete a supply offer
+      tags:
+        - Supplies
+      security:
+        - customTokenAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                strategy:
+                  type: string
+                  example: nonAdmin
+      responses:
+        204:
+          description: Delete a supply offer successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supplies deletion via nonAdmin strategy successfully"
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
 components:
+  securitySchemes:
+    customTokenAuth:
+      type: apiKey
+      in: header
+      name: token
   schemas:
     UserRequest:
       type: object
       properties:
         email: { type: string }
         password: { type: string }
-        strategy: { type: string }
+        strategy:
+          type: string
+          example: jwt
         name: { type: string }
         username: { type: string }
         phone: { type: string }
@@ -188,3 +348,49 @@ components:
       properties:
         id: { type: integer }
         name: { type: string }
+
+    SupplyRequest:
+      type: object
+      properties:
+        strategy:
+          type: string
+          example: ["normal", "nonAdmin"]
+        category: { type: integer }
+        unit: { type: integer }
+        name: { type: string }
+        count: { type: integer }
+        quantity:
+          type: number
+          format: float
+          example: 19.99
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+
+    Supply:
+      type: object
+      properties:
+        id: { type: integer }
+        Category.name: { type: string }
+        Unit.name: { type: string }
+        User.username: { type: string }
+        name: { type: string }
+        count: { type: integer }
+        quantity:
+          type: number
+          format: float
+          example: 19.99
+        expected_ward: { type: string }
+        expected_district: { type: string }
+        expected_city_province: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-12-28T21:23:27Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2025-12-28T21:23:27Z"
