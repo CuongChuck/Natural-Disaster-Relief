@@ -8,7 +8,7 @@ class CategorySqlRepository extends ICategoryRepository {
 
   async findAll() {
     try {
-      return await this.Category.findAll();
+      return await this.Category.findAll({ attributes: ['id', 'name'] });
     }
     catch (err) {
       throw new Error("Category retrieval failed: " + err.message);

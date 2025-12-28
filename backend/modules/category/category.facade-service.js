@@ -1,14 +1,14 @@
 class CategoryFacadeService {
-  constructor({ getAllStrategy }) {
+  constructor({ categoryGetAllService }) {
     this.getStrategy = {
-      all: getAllStrategy
+      all: categoryGetAllService
     };
   }
 
   async getAll() {
     try {
-      const strategy = this.registerStrategy.all;
-      const categories = await strategy.registerUser(data);
+      const strategy = this.getStrategy.all;
+      const categories = await strategy.getAll();
       return {
         message: `Categories retrieved via all strategy successfully`,
         categories
