@@ -17,7 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         201:
           description: User signed in successfully
@@ -33,7 +33,7 @@ paths:
                     type: string
                     description: RS256 JWT token
                   user:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/UserResponse'
         500:
           description: Error message
           content:
@@ -45,7 +45,7 @@ paths:
                     type: string
 
   /user/auth:
-    get:
+    post:
       summary: User login
       tags:
         - Users
@@ -77,7 +77,37 @@ paths:
                     type: string
                     description: RS256 JWT token
                   user:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/UserResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /categories:
+    get:
+      summary: Get all categories
+      tags:
+        - Categories
+      responses:
+        200:
+          description: Get all categories successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Categories retrieved via all strategy successfully"
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
         500:
           description: Error message
           content:
@@ -90,7 +120,7 @@ paths:
 
 components:
   schemas:
-    User:
+    UserRequest:
       type: object
       properties:
         email: { type: string }
@@ -103,3 +133,22 @@ components:
         district: { type: string }
         city_province: { type: string }
         role: { type: string }
+
+    UserResponse:
+      type: object
+      properties:
+        id: { type: integer }
+        email: { type: string }
+        name: { type: string }
+        username: { type: string }
+        phone: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+        role: { type: string }
+
+    Category:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
