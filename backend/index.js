@@ -3,6 +3,7 @@ import { serve, setup } from 'swagger-ui-express';
 import yamljs from 'yamljs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 import errorHandler from './core/middleware/error-handler.js';
 import { PORT } from './core/config/env.js';
@@ -17,6 +18,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:4200',
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 app.use(express.json());
 app.use(errorHandler);
 app.use('/', userRoutes);
