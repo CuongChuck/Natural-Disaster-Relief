@@ -1,15 +1,10 @@
 FROM node:20-alpine
-
-# Install build tools needed by some native deps (mysql2, bcrypt)
-RUN apk add --no-cache python3 make g++ libc6-compat
-
-WORKDIR /usr/src/app
+WORKDIR /usr/src/backend
 
 # Copy package manifests first to leverage docker cache
 COPY package*.json ./
 
-# Install all dependencies (including devDependencies because we need sequelize-cli for migrations)
-RUN npm ci --no-audit --prefer-offline
+RUN npm install
 
 # Copy application source
 COPY . .
