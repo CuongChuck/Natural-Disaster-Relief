@@ -8,7 +8,7 @@ class UserSqlRepository extends IUserRepository {
 
   async createUser(data, transaction){
     try {
-      return await this.User.create({
+      await this.User.create({
         name: data.name,
         username: data.username,
         email: data.email,
@@ -19,6 +19,7 @@ class UserSqlRepository extends IUserRepository {
         city_province: data.city_province,
         role: data.role
       }, { transaction });
+      return await this.User.findByUsername(data.username, transaction);
     }
     catch (err) {
       throw new Error("User creation failed: " + err.message);
@@ -27,7 +28,17 @@ class UserSqlRepository extends IUserRepository {
 
   async findByUsername(data, transaction) {
     try {
-      return await this.User.findOne({ where: { username: data.username } }, { transaction });
+      return await this.User.findOne({ where: { username: data.username }, attributes: [
+        'id',
+        'email',
+        'name',
+        'username',
+        'phone',
+        'ward',
+        'district',
+        'city_province',
+        'role'
+      ], transaction });
     }
     catch (err) {
       throw new Error("User retrieval failed: " + err.message);
@@ -47,7 +58,16 @@ class UserSqlRepository extends IUserRepository {
         city_province: data.city_province,
         role: data.role
       }, { where: { id: data.id }, transaction });
-      return await this.User.findByPk(data.id, { transaction });
+      return await this.User.findByPk(data.id, { attributes: [
+        'email',
+        'name',
+        'username',
+        'phone',
+        'ward',
+        'district',
+        'city_province',
+        'role'
+      ], transaction });
     }
     catch (err) {
       throw new Error("User profile update failed: " + err.message);
@@ -56,7 +76,7 @@ class UserSqlRepository extends IUserRepository {
 
   async deleteUser({ id }, transaction) {
     try {
-      await this.User.delete({ where: { id: id } }, { transaction });
+      await this.User.delete({ where: { id: id }, transaction });
     }
     catch (err) {
       throw new Error("User deletion failed: " + err.message);
