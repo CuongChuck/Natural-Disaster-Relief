@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  return queryInterface.bulkInsert('Categories', [
+  return queryInterface.bulkInsert('Units', [
     {
       name: 'kg',
       createdAt: new Date(),
@@ -26,5 +26,5 @@ export async function up(queryInterface, Sequelize) {
   ]);
 }
 export async function down(queryInterface, Sequelize) {
-  return queryInterface.bulkDelete('Categories', null, {});
+  return queryInterface.bulkDelete('Units', null, {});
 }
