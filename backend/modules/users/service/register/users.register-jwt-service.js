@@ -22,11 +22,14 @@ class UserRegisterJwtService extends IUserRegisterService {
       data.password = await bcrypt.hash(data.password, 10);
       const user = await this.userRepository.createUser(data, transaction);
       await transaction.commit();
-      return { user, token: jwt.sign(
-        { id: user.id, role: user.role },
-        privateKey,
-        { expiresIn: '2h', algorithm: 'RS256' }
-      ) };
+      const { password, createdAt, updatedAt, ...userResponse } = user;
+      return {
+        user: userResponse,
+        token: jwt.sign(
+          { id: user.id, role: user.role },
+            privateKey,
+          { expiresIn: '2h', algorithm: 'RS256' }
+        ) };
     }
     catch (err) {
       await transaction.rollback();

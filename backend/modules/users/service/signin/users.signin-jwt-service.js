@@ -28,11 +28,14 @@ class UserSignInJwtService extends IUserSignInService {
         throw new Error("Username or password is incorrect.");
       }
       await transaction.commit();
-      return { user, token: jwt.sign(
-        { id: user.id, role: user.role },
-          privateKey,
-        { expiresIn: '2h', algorithm: 'RS256' }
-      ) };
+      const { password, createdAt, updatedAt, ...userResponse } = user;
+      return {
+        user: userResponse,
+        token: jwt.sign(
+          { id: user.id, role: user.role },
+            privateKey,
+          { expiresIn: '2h', algorithm: 'RS256' }
+        ) };
     }
     catch (err) {
       await transaction.rollback();

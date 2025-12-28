@@ -8,7 +8,7 @@ class UserSqlRepository extends IUserRepository {
 
   async createUser(data, transaction){
     try {
-      await this.User.create({
+      const user = await this.User.create({
         name: data.name,
         username: data.username,
         email: data.email,
@@ -19,7 +19,7 @@ class UserSqlRepository extends IUserRepository {
         city_province: data.city_province,
         role: data.role
       }, { transaction });
-      return await this.User.findByUsername(data.username, transaction);
+      return user.toJSON();
     }
     catch (err) {
       throw new Error("User creation failed: " + err.message);
@@ -28,17 +28,8 @@ class UserSqlRepository extends IUserRepository {
 
   async findByUsername(data, transaction) {
     try {
-      return await this.User.findOne({ where: { username: data.username }, attributes: [
-        'id',
-        'email',
-        'name',
-        'username',
-        'phone',
-        'ward',
-        'district',
-        'city_province',
-        'role'
-      ], transaction });
+      const user = await this.User.findOne({ where: { username: data.username }, transaction })
+      return user.toJSON();
     }
     catch (err) {
       throw new Error("User retrieval failed: " + err.message);
