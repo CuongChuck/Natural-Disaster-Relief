@@ -1,6 +1,6 @@
-class IUserRepository {
+class ICategoryRepository {
   constructor() {
-    if (new.target === IUserRepository) {
+    if (new.target === ICategoryRepository) {
       throw new Error('Cannot instantiate interface.');
     }
   }
@@ -10,4 +10,4 @@ class IUserRepository {
   }
 }
 
-export default IUserRepository;
+export default ICategoryRepository;
