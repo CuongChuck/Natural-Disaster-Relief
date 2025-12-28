@@ -68,8 +68,7 @@ export default (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'User',
-    tableName: 'Users'
+    modelName: 'User'
   });
   return User;
 };
