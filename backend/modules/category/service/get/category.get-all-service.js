@@ -1,6 +1,6 @@
 import ICategoryGetService from './category.interface-get.js';
 
-class CategoryGetService extends ICategoryGetService {
+class CategoryGetAllService extends ICategoryGetService {
   constructor({ categoryRepository }) {
     super();
     this.categoryRepository = categoryRepository;
@@ -16,4 +16,4 @@ class CategoryGetService extends ICategoryGetService {
   }
 }
 
-export default CategoryGetService;
+export default CategoryGetAllService;
