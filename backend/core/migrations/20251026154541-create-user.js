@@ -18,7 +18,8 @@ export async function up(queryInterface, Sequelize) {
       unique: true
     },
     email: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false
     },
     password: {
       type: Sequelize.STRING,

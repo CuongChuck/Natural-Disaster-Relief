@@ -40,10 +40,7 @@ export default (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [8,20]
-      }
+      allowNull: false
     },
     phone: {
       type: DataTypes.STRING,
