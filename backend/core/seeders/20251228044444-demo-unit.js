@@ -24,7 +24,7 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      name: 'nghìn đồng',
+      name: 'nghìn VNĐ',
       createdAt: new Date(),
       updatedAt: new Date(),
     }
