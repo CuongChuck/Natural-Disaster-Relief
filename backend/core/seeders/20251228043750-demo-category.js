@@ -9,7 +9,7 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      name: 'thức ăn',
+      name: 'thực phẩm',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -19,7 +19,7 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      name: 'dụng cụ',
+      name: 'vật dụng',
       createdAt: new Date(),
       updatedAt: new Date(),
     },

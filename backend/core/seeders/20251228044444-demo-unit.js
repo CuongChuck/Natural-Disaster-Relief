@@ -19,6 +19,11 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
+      name: 'cái',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
       name: 'nghìn đồng',
       createdAt: new Date(),
       updatedAt: new Date(),
