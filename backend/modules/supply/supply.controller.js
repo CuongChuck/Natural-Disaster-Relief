@@ -8,7 +8,7 @@ class SupplyController {
       const result = await this.supplyFacade.getAll();
       res.status(200).json({
         message: result.message,
-        categories: result.categories
+        supplies: result.supplies
       });
     }
     catch (err) {
