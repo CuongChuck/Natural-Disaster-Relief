@@ -6,7 +6,12 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo:all",
+    "db:create": "npx sequelize-cli db:create",
+    "db:drop": "npx sequelize-cli db:drop",
+    "db:seed": "npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +24,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.15.3",
+    "pg": "^8.20.0",
     "process": "^0.11.10",
     "sequelize": "^6.37.7",
     "swagger-ui-express": "^5.0.1",
