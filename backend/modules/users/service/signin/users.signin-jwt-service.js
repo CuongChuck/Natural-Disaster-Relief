@@ -1,24 +1,18 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
 
 import IUserSignInService from './users.interface-signin.js';
-import db from '../../../../core/models/index.js';
 
 class UserSignInJwtService extends IUserSignInService {
-  constructor({ userRepository }) {
+  constructor({ userRepository, jwtService, db }) {
     super();
     this.userRepository = userRepository;
+    this.jwtService = jwtService;
+    this.db = db;
   }
 
   async signInUser(data) {
-    const transaction = await db.sequelize.transaction();
+    const transaction = await this.db.sequelize.transaction();
     try {
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = path.dirname(__filename);
-      const privateKey = fs.readFileSync(path.resolve(__dirname, '../../../../private_key.pem'), 'utf-8');
       const user = await this.userRepository.findByUsername(data, transaction);
       if (!user) {
         throw new Error("Username or password is incorrect.");
@@ -31,11 +25,8 @@ class UserSignInJwtService extends IUserSignInService {
       const { password, createdAt, updatedAt, ...userResponse } = user;
       return {
         user: userResponse,
-        token: jwt.sign(
-          { id: user.id, role: user.role },
-            privateKey,
-          { expiresIn: '2h', algorithm: 'RS256' }
-        ) };
+        token: this.jwtService.generateToken({ id: user.id, role: user.role })
+      };
     }
     catch (err) {
       await transaction.rollback();

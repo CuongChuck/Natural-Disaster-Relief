@@ -2,19 +2,19 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 
 import IUserDeleteService from './users.interface-delete.js';
-import db from '../../../../core/models/index.js';
 
 class UserDeleteService extends IUserDeleteService {
-  constructor({ userRepository }) {
+  constructor({ userRepository, jwtService, db }) {
     super();
     this.userRepository = userRepository;
+    this.jwtService = jwtService;
+    this.db = db;
   }
 
   async deleteUser({ token }) {
-    const transaction = db.sequelize.transaction();
+    const transaction = this.db.sequelize.transaction();
     try {
-      const publicKey = fs.readFileSync('../../../../public.pem');
-      const decodedPayload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+      const decodedPayload = this.jwtService.verifyToken(token);
       await this.userRepository.deleteUser({ id: decodedPayload.id }, transaction);
       await transaction.commit();
     }
