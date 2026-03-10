@@ -15,7 +15,7 @@ export default (sequelize, DataTypes) => {
   }
   User.init({
     id: {
-      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },

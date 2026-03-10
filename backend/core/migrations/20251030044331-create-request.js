@@ -7,10 +7,10 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
-      type: Sequelize.INTEGER.UNSIGNED.ZEROFILL
+      type: Sequelize.INTEGER
     },
     recipientId: {
-      type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
@@ -20,7 +20,7 @@ export async function up(queryInterface, Sequelize) {
       onDelete: 'CASCADE'
     },
     categoryId: {
-      type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'Categories',
@@ -30,7 +30,7 @@ export async function up(queryInterface, Sequelize) {
       onDelete: 'CASCADE'
     },
     unitId: {
-      type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
+      type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'Units',

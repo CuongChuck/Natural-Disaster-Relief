@@ -16,15 +16,15 @@ export default (sequelize, DataTypes) => {
   }
   Supply.init({
     CategoryId: {
-      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     UnitId: {
-      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     UserId: {
-      type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     name: {
