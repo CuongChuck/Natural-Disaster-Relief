@@ -5,7 +5,7 @@ import path from 'path';
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import process from 'process';
 import { fileURLToPath, pathToFileURL } from 'url';
-import configData from '../config/config.json' with { type: 'json' };
+import configData from '../config/db_config.cjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
