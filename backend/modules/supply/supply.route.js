@@ -1,6 +1,6 @@
 import express from 'express';
 
-import container from '../../core/di/supply-container.js';
+import container from '../../core/middleware/awilix-container.js';
 
 const router = express.Router();
 const supplyController = container.resolve('supplyController');

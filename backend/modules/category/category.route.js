@@ -1,6 +1,6 @@
 import express from 'express';
 
-import container from '../../core/di/category-container.js';
+import container from '../../core/middleware/awilix-container.js';
 
 const router = express.Router();
 const categoryController = container.resolve('categoryController');
