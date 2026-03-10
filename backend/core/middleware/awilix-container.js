@@ -41,6 +41,7 @@ container.register({
   categoryGetAllService: asClass(CategoryGetAllService).scoped(),
   categoryController: asClass(CategoryController).scoped(),
 
+  db: asValue(db),
   jwtService: asClass(JwtService).scoped(),
 
   supplyRepository: asClass(SupplySqlRepository).scoped(),
