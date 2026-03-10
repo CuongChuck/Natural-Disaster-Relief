@@ -184,7 +184,7 @@ paths:
       tags:
         - Supplies
       security:
-        - customTokenAuth: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -220,7 +220,7 @@ paths:
       tags:
         - Supplies
       security:
-        - customTokenAuth: []
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -262,7 +262,7 @@ paths:
       tags:
         - Supplies
       security:
-        - customTokenAuth: []
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -303,10 +303,10 @@ paths:
 
 components:
   securitySchemes:
-    customTokenAuth:
-      type: apiKey
-      in: header
-      name: token
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     UserRequest:
       type: object
