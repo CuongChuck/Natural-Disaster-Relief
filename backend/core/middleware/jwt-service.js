@@ -13,8 +13,11 @@ class JwtService {
     return jwt.sign(payload, this.private, { algorithm: 'RS256', expiresIn: '5h' });
   }
 
-  verifyToken = (token) => {
+  verifyToken = (header) => {
     try {
+      if (!header) throw new Error('Missing authorization header');
+      if (!header.startsWith('Bearer ')) throw new Error('Invalid authorization header');
+      const token = header.split(' ')[1];
       return jwt.verify(token, this.public, { algorithms: ['RS256'] });
     } catch (err) {
       throw new Error('Invalid token');
