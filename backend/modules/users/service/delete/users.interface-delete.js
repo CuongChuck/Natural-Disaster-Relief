@@ -5,7 +5,7 @@ class IUserDeleteService {
     }
   }
 
-  async deleteUser() {
+  async deleteUser(data) {
     throw new Error('Method not implemented.');
   }
 }

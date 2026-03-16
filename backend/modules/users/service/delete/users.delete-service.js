@@ -1,21 +1,16 @@
-import fs from 'fs';
-import jwt from 'jsonwebtoken';
-
 import IUserDeleteService from './users.interface-delete.js';
 
 class UserDeleteService extends IUserDeleteService {
-  constructor({ userRepository, jwtService, db }) {
+  constructor({ userRepository, db }) {
     super();
     this.userRepository = userRepository;
-    this.jwtService = jwtService;
     this.db = db;
   }
 
-  async deleteUser({ token }) {
-    const transaction = this.db.sequelize.transaction();
+  async deleteUser(data) {
+    const transaction = await this.db.sequelize.transaction();
     try {
-      const decodedPayload = this.jwtService.verifyToken(token);
-      await this.userRepository.deleteUser({ id: decodedPayload.id }, transaction);
+      await this.userRepository.deleteUser(data, transaction);
       await transaction.commit();
     }
     catch (err) {

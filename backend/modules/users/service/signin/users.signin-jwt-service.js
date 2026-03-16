@@ -15,11 +15,11 @@ class UserSignInJwtService extends IUserSignInService {
     try {
       const user = await this.userRepository.findByUsername(data, transaction);
       if (!user) {
-        throw new Error("Username or password is incorrect.");
+        throw new Error("Username is incorrect.");
       }
       const isMatch = await bcrypt.compare(data.password, user.password);
       if (!isMatch) {
-        throw new Error("Username or password is incorrect.");
+        throw new Error("Password is incorrect.");
       }
       await transaction.commit();
       const { password, createdAt, updatedAt, ...userResponse } = user;
