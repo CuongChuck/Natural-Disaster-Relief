@@ -3,6 +3,20 @@ class UserController {
     this.userFacade = userFacade;
   }
 
+  get = async (req, res, next) => {
+    try {
+      const data = req.body;
+      data.userId = req.userId;
+      const result = await this.userFacade.getUser(data);
+      res.status(201).json({
+        message: result.message,
+        user: result.user
+      });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
   register = async (req, res, next) => {
     try {
       const result = await this.userFacade.registerUser(req.body);
@@ -32,10 +46,10 @@ class UserController {
   };
 
   edit = async (req, res, next) => {
-    try {
-      const token = req.headers['token'];
+    try {;
       const data = req.body;
-      data.token = token;
+      data.userId = req.userId;
+      data.userRole = req.userRole;
       const result = await this.userFacade.editUser(data);
       res.status(200).json({
         message: result.message,
@@ -49,7 +63,9 @@ class UserController {
 
   delete = async (req, res, next) => {
     try {
-      const result = await this.userFacade.deleteUser(req.body);
+      const data = req.body;
+      data.userId = req.userId;
+      const result = await this.userFacade.deleteUser(data);
       res.status(200).json({ message: result.message });
     }
     catch (err) {

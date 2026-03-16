@@ -6,7 +6,25 @@ class UserSqlRepository extends IUserRepository {
     this.User = User;
   }
 
-  async createUser(data, transaction){
+  async getUser(data, transaction) {
+    try {
+      const user = await this.User.findByPk(data.userId, { attributes: [
+        'email',
+        'name',
+        'username',
+        'phone',
+        'ward',
+        'district',
+        'city_province'
+      ], transaction });
+      if (!user) throw new Error('There is no such user');
+      return user.toJSON();
+    } catch (err) {
+      throw new Error("User retrieval failed: " + err.message);
+    }
+  }
+
+  async createUser(data, transaction) {
     try {
       const user = await this.User.create({
         name: data.name,
@@ -19,6 +37,7 @@ class UserSqlRepository extends IUserRepository {
         city_province: data.city_province,
         role: data.role
       }, { transaction });
+      if (!user) throw new Error('Cannot create user');
       return user.toJSON();
     }
     catch (err) {
@@ -28,7 +47,8 @@ class UserSqlRepository extends IUserRepository {
 
   async findByUsername(data, transaction) {
     try {
-      const user = await this.User.findOne({ where: { username: data.username }, transaction })
+      const user = await this.User.findOne({ where: { username: data.username }, transaction });
+      if (!user) throw new Error('There is no user with username: ' + data.username);
       return user.toJSON();
     }
     catch (err) {
@@ -38,6 +58,8 @@ class UserSqlRepository extends IUserRepository {
 
   async updateUser(data, transaction) {
     try {
+      const user = await this.User.findByPk(data.userId);
+      if (!user) throw new Error('There is no such user');
       await this.User.update({
         name: data.name,
         username: data.username,
@@ -46,18 +68,16 @@ class UserSqlRepository extends IUserRepository {
         phone: data.phone,
         ward: data.ward,
         district: data.district,
-        city_province: data.city_province,
-        role: data.role
-      }, { where: { id: data.id }, transaction });
-      return await this.User.findByPk(data.id, { attributes: [
+        city_province: data.city_province
+      }, { where: { id: data.userId }, transaction });
+      return await this.User.findByPk(data.userId, { attributes: [
         'email',
         'name',
         'username',
         'phone',
         'ward',
         'district',
-        'city_province',
-        'role'
+        'city_province'
       ], transaction });
     }
     catch (err) {
@@ -65,9 +85,11 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  async deleteUser({ id }, transaction) {
+  async deleteUser(data, transaction) {
     try {
-      await this.User.delete({ where: { id: id }, transaction });
+      const user = await this.User.findByPk(data.userId);
+      if (!user) throw new Error('There is no such user');
+      await this.User.destroy({ where: { id: data.userId }, force: true, transaction: transaction });
     }
     catch (err) {
       throw new Error("User deletion failed: " + err.message);

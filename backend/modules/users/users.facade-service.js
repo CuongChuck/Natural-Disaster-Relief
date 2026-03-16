@@ -1,29 +1,39 @@
 class UserFacadeService {
-  constructor({
-                userRegisterJwtService,
-                userSignInJwtService,
-                userEditService,
-                userAdminEditService,
-                userDeleteService,
-                userAdminDeleteService
-  }) {
+  constructor(opts) {
+    this.getStrategy = {
+      nonAdmin: opts.userGetService
+    };
+
     this.registerStrategy = {
-      jwt: userRegisterJwtService
+      jwt: opts.userRegisterJwtService
     };
 
     this.signInStrategy = {
-      jwt: userSignInJwtService
+      jwt: opts.userSignInJwtService
     };
 
     this.editStrategy = {
-      admin: userAdminEditService,
-      nonAdmin: userEditService
+      admin: opts.userAdminEditService,
+      nonAdmin: opts.userEditService
     };
 
     this.deleteStrategy = {
-      admin: userAdminDeleteService,
-      nonAdmin: userDeleteService
+      admin: opts.userAdminDeleteService,
+      nonAdmin: opts.userDeleteService
     };
+  }
+
+  async getUser(data) {
+    try {
+      const strategy = this.getStrategy[data.strategy];
+      const user = await strategy.getUser(data);
+      return {
+        message: `User retrieval via ${data.strategy} strategy successfully`,
+        user
+      };
+    } catch (err) {
+      throw err;
+    }
   }
 
   async registerUser(data) {
@@ -59,7 +69,7 @@ class UserFacadeService {
       const strategy = this.editStrategy[data.strategy];
       const user = await strategy.editUser(data);
       return {
-        message: `User signed in via ${data.strategy} strategy successfully`,
+        message: `User profile edit via ${data.strategy} strategy successfully`,
         user
       };
     }
@@ -70,10 +80,9 @@ class UserFacadeService {
 
   async deleteUser(data) {
     try {
-      const strategyId = data.strategy === 'admin' ? data.strategy : 'nonAdmin';
-      const strategy = this.deleteStrategy[strategyId];
-      await strategy.deleteUser({ token: data.token });
-      return { message: `User deleted via ${strategyId} strategy successfully` };
+      const strategy = this.deleteStrategy[data.strategy];
+      await strategy.deleteUser(data);
+      return { message: `User deleted via ${data.strategy} strategy successfully` };
     }
     catch (err) {
       throw err;
