@@ -5,6 +5,10 @@ class IUserRepository {
     }
   }
 
+  async getUser(data, transaction) {
+    throw new Error('Method not implemented.');
+  }
+
   async createUser(data, transaction) {
     throw new Error('Method not implemented.');
   }
@@ -14,6 +18,10 @@ class IUserRepository {
   }
 
   async updateUser(data, transaction) {
+    throw new Error('Method not implemented.');
+  }
+
+  async deleteUser(data, transaction) {
     throw new Error('Method not implemented.');
   }
 }
