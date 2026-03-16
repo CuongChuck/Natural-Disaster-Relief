@@ -1,9 +1,10 @@
 import express from 'express';
-import { serve, setup } from 'swagger-ui-express';
-import yamljs from 'yamljs';
+import yaml from 'js-yaml';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import cors from 'cors';
+import fs from 'fs';
+import { serve, setup } from 'swagger-ui-express';
+import { fileURLToPath } from 'url';
 
 import errorHandler from './core/middleware/error-handler.js';
 import { PORT } from './core/config/env.js';
@@ -31,7 +32,7 @@ app.use('/', unitRoutes);
 app.use('/', supplyRoutes);
 
 const swaggerPath = path.join(__dirname, './swagger.yaml');
-const swaggerSpec = yamljs.load(swaggerPath);
+const swaggerSpec = yaml.load(fs.readFileSync(swaggerPath, 'utf-8'));
 
 swaggerSpec.servers = [{ url: `http://localhost:${PORT}` }];
 
