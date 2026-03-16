@@ -5,12 +5,10 @@ class AuthHandler {
 
   verifyToken = async (req, res, next) => {
     try {
-      const result = await this.jwtService.verifyToken(req.body);
-      res.status(201).json({
-        message: result.message,
-        user: result.user,
-        token: result.token
-      });
+      const decodedPayload = await this.jwtService.verifyToken(req.headers.authorization);
+      req.userId = decodedPayload.id;
+      req.userRole = decodedPayload.role;
+      next();
     }
     catch (err) {
       res.status(500).json({ message: err.message });
