@@ -1,4 +1,4 @@
-import { createContainer, asClass, asValue } from 'awilix';
+import { createContainer, asClass, asValue, InjectionMode } from 'awilix';
 
 import db from '../models/index.js';
 import CategorySqlRepository from '../../modules/category/repository/category.sql-repository.js';
@@ -6,6 +6,7 @@ import CategoryFacadeService from '../../modules/category/category.facade-servic
 import CategoryGetAllService from '../../modules/category/service/get/category.get-all-service.js';
 import CategoryController from '../../modules/category/category.controller.js';
 import JwtService from './jwt-service.js';
+import AuthHandler from './auth-handler.js';
 import SupplySqlRepository from '../../modules/supply/repository/supply.sql-repository.js';
 import SupplyFacadeService from '../../modules/supply/supply.facade-service.js';
 import SupplyGetAllService from '../../modules/supply/service/get/supply.get-all-service.js';
@@ -26,46 +27,50 @@ import UserAdminEditService from '../../modules/users/service/edit/users.admin-e
 import UserDeleteService from '../../modules/users/service/delete/users.delete-service.js';
 import UserAdminDeleteService from '../../modules/users/service/delete/users.admin-delete-service.js';
 import UserController from '../../modules/users/users.controller.js';
+import UserGetService from '../../modules/users/service/get/users.get-service.js';
 
-const container = createContainer();
+const container = createContainer({
+  injectionMode: InjectionMode.PROXY,
+  strict: true
+});
 
 container.register({
-  container: asValue(container),
-
   ...Object.keys(db).reduce((acc, key) => {
     acc[key] = asValue(db[key]);
     return acc;
   }, {}),
-  categoryRepository: asClass(CategorySqlRepository).scoped(),
-  categoryFacade: asClass(CategoryFacadeService).scoped(),
-  categoryGetAllService: asClass(CategoryGetAllService).scoped(),
-  categoryController: asClass(CategoryController).scoped(),
+  categoryRepository: asClass(CategorySqlRepository).singleton(),
+  categoryFacade: asClass(CategoryFacadeService).singleton(),
+  categoryGetAllService: asClass(CategoryGetAllService).singleton(),
+  categoryController: asClass(CategoryController).singleton(),
 
   db: asValue(db),
-  jwtService: asClass(JwtService).scoped(),
+  jwtService: asClass(JwtService).singleton(),
+  authHandler: asClass(AuthHandler).singleton(),
 
-  supplyRepository: asClass(SupplySqlRepository).scoped(),
-  supplyFacade: asClass(SupplyFacadeService).scoped(),
-  supplyGetAllService: asClass(SupplyGetAllService).scoped(),
-  supplyCreateService: asClass(SupplyCreateService).scoped(),
-  supplyEditService: asClass(SupplyEditService).scoped(),
-  supplyDeleteService: asClass(SupplyDeleteService).scoped(),
-  supplyController: asClass(SupplyController).scoped(),
+  supplyRepository: asClass(SupplySqlRepository).singleton(),
+  supplyFacade: asClass(SupplyFacadeService).singleton(),
+  supplyGetAllService: asClass(SupplyGetAllService).singleton(),
+  supplyCreateService: asClass(SupplyCreateService).singleton(),
+  supplyEditService: asClass(SupplyEditService).singleton(),
+  supplyDeleteService: asClass(SupplyDeleteService).singleton(),
+  supplyController: asClass(SupplyController).singleton(),
 
-  unitRepository: asClass(UnitSqlRepository).scoped(),
-  unitFacade: asClass(UnitFacadeService).scoped(),
-  unitGetAllService: asClass(UnitGetAllService).scoped(),
-  unitController: asClass(UnitController).scoped(),
+  unitRepository: asClass(UnitSqlRepository).singleton(),
+  unitFacade: asClass(UnitFacadeService).singleton(),
+  unitGetAllService: asClass(UnitGetAllService).singleton(),
+  unitController: asClass(UnitController).singleton(),
 
-  userRepository: asClass(UserSqlRepository).scoped(),
-  userFacade: asClass(UserFacadeService).scoped(),
-  userRegisterJwtService: asClass(UserRegisterJwtService).scoped(),
-  userSignInJwtService: asClass(UserSignInJwtService).scoped(),
-  userEditService: asClass(UserEditService).scoped(),
-  userAdminEditService: asClass(UserAdminEditService).scoped(),
-  userDeleteService: asClass(UserDeleteService).scoped(),
-  userAdminDeleteService: asClass(UserAdminDeleteService).scoped(),
-  userController: asClass(UserController).scoped()
+  userRepository: asClass(UserSqlRepository).singleton(),
+  userFacade: asClass(UserFacadeService).singleton(),
+  userGetService: asClass(UserGetService).singleton(),
+  userRegisterJwtService: asClass(UserRegisterJwtService).singleton(),
+  userSignInJwtService: asClass(UserSignInJwtService).singleton(),
+  userEditService: asClass(UserEditService).singleton(),
+  userAdminEditService: asClass(UserAdminEditService).singleton(),
+  userDeleteService: asClass(UserDeleteService).singleton(),
+  userAdminDeleteService: asClass(UserAdminDeleteService).singleton(),
+  userController: asClass(UserController).singleton()
 
 });
 
