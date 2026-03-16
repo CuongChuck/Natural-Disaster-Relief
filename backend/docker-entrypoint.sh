@@ -5,9 +5,6 @@ echo "Starting docker entrypoint for backend"
 # Allow overriding the sequelize CLI binary (use shipped devDependency by default via npx)
 SEQUELIZE_CMD=${SEQUELIZE_CMD:-npx sequelize-cli}
 
-# Compose sequelize-cli options so it uses the project config and correct folders
-SEQUELIZE_OPTS="--config core/config/config.json --migrations-path core/migrations --seeders-path core/seeders --models-path core/models"
-
 MAX_ATTEMPTS=6
 SLEEP_SECONDS=5
 
@@ -16,7 +13,7 @@ run_with_retries() {
   attempt=1
   while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     echo "Attempt ${attempt} for: ${cmd}"
-    if sh -c "$cmd $SEQUELIZE_OPTS"; then
+    if sh -c "$cmd"; then
       echo "Command succeeded: ${cmd}"
       return 0
     fi
