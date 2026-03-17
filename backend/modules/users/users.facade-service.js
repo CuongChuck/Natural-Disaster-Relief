@@ -28,7 +28,7 @@ class UserFacadeService {
       const strategy = this.getStrategy[data.strategy];
       const user = await strategy.getUser(data);
       return {
-        message: `User retrieval via ${data.strategy} strategy successfully`,
+        message: `User profile retrieval via ${data.strategy} strategy successfully`,
         user
       };
     } catch (err) {
@@ -39,10 +39,10 @@ class UserFacadeService {
   async registerUser(data) {
     try {
       const strategy = this.registerStrategy[data.strategy];
-      const { user, token } = await strategy.registerUser(data);
+      const { token } = await strategy.registerUser(data);
       return {
         message: `User registered via ${data.strategy} strategy successfully`,
-        user, token
+        token
       };
     }
     catch (err) {
@@ -53,10 +53,10 @@ class UserFacadeService {
   async signInUser(data) {
     try {
       const strategy = this.signInStrategy[data.strategy];
-      const { user, token } = await strategy.signInUser(data);
+      const { token } = await strategy.signInUser(data);
       return {
         message: `User signed in via ${data.strategy} strategy successfully`,
-        user, token
+        token
       };
     }
     catch (err) {
