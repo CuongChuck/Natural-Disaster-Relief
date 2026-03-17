@@ -7,6 +7,124 @@ servers:
   - url: http://localhost:3000
 
 paths:
+  /user:
+    get:
+      summary: Get User profile
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                strategy:
+                  type: string
+                  example: "nonAdmin"
+      responses:
+        201:
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User profile retrieval via nonAdmin strategy successfully"
+                  user:
+                    $ref: '#/components/schemas/User'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    
+    put:
+      summary: User profile edit
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    password:
+                      type: string
+                    strategy:
+                      type: string
+                      example: "nonAdmin"
+      responses:
+        200:
+          description: User profile edit successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User profile edit via nonAdmin strategy successfully"
+                  user:
+                    $ref: '#/components/schemas/User'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete User
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                strategy:
+                  type: string
+                  example: "nonAdmin"
+      responses:
+        200:
+          description: User profile deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User deleted via nonAdmin strategy successfully"
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
   /user/register:
     post:
       summary: Register a new user
@@ -32,8 +150,6 @@ paths:
                   token:
                     type: string
                     description: RS256 JWT token
-                  user:
-                    $ref: '#/components/schemas/UserResponse'
         500:
           description: Error message
           content:
@@ -76,8 +192,6 @@ paths:
                   token:
                     type: string
                     description: RS256 JWT token
-                  user:
-                    $ref: '#/components/schemas/UserResponse'
         500:
           description: Error message
           content:
@@ -324,10 +438,9 @@ components:
         city_province: { type: string }
         role: { type: string }
 
-    UserResponse:
+    User:
       type: object
       properties:
-        id: { type: integer }
         email: { type: string }
         name: { type: string }
         username: { type: string }
@@ -335,7 +448,6 @@ components:
         ward: { type: string }
         district: { type: string }
         city_province: { type: string }
-        role: { type: string }
 
     Category:
       type: object
