@@ -22,9 +22,7 @@ class UserSignInJwtService extends IUserSignInService {
         throw new Error("Password is incorrect.");
       }
       await transaction.commit();
-      const { password, createdAt, updatedAt, ...userResponse } = user;
       return {
-        user: userResponse,
         token: this.jwtService.generateToken({ id: user.id, role: user.role })
       };
     }

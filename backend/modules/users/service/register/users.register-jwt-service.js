@@ -16,9 +16,7 @@ class UserRegisterJwtService extends IUserRegisterService {
       data.password = await bcrypt.hash(data.password, 10);
       const user = await this.userRepository.createUser(data, transaction);
       await transaction.commit();
-      const { password, createdAt, updatedAt, ...userResponse } = user;
       return {
-        user: userResponse,
         token: this.jwtService.generateToken({ id: user.id, role: user.role })
       };
     }
