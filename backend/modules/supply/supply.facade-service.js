@@ -1,34 +1,32 @@
 class SupplyFacadeService {
-  constructor({
-    supplyGetAllService,
-    supplyCreateService,
-    supplyEditService,
-    supplyDeleteService
-  }) {
-    this.getStrategy = {
-      all: supplyGetAllService
-    };
-
-    this.createStrategy = {
-      normal: supplyCreateService
-    }
-
-    this.editStrategy = {
-      nonAdmin: supplyEditService
-    }
-
-    this.deleteStrategy = {
-      nonAdmin: supplyDeleteService
-    }
+  constructor(opts) {
+    this.getAllService = opts.supplyGetAllService
+    this.getMineService = opts.supplyGetMineService
+    this.getOneService = opts.supplyGetOneService
+    this.createService = opts.supplyCreateService
+    this.editService = opts.supplyEditService
+    this.deleteService = opts.supplyDeleteService
   }
 
-  async getAll() {
+  getAll = async () => {
     try {
-      const strategy = this.getStrategy.all;
-      const supplies = await strategy.getAll();
+      const supplies = await this.getAllService.getAll();
       return {
-        message: `Supplies retrieved via all strategy successfully`,
-        supplies: supplies
+        message: `All supplies retrieved successfully`,
+        supplies
+      };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+  
+  getOne = async (data) => {
+    try {
+      const supply = await this.getOneService.getOne(data);
+      return {
+        message: `Supply ${data.id} retrieved successfully`,
+        supply
       };
     }
     catch (err) {
@@ -36,12 +34,33 @@ class SupplyFacadeService {
     }
   }
 
-  async create(data) {
+  getMine = async (data) => {
     try {
-      const strategy = this.createStrategy[data.strategy];
-      const supply = await strategy.create(data);
+      const supplies = await this.getMineService.getMine(data);
       return {
-        message: `Supply create via ${data.strategy} strategy successfully`,
+        message: `My supplies retrieved successfully`,
+        supplies
+      };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+  create = async (data) => {
+    try {
+      await this.createService.create(data);
+      return { message: `Supply create successfully` };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  edit = async (data) => {
+    try {
+      const supply = await this.editService.edit(data);
+      return {
+        message: `Supply edit successfully`,
         supply
       };
     } catch (err) {
@@ -49,25 +68,11 @@ class SupplyFacadeService {
     }
   }
 
-  async edit(data) {
+  delete = async (data) => {
     try {
-      const strategy = this.editStrategy[data.strategy];
-      const supply = await strategy.edit(data);
+      await this.deleteService.delete(data);
       return {
-        message: `Supply edit via ${data.strategy} strategy successfully`,
-        supply
-      };
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async delete(data) {
-    try {
-      const strategy = this.deleteStrategy[data.strategy];
-      await strategy.delete(data);
-      return {
-        message: `Supply deletion via ${data.strategy} strategy successfully`
+        message: `Supply deletion successfully`
       };
     } catch (err) {
       throw err;

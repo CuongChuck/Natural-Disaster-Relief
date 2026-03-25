@@ -1,14 +1,11 @@
 class UnitFacadeService {
   constructor({ unitGetAllService }) {
-    this.getStrategy = {
-      all: unitGetAllService
-    };
+    this.getAllService = unitGetAllService;
   }
 
-  async getAll() {
+  getAll = async () => {
     try {
-      const strategy = this.getStrategy.all;
-      const units = await strategy.getAll();
+      const units = await this.getAllService.getAll();
       return {
         message: `Units retrieved via all strategy successfully`,
         units
