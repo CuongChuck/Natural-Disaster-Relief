@@ -3,8 +3,8 @@ import express from 'express';
 import container from '../../core/middleware/awilix-container.js';
 
 const router = express.Router();
-const categoryController = container.resolve('categoryController');
+const controllerHelper = container.resolve('controllerHelper');
 
-router.get('/categories', categoryController.getAll);
+router.get('/categories', controllerHelper.invoke('getAll', 'categoryController'));
 
 export default router;
