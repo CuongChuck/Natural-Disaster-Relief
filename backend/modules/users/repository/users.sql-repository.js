@@ -6,17 +6,20 @@ class UserSqlRepository extends IUserRepository {
     this.User = User;
   }
 
-  async getUser(data, transaction) {
+  getUser = async (data) => {
     try {
-      const user = await this.User.findByPk(data.userId, { attributes: [
-        'email',
-        'name',
-        'username',
-        'phone',
-        'ward',
-        'district',
-        'city_province'
-      ], transaction });
+      const user = await this.User.findByPk(data.userId, {
+        attributes: [
+          'email',
+          'name',
+          'username',
+          'phone',
+          'address_line',
+          'ward',
+          'district',
+          'city_province'
+        ]
+      });
       if (!user) throw new Error('There is no such user');
       return user.toJSON();
     } catch (err) {
@@ -24,7 +27,21 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  async createUser(data, transaction) {
+  getUsers = async (data) => {
+    try {
+      return await this.User.findAll({ 
+        attributes: [ 'id', 'username' ],
+        where: {
+          id: data
+        },
+        raw: true
+      });
+    } catch (err) {
+      throw new Error("User retrieval failed: " + err.message);
+    }
+  }
+
+  createUser = async (data, transaction) => {
     try {
       const user = await this.User.create({
         name: data.name,
@@ -32,6 +49,7 @@ class UserSqlRepository extends IUserRepository {
         email: data.email,
         password: data.password,
         phone: data.phone,
+        address_line: data.address_line,
         ward: data.ward,
         district: data.district,
         city_province: data.city_province,
@@ -45,7 +63,7 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  async findByUsername(data, transaction) {
+  findByUsername = async (data, transaction) => {
     try {
       const user = await this.User.findOne({ where: { username: data.username }, transaction });
       if (!user) throw new Error('There is no user with username: ' + data.username);
@@ -56,7 +74,7 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  async updateUser(data, transaction) {
+  updateUser = async (data, transaction) => {
     try {
       const user = await this.User.findByPk(data.userId);
       if (!user) throw new Error('There is no such user');
@@ -66,6 +84,7 @@ class UserSqlRepository extends IUserRepository {
         email: data.email,
         password: data.password,
         phone: data.phone,
+        address_line: data.address_line,
         ward: data.ward,
         district: data.district,
         city_province: data.city_province
@@ -75,6 +94,7 @@ class UserSqlRepository extends IUserRepository {
         'name',
         'username',
         'phone',
+        'address_line',
         'ward',
         'district',
         'city_province'
@@ -85,7 +105,7 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  async deleteUser(data, transaction) {
+  deleteUser = async (data, transaction) => {
     try {
       const user = await this.User.findByPk(data.userId);
       if (!user) throw new Error('There is no such user');
