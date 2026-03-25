@@ -8,10 +8,11 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate:up": "npx sequelize-cli db:migrate",
-    "migrate:undo": "npx sequelize-cli db:migrate:undo:all",
+    "migrate:down": "npx sequelize-cli db:migrate:undo:all",
     "db:create": "npx sequelize-cli db:create",
     "db:drop": "npx sequelize-cli db:drop",
-    "db:seed": "npx sequelize-cli db:seed:all"
+    "seed:all": "npx sequelize-cli db:seed:all",
+    "seed:undo": "npx sequelize-cli db:seed:undo:all"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
     "pg": "^8.20.0",
     "pg-hstore": "^2.3.4",
     "process": "^0.11.10",
+    "redis": "^5.11.0",
     "sequelize": "^6.37.7",
     "swagger-ui-express": "^5.0.1"
   },
