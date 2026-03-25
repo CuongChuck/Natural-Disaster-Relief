@@ -5,7 +5,7 @@ class UserController {
 
   get = async (req, res, next) => {
     try {
-      const data = req.body;
+      const data = req.body || {};
       data.userId = req.userId;
       const result = await this.userFacade.getUser(data);
       res.status(201).json({
@@ -63,7 +63,7 @@ class UserController {
 
   delete = async (req, res, next) => {
     try {
-      const data = req.body;
+      const data = req.body || {};
       data.userId = req.userId;
       const result = await this.userFacade.deleteUser(data);
       res.status(200).json({ message: result.message });
