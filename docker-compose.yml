@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres:latest
+    image: postgres:17-alpine
     restart: always
     environment:
       POSTGRES_PASSWORD: ${DEV_DB_PASS}
@@ -15,6 +15,30 @@ services:
       retries: 5
       start_period: 10s
 
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: redis-cache
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis-seeds:
+    image: redis/redis-stack-server:latest
+    container_name: redis-seeder
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./redis-seed.txt:/data/seed.txt
+    command: >
+      sh -c "cat /data/seed.txt | redis-cli -h redis --pipe"
+
+
   backend:
     build:
       context: ./backend
@@ -23,6 +47,7 @@ services:
     env_file:
       - ./.env
     environment:
+      REDIS_HOST: redis
       DB_HOST: database
       DB_PORT: 5432
       DB_USER: ${DEV_DB_USER}
@@ -32,6 +57,8 @@ services:
       NODE_ENV: development
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     ports:
       - "3000:3000"
