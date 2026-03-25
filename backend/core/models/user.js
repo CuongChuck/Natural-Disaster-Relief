@@ -50,6 +50,9 @@ export default (sequelize, DataTypes) => {
         len: [10,10]
       }
     },
+    address_line: {
+      type: DataTypes.STRING
+    },
     ward: {
       type: DataTypes.STRING,
       allowNull: false

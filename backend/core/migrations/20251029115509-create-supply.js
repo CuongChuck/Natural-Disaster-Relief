@@ -8,26 +8,6 @@ export async function up(queryInterface, Sequelize) {
       autoIncrement: true,
       type: Sequelize.INTEGER
     },
-    CategoryId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Categories',
-        key: 'id'
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    },
-    UnitId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Units',
-        key: 'id'
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    },
     UserId: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -46,29 +26,46 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.FLOAT,
       allowNull: false
     },
+    category: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    unit: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
     count: {
       type: Sequelize.INTEGER,
       allowNull: false
     },
-    expected_ward: {
-      type: Sequelize.STRING,
-      allowNull: false
+    proof: {
+      type: Sequelize.STRING
     },
-    expected_district: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    expected_city_province: {
-      type: Sequelize.STRING,
-      allowNull: false
+    address_line: {
+      type: Sequelize.STRING
     },
     ward: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false
     },
     district: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false
     },
     city_province: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    expected_address_line: {
+      type: Sequelize.STRING
+    },
+    expected_ward: {
+      type: Sequelize.STRING
+    },
+    expected_district: {
+      type: Sequelize.STRING
+    },
+    expected_city_province: {
       type: Sequelize.STRING
     },
     createdAt: {
@@ -80,6 +77,8 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.DATE
     }
   });
+
+  await queryInterface.addIndex('Supplies', ['UserId']);
 }
 export async function down(queryInterface, Sequelize) {
   await queryInterface.dropTable('Supplies');

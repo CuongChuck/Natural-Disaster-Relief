@@ -29,6 +29,9 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: false
     },
+    address_line: {
+      type: Sequelize.STRING
+    },
     ward: {
       type: Sequelize.STRING,
       allowNull: false

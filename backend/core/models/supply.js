@@ -9,20 +9,10 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       Supply.belongsTo(models['User']);
-      Supply.belongsTo(models['Category']);
-      Supply.belongsTo(models['Unit']);
       Supply.belongsToMany(models['Event'], { through: 'SupplyEvent' });
     }
   }
   Supply.init({
-    CategoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    UnitId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
     UserId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -53,30 +43,53 @@ export default (sequelize, DataTypes) => {
         }
       }
     },
-    expected_ward: {
+    category: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    expected_district: {
+    unit: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    expected_city_province: {
+    proof: {
       type: DataTypes.STRING,
-      allowNull: false
+      validate: {
+        isUrl: true
+      }
+    },
+    address_line: {
+      type: DataTypes.STRING
     },
     ward: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     district: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     city_province: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    expected_address_line: {
+      type: DataTypes.STRING
+    },
+    expected_ward: {
+      type: DataTypes.STRING
+    },
+    expected_district: {
+      type: DataTypes.STRING
+    },
+    expected_city_province: {
       type: DataTypes.STRING
     }
   }, {
     sequelize,
     modelName: 'Supply',
+    indexes: [
+      { fields: ['UserId'] },
+    ],
   });
   return Supply;
 };

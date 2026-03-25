@@ -25,6 +25,9 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    address_line: {
+      type: DataTypes.STRING
+    },
     ward: {
       type: DataTypes.STRING,
       allowNull: false

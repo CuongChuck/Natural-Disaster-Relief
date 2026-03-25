@@ -9,11 +9,13 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       Request.belongsTo(models['User'], { as: 'recipient' });
-      Request.belongsTo(models['Category']);
-      Request.belongsTo(models['Unit']);
     }
   }
   Request.init({
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -29,6 +31,14 @@ export default (sequelize, DataTypes) => {
         }
       }
     },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    unit: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     status: {
       type: DataTypes.ENUM("PENDING, ACTIVE, REJECTED"),
       allowNull: false
@@ -36,6 +46,9 @@ export default (sequelize, DataTypes) => {
     priority: {
       type: DataTypes.ENUM("LOW, MEDIUM, HIGH, URGENT"),
       allowNull: false
+    },
+    address_line: {
+      type: DataTypes.STRING
     },
     ward: {
       type: DataTypes.STRING,
@@ -49,9 +62,12 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, {
+  },  {
     sequelize,
     modelName: 'Request',
+    indexes: [
+      { fields: ['UserId'] },
+    ],
   });
   return Request;
 };

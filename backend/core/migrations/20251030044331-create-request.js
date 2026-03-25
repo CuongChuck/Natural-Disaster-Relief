@@ -9,31 +9,11 @@ export async function up(queryInterface, Sequelize) {
       autoIncrement: true,
       type: Sequelize.INTEGER
     },
-    recipientId: {
+    UserId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
-        key: 'id'
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    },
-    categoryId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Categories',
-        key: 'id'
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    },
-    unitId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Units',
         key: 'id'
       },
       onUpdate: 'CASCADE',
@@ -47,6 +27,14 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.FLOAT,
       allowNull: false,
     },
+    category: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    unit: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
     status: {
       type: Sequelize.ENUM("PENDING, ACTIVE, REJECTED"),
       allowNull: false
@@ -54,6 +42,9 @@ export async function up(queryInterface, Sequelize) {
     priority: {
       type: Sequelize.ENUM("LOW, MEDIUM, HIGH, URGENT"),
       allowNull: false
+    },
+    address_line: {
+      type: Sequelize.STRING
     },
     ward: {
       type: Sequelize.STRING,
@@ -76,6 +67,8 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.DATE
     }
   });
+
+  await queryInterface.addIndex('Requests', ['UserId']);
 }
 export async function down(queryInterface, Sequelize) {
   await queryInterface.dropTable('Requests');
