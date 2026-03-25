@@ -5,19 +5,19 @@ class ISupplyRepository {
     }
   }
 
-  async findAll(transaction) {
+  getAll = async () => {
     throw new Error('Method not implemented.');
   }
 
-  async create(data, transaction) {
+  getOne = async (data) => {
     throw new Error('Method not implemented.');
   }
 
-  async edit(data, transaction) {
+  getMine = async (data) => {
     throw new Error('Method not implemented.');
   }
 
-  async delete(data, transaction) {
+  create = async (data) => {
     throw new Error('Method not implemented.');
   }
 }
