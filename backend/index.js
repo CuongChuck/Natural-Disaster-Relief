@@ -13,6 +13,7 @@ import userRoutes from './modules/users/users.route.js';
 import categoryRoutes from './modules/category/category.route.js';
 import unitRoutes from './modules/unit/unit.route.js';
 import supplyRoutes from './modules/supply/supply.route.js';
+import container from './core/middleware/awilix-container.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,6 +45,8 @@ app.get('/swagger/v1/swagger.json', (req, res) => {
 if (process.env.NODE_ENV !== 'production') {
   app.use('/api-docs', serve, setup(swaggerSpec));
 }
+
+app.set('container', container);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
