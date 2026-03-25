@@ -12,16 +12,6 @@ paths:
       summary: Get User profile
       tags:
         - Users
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                strategy:
-                  type: string
-                  example: "nonAdmin"
       responses:
         201:
           description: User profile retrieved successfully
@@ -32,7 +22,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "User profile retrieval via nonAdmin strategy successfully"
+                    example: "User profile retrieval successfully"
                   user:
                     $ref: '#/components/schemas/User'
         500:
@@ -62,9 +52,6 @@ paths:
                   properties:
                     password:
                       type: string
-                    strategy:
-                      type: string
-                      example: "nonAdmin"
       responses:
         200:
           description: User profile edit successfully
@@ -75,7 +62,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "User profile edit via nonAdmin strategy successfully"
+                    example: "User profile edit successfully"
                   user:
                     $ref: '#/components/schemas/User'
         500:
@@ -94,16 +81,6 @@ paths:
         - Users
       security:
         - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                strategy:
-                  type: string
-                  example: "nonAdmin"
       responses:
         200:
           description: User profile deleted successfully
@@ -114,7 +91,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "User deleted via nonAdmin strategy successfully"
+                    example: "User deleted successfully"
         500:
           description: Error message
           content:
@@ -146,7 +123,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "User registered via jwt strategy successfully"
+                    example: "User registered successfully"
                   token:
                     type: string
                     description: RS256 JWT token
@@ -176,8 +153,6 @@ paths:
                   type: string
                 password:
                   type: string
-                strategy:
-                  type: string
       responses:
         201:
           description: User signed in successfully
@@ -188,7 +163,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "User signed via jwt strategy successfully"
+                    example: "User signed in successfully"
                   token:
                     type: string
                     description: RS256 JWT token
@@ -217,11 +192,9 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Categories retrieved via all strategy successfully"
+                    example: "Categories retrieved successfully"
                   categories:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Category'
+                    $ref: '#/components/schemas/Category'
         500:
           description: Error message
           content:
@@ -247,11 +220,9 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Units retrieved via all strategy successfully"
+                    example: "Units retrieved successfully"
                   units:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Unit'
+                    $ref: '#/components/schemas/Unit'
         500:
           description: Error message
           content:
@@ -262,14 +233,14 @@ paths:
                   message:
                     type: string
 
-  /supplies:
+  /supplies/unverified:
     get:
-      summary: Get all supply offers
+      summary: Get all unverified supply offers
       tags:
         - Supplies
       responses:
         200:
-          description: Get all supply offers successfully
+          description: Get all unverified supply offers successfully
           content:
             application/json:
               schema:
@@ -277,11 +248,76 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Supplies retrieved via all strategy successfully"
+                    example: "Supplies retrieved successfully"
                   supplies:
                     type: array
                     items:
                       $ref: '#/components/schemas/Supply'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /supplies/me/unverified:
+    get:
+      summary: Get all current user's unverified supply offers
+      tags:
+        - Supplies
+      responses:
+        200:
+          description: Get all current user's unverified supply offers successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "My supplies retrieved successfully"
+                  supplies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Supply'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /supply/unverified/{id}:
+    get:
+      summary: Get an unverified supply offers
+      tags:
+        - Supplies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get an unverified supply offers successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supply ID retrieved successfully"
+                  supply:
+                    $ref: '#/components/schemas/Supply'
         500:
           description: Error message
           content:
@@ -315,9 +351,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Supplies created via normal strategy successfully"
-                  supply:
-                    $ref: '#/components/schemas/Supply'
+                    example: "Supplies created successfully"
         500:
           description: Error message
           content:
@@ -328,92 +362,92 @@ paths:
                   message:
                     type: string
 
-  /supply/{id}:
-    put:
-      summary: Edit a supply offer
-      tags:
-        - Supplies
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of supply offer
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SupplyRequest'
-      responses:
-        201:
-          description: Edit a supply offer successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supplies edit via nonAdmin strategy successfully"
-                  supply:
-                    $ref: '#/components/schemas/Supply'
-        500:
-          description: Error message
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+  # /supply/{id}:
+  #   put:
+  #     summary: Edit a supply offer
+  #     tags:
+  #       - Supplies
+  #     security:
+  #       - bearerAuth: []
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         required: true
+  #         description: The ID of supply offer
+  #         schema:
+  #           type: integer
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/SupplyRequest'
+  #     responses:
+  #       201:
+  #         description: Edit a supply offer successfully
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                   example: "Supplies edit successfully"
+  #                 supply:
+  #                   $ref: '#/components/schemas/Supply'
+  #       500:
+  #         description: Error message
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
 
-    delete:
-      summary: Delete a supply offer
-      tags:
-        - Supplies
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of supply offer
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                strategy:
-                  type: string
-                  example: nonAdmin
-      responses:
-        204:
-          description: Delete a supply offer successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supplies deletion via nonAdmin strategy successfully"
-        500:
-          description: Error message
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+  #   delete:
+  #     summary: Delete a supply offer
+  #     tags:
+  #       - Supplies
+  #     security:
+  #       - bearerAuth: []
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         required: true
+  #         description: The ID of supply offer
+  #         schema:
+  #           type: integer
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               strategy:
+  #                 type: string
+  #                 example: nonAdmin
+  #     responses:
+  #       204:
+  #         description: Delete a supply offer successfully
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                   example: "Supplies deletion successfully"
+  #       500:
+  #         description: Error message
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
 
 components:
   securitySchemes:
@@ -427,12 +461,10 @@ components:
       properties:
         email: { type: string }
         password: { type: string }
-        strategy:
-          type: string
-          example: jwt
         name: { type: string }
         username: { type: string }
         phone: { type: string }
+        address_line: { type: string }
         ward: { type: string }
         district: { type: string }
         city_province: { type: string }
@@ -445,36 +477,51 @@ components:
         name: { type: string }
         username: { type: string }
         phone: { type: string }
+        address_line: { type: string }
         ward: { type: string }
         district: { type: string }
         city_province: { type: string }
 
     Category:
       type: object
-      properties:
-        id: { type: integer }
-        name: { type: string }
+      description: "A map of category IDs to unit names"
+      additionalProperties:
+        type: string
+      example:
+        "1": "thuốc"
+        "2": "thực phẩm"
+        "3": "nước"
+        "4": "vật dụng"
+        "5": "tiền"
     
     Unit:
       type: object
-      properties:
-        id: { type: integer }
-        name: { type: string }
+      description: "A map of unit IDs to unit names"
+      additionalProperties:
+        type: string
+      example:
+        "1": "kg"
+        "2": "l"
+        "3": "phần"
+        "4": "cái"
+        "5": "nghìn VND"
 
     SupplyRequest:
       type: object
       properties:
-        strategy:
+        category:
           type: string
-          example: ["normal", "nonAdmin"]
-        category: { type: integer }
-        unit: { type: integer }
+          example: "1"
+        unit:
+          type: string
+          example: "1"
         name: { type: string }
         count: { type: integer }
         quantity:
           type: number
           format: float
           example: 19.99
+        address_line: { type: string }
         ward: { type: string }
         district: { type: string }
         city_province: { type: string }
@@ -483,18 +530,16 @@ components:
       type: object
       properties:
         id: { type: integer }
-        Category.name: { type: string }
-        Unit.name: { type: string }
-        User.username: { type: string }
+        category: { type: string }
+        unit: { type: string }
+        donor: { type: string }
         name: { type: string }
-        count: { type: integer }
         quantity:
           type: number
           format: float
           example: 19.99
-        expected_ward: { type: string }
-        expected_district: { type: string }
-        expected_city_province: { type: string }
+        count: { type: integer }
+        address_line: { type: string }
         ward: { type: string }
         district: { type: string }
         city_province: { type: string }
