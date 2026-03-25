@@ -1,33 +1,52 @@
 import ISupplyRepository from './supply.interface-repository.js';
+import { ISupplyStorageRepository } from "./supply.interface-storage-repository.js";
 
-class SupplySqlRepository extends ISupplyRepository {
-  constructor({ Supply, Event, Category, Unit, User }) {
+class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
+  constructor({ Supply, Event, User, db }) {
     super();
     this.Supply = Supply;
     this.Event = Event;
-    this.Category = Category;
-    this.Unit = Unit;
     this.User = User;
+    this.db = db;
   }
 
-  async findAll() {
+  async getAll() {
     try {
-      return await this.Supply.findAll({ attributes: { exclude: [
-        'CategoryId', 'UnitId', 'UserId'
-      ] }, include: [
-        { model: this.Category, attributes: ['name'] },
-        { model: this.Unit, attributes: ['name'] },
-        { model: this.User, attributes: ['username'] }
-      ], raw: true });
+      return await this.db.sequelize.query(
+        `SELECT "Supply"."id", "Supply"."name", "Supply"."quantity",
+        "Supply"."count", "Supply"."expected_address_line", "Supply"."expected_ward",
+        "Supply"."expected_district", "Supply"."expected_city_province","Supply"."address_line",
+        "Supply"."ward", "Supply"."district", "Supply"."city_province", "Supply"."createdAt",
+        "Supply"."updatedAt", "Categories"."name" AS "category",
+        "Units"."name" AS "unit", "Users"."username" AS "donor"
+        FROM "Supplies" AS "Supply"
+        LEFT OUTER JOIN "Categories" ON "Supply"."CategoryId" = "Categories"."id"
+        LEFT OUTER JOIN "Units" ON "Supply"."UnitId" = "Units"."id"
+        LEFT OUTER JOIN "Users" ON "Supply"."UserId" = "Users"."id";`,
+        { type: this.db.sequelize.QueryTypes.SELECT, }
+      );
     }
     catch (err) {
       throw new Error("Supplies retrieval failed: " + err.message);
     }
   }
 
-  async findByDonor(data, transaction) {
+  async getMine(data) {
     try {
-      return await this.Supply.findOne({ where: { id: data.id, UserId: data.user }, transaction });
+      return await this.db.sequelize.query(
+        `SELECT "Supply"."id", "Supply"."name", "Supply"."quantity",
+        "Supply"."count", "Supply"."expected_address_line", "Supply"."expected_ward",
+        "Supply"."expected_district", "Supply"."expected_city_province","Supply"."address_line",
+        "Supply"."ward", "Supply"."district", "Supply"."city_province", "Supply"."createdAt",
+        "Supply"."updatedAt", "Categories"."name" AS "category",
+        "Units"."name" AS "unit", "Users"."username" AS "donor"
+        FROM "Supplies" AS "Supply"
+        LEFT OUTER JOIN "Categories" ON "Supply"."CategoryId" = "Categories"."id"
+        LEFT OUTER JOIN "Units" ON "Supply"."UnitId" = "Units"."id"
+        LEFT OUTER JOIN "Users" ON "Supply"."UserId" = "Users"."id"
+        WHERE "Supply"."UserId" = ${data.userId};`,
+        { type: this.db.sequelize.QueryTypes.SELECT, }
+      );
     } catch (err) {
       throw new Error("Supply retrieval failed: " + err.message);
     }
@@ -35,10 +54,10 @@ class SupplySqlRepository extends ISupplyRepository {
 
   async create(data, transaction) {
     try {
-      const supply = await this.Supply.create({
+      await this.Supply.create({
         CategoryId: data.category,
         UnitId: data.unit,
-        UserId: data.user,
+        UserId: data.userId,
         name: data.name,
         count: data.count,
         quantity: data.quantity,
@@ -46,14 +65,6 @@ class SupplySqlRepository extends ISupplyRepository {
         expected_district: data.district,
         expected_city_province: data.city_province
       }, { transaction });
-      return await this.Supply.findByPk(supply.id, {
-        attributes: { exclude: [ 'CategoryId', 'UnitId', 'UserId' ] },
-        include: [
-          { model: this.Category, attributes: ['name'] },
-          { model: this.Unit, attributes: ['name'] },
-          { model: this.User, attributes: ['username'] }
-        ], transaction, raw: true
-      });
     } catch (err) {
       throw new Error("Supply creation failed: " + err.message);
     }
@@ -66,19 +77,30 @@ class SupplySqlRepository extends ISupplyRepository {
         UnitId: data.unit,
         UserId: data.user,
         name: data.name,
-        count: data.count, 
-        expected_ward: data.ward,
-        expected_district: data.district,
-        expected_city_province: data.city_province
+        count: data.count,
+        address_line: data.address_line,
+        ward: data.ward,
+        district: data.district,
+        city_province: data.city_province,
+        expected_address_line: data.expected_address_line,
+        expected_ward: data.expected_ward,
+        expected_district: data.expected_district,
+        expected_city_province: data.expected_city_province
       }, { where: { id: data.id } , transaction });
-      return await this.Supply.findByPk(data.id, {
-        attributes: { exclude: [ 'CategoryId', 'UnitId', 'UserId' ] },
-        include: [
-          { model: this.Category, attributes: ['name'] },
-          { model: this.Unit, attributes: ['name'] },
-          { model: this.User, attributes: ['username'] }
-        ], transaction, raw: true
-      });
+      return await this.db.sequelize.query(
+        `SELECT "Supply"."id", "Supply"."name", "Supply"."quantity",
+        "Supply"."count", "Supply"."expected_address_line", "Supply"."expected_ward",
+        "Supply"."expected_district", "Supply"."expected_city_province","Supply"."address_line",
+        "Supply"."ward", "Supply"."district", "Supply"."city_province", "Supply"."createdAt",
+        "Supply"."updatedAt", "Categories"."name" AS "category",
+        "Units"."name" AS "unit", "Users"."username" AS "donor"
+        FROM "Supplies" AS "Supply"
+        LEFT OUTER JOIN "Categories" ON "Supply"."CategoryId" = "Categories"."id"
+        LEFT OUTER JOIN "Units" ON "Supply"."UnitId" = "Units"."id"
+        LEFT OUTER JOIN "Users" ON "Supply"."UserId" = "Users"."id"
+        WHERE "Supply"."UserId" = ${data.userId};`,
+        { type: this.db.sequelize.QueryTypes.SELECT, }
+      );
     } catch (err) {
       throw new Error("Supply edit failed: " + err.message);
     }
