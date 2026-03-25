@@ -9,6 +9,10 @@ class IUserRepository {
     throw new Error('Method not implemented.');
   }
 
+  getUsers = async (data) => {
+    throw new Error('Method not implemented.');
+  }
+
   async createUser(data, transaction) {
     throw new Error('Method not implemented.');
   }
