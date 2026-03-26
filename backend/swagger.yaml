@@ -268,6 +268,8 @@ paths:
       summary: Get all current user's unverified supply offers
       tags:
         - Supplies
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: Get all current user's unverified supply offers successfully
@@ -362,92 +364,82 @@ paths:
                   message:
                     type: string
 
-  # /supply/{id}:
-  #   put:
-  #     summary: Edit a supply offer
-  #     tags:
-  #       - Supplies
-  #     security:
-  #       - bearerAuth: []
-  #     parameters:
-  #       - name: id
-  #         in: path
-  #         required: true
-  #         description: The ID of supply offer
-  #         schema:
-  #           type: integer
-  #     requestBody:
-  #       required: true
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/SupplyRequest'
-  #     responses:
-  #       201:
-  #         description: Edit a supply offer successfully
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: string
-  #                   example: "Supplies edit successfully"
-  #                 supply:
-  #                   $ref: '#/components/schemas/Supply'
-  #       500:
-  #         description: Error message
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: string
+  /supply/{id}:
+    put:
+      summary: Donor edit an unverified supply offer
+      tags:
+        - Supplies
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyRequest'
+      responses:
+        201:
+          description: Edit a supply offer successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supply edition successfully"
+                  supply:
+                    $ref: '#/components/schemas/Supply'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
-  #   delete:
-  #     summary: Delete a supply offer
-  #     tags:
-  #       - Supplies
-  #     security:
-  #       - bearerAuth: []
-  #     parameters:
-  #       - name: id
-  #         in: path
-  #         required: true
-  #         description: The ID of supply offer
-  #         schema:
-  #           type: integer
-  #     requestBody:
-  #       required: true
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               strategy:
-  #                 type: string
-  #                 example: nonAdmin
-  #     responses:
-  #       204:
-  #         description: Delete a supply offer successfully
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: string
-  #                   example: "Supplies deletion successfully"
-  #       500:
-  #         description: Error message
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: string
+    delete:
+      summary: Donor delete an unverified supply offer
+      tags:
+        - Supplies
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Delete a supply offer successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supply deletion successfully"
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
 components:
   securitySchemes:
