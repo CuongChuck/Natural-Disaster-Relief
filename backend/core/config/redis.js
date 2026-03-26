@@ -10,13 +10,9 @@ await client.ft.dropIndex('idx:supplies').then(() => {}, () => {});
 await client.ft.dropIndex('idx:supplies_review').then(() => {}, () => {});
 
 await client.ft.create('idx:supplies', {
-  '$.id': {
-    type: SCHEMA_FIELD_TYPE.TEXT,
-    AS: 'id'
-  },
-  '$.userId': {
+  '$.donorId': {
     type: SCHEMA_FIELD_TYPE.NUMERIC,
-    AS: 'userId'
+    AS: 'donorId'
   }
 }, {
   ON: 'JSON',
@@ -24,19 +20,15 @@ await client.ft.create('idx:supplies', {
 });
 
 await client.ft.create('idx:supplies_review', {
-  '$.id': {
-    type: SCHEMA_FIELD_TYPE.TEXT,
-    AS: 'id'
-  },
   '$.reviewerId': {
     type: SCHEMA_FIELD_TYPE.NUMERIC,
     AS: 'reviewerId'
   },
-  '$.userId': {
+  '$.donorId': {
     type: SCHEMA_FIELD_TYPE.NUMERIC,
-    AS: 'userId'
+    AS: 'donorId'
   }
 }, {
   ON: 'JSON',
-  PREFIX: ['supply_audited:']
+  PREFIX: ['supply_review:']
 });
