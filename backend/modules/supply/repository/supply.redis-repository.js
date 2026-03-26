@@ -25,16 +25,24 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
 
   getMine = async (data) => {
     try {
-      return await this.redis.ft.search('idx:supplies', `@userId:[${data.userId} ${data.userId}]`);
+      return await this.redis.ft.search('idx:supplies', `@donorId:[${data.donorId} ${data.donorId}]`);
     } catch (err) {
       throw new Error('Error in retrieving my unverified supplies: ' + err.message);
     }
   }
 
+  getReview = async (data) => {
+    try {
+      return await this.redis.json.get(`supply_review:${data.id}`);
+    } catch (err) {
+      throw new Error(`Error in retrieving supply review ${data.id}: ` + err.message);
+    }
+  }
+
   checkOwner = async (data) => {
     try {
-      const userIds = await this.redis.json.get(`supply:${data.id}`, { path: '$.userId' });
-      if (data.userId != userIds[0]) throw new Error('User is not authorized to modify this supply');
+      const donorIds = await this.redis.json.get(`supply:${data.id}`, { path: '$.donorId' });
+      if (data.donorId != donorIds[0]) throw new Error('User is not authorized to modify this supply');
     } catch (err) {
       throw new Error('Error in checking supply owner: ' + err.message);
     }
@@ -50,19 +58,36 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
         .then((result) => {}, (err) => {
           throw new Error(err.message);
         });
+      return id;
     } catch (err) {
       throw new Error('Error in creating a new supply: ' + err.message);
     }
   }
 
+  review = async (data) => {
+    try {
+      const { id, ...input } = data;
+      await this.redis.json.set(`supply_review:${id}`, '$', data);
+    } catch (err) {
+      throw new Error('Error in reviewing a supply: ' + err.message);
+    }
+  }
+
+  outdateReview = async (data) => {
+    try {
+      await this.redis.json.set(`supply_review:${data.id}`, '$.updated', false);
+    } catch (err) {
+      throw new Error('Error in outdating a review on supply: ' + err.message);
+    }
+  }
+
   edit = async (data) => {
     try {
-      const { id, userId, ...input } = data;
+      const { id, donorId, ...input } = data;
       const key = `supply:${id}`;
       for (const [field, value] of Object.entries(input)) {
         await this.redis.json.set(key, `$.${field}`, value);
       }
-      return await this.redis.json.get(key, '$');
     } catch (err) {
       throw new Error('Error in editing a supply: ' + err.message);
     }
@@ -70,7 +95,6 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
 
   delete = async (data) => {
     try {
-      console.log(data);
       await this.redis.json.del(`supply:${data.id}`, '$');
     } catch (err) {
       throw new Error('Error in deleting a supply: ' + err.message);

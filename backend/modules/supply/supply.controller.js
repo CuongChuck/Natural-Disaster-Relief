@@ -30,10 +30,24 @@ class SupplyController {
     }
   };
 
+  getReview = async (req, res, next) => {
+    try {
+      const data = { id: req.params.id };
+      const result = await this.supplyFacade.getReview(data);
+      res.status(200).json({
+        message: result.message,
+        review: result.review
+      });
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
   getMine = async (req, res, next) => {
     try {
       const data = req.body || {};
-      data.userId = req.userId;
+      data.donorId = req.userId;
       const result = await this.supplyFacade.getMine(data);
       res.status(200).json({
         message: result.message,
@@ -57,12 +71,30 @@ class SupplyController {
     }
   };
 
+  review = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const data = { id, reviewerId: req.userId, ...req.body }
+      const result = await this.supplyFacade.review(data);
+      res.status(201).json({
+        message: result.message,
+        review: result.review
+      });
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
   create = async (req, res, next) => {
     try {
-      const data = req.body;
-      data.userId = req.userId;
+      const { id } = req.params;
+      const data = { id, donorId: req.userId, ...req.body }
       const result = await this.supplyFacade.create(data);
-      res.status(201).json({ message: result.message });
+      res.status(201).json({
+        message: result.message,
+        supply: result.supply
+      });
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -72,8 +104,7 @@ class SupplyController {
   edit = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const userId = req.userId;
-      const data = { id, userId, ...req.body };
+      const data = { id, donorId: req.userId, ...req.body };
       const result = await this.supplyFacade.edit(data);
       res.status(201).json({
         message: result.message,
@@ -88,8 +119,7 @@ class SupplyController {
   delete = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const userId = req.userId;
-      const data = { id, userId };
+      const data = { id, donorId: req.userId };
       const result = await this.supplyFacade.delete(data);
       res.status(200).json({ message: result.message });
     }

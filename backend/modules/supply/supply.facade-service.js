@@ -1,11 +1,13 @@
 class SupplyFacadeService {
   constructor(opts) {
-    this.getAllService = opts.supplyGetAllService
-    this.getMineService = opts.supplyGetMineService
-    this.getOneService = opts.supplyGetOneService
-    this.createService = opts.supplyCreateService
-    this.editService = opts.supplyEditService
-    this.deleteService = opts.supplyDeleteService
+    this.getAllService = opts.supplyGetAllService;
+    this.getMineService = opts.supplyGetMineService;
+    this.getOneService = opts.supplyGetOneService;
+    this.createService = opts.supplyCreateService;
+    this.editService = opts.supplyEditService;
+    this.deleteService = opts.supplyDeleteService;
+    this.reviewService = opts.supplyReviewService;
+    this.getReviewService = opts.supplyGetReviewService;
   }
 
   getAll = async () => {
@@ -47,10 +49,32 @@ class SupplyFacadeService {
     }
   }
 
+  getReview = async (data) => {
+    try {
+      const review = await this.getReviewService.getReview(data);
+      return {
+        message: `Supply review ${data.id} retrieved successfully`,
+        review
+      };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
   create = async (data) => {
     try {
-      await this.createService.create(data);
-      return { message: `Supply create successfully` };
+      const supply = await this.createService.create(data);
+      return { message: `Supply created successfully`, supply };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  review = async (data) => {
+    try {
+      const review = await this.reviewService.review(data);
+      return { message: `Supply review created successfully`, review };
     } catch (err) {
       throw err;
     }
@@ -60,7 +84,7 @@ class SupplyFacadeService {
     try {
       const supply = await this.editService.edit(data);
       return {
-        message: `Supply edit successfully`,
+        message: `Supply edited successfully`,
         supply
       };
     } catch (err) {
@@ -72,7 +96,7 @@ class SupplyFacadeService {
     try {
       await this.deleteService.delete(data);
       return {
-        message: `Supply deletion successfully`
+        message: `Supply deleted successfully`
       };
     } catch (err) {
       throw err;
