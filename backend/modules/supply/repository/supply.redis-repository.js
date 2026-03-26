@@ -31,6 +31,15 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
     }
   }
 
+  checkOwner = async (data) => {
+    try {
+      const userIds = await this.redis.json.get(`supply:${data.id}`, { path: '$.userId' });
+      if (data.userId != userIds[0]) throw new Error('User is not authorized to modify this supply');
+    } catch (err) {
+      throw new Error('Error in checking supply owner: ' + err.message);
+    }
+  }
+
   create = async (data) => {
     try {
       const id = await this.redis.get('supply_id');
@@ -47,11 +56,25 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
   }
 
   edit = async (data) => {
-    
+    try {
+      const { id, userId, ...input } = data;
+      const key = `supply:${id}`;
+      for (const [field, value] of Object.entries(input)) {
+        await this.redis.json.set(key, `$.${field}`, value);
+      }
+      return await this.redis.json.get(key, '$');
+    } catch (err) {
+      throw new Error('Error in editing a supply: ' + err.message);
+    }
   }
 
   delete = async (data) => {
-    
+    try {
+      console.log(data);
+      await this.redis.json.del(`supply:${data.id}`, '$');
+    } catch (err) {
+      throw new Error('Error in deleting a supply: ' + err.message);
+    }
   }
 }
 
