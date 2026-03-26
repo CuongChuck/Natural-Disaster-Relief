@@ -1,9 +1,13 @@
 export const ISupplyCacheRepository = (Base) => class extends Base {
-  async edit(data) {
+  edit = async (data) => {
     throw new Error('Method not implemented.');
   }
 
-  async delete(data) {
+  delete = async (data) => {
+    throw new Error('Method not implemented.');
+  }
+
+  checkOwner = async (data) => {
     throw new Error('Method not implemented.');
   }
 };
