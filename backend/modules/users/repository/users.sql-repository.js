@@ -17,7 +17,8 @@ class UserSqlRepository extends IUserRepository {
           'address_line',
           'ward',
           'district',
-          'city_province'
+          'city_province',
+          'role'
         ]
       });
       if (!user) throw new Error('There is no such user');
