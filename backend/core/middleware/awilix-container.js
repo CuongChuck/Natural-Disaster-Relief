@@ -16,7 +16,9 @@ import SupplyFacadeService from '../../modules/supply/supply.facade-service.js';
 import SupplyGetAllUnverified from '../../modules/supply/service/get-all/supply.get-all-unverified.js';
 import SupplyGetMineUnverified from '../../modules/supply/service/get-mine/supply.get-mine-unverified.js';
 import SupplyGetOneUnverified from '../../modules/supply/service/get-one/supply.get-one-unverified.js';
+import SupplyGetReview from '../../modules/supply/service/get-review/supply.get-review.js';
 import SupplyCreateService from '../../modules/supply/service/create/supply.create-service.js';
+import SupplyReviewService from '../../modules/supply/service/review/supply.review-service.js';
 import SupplyEditService from '../../modules/supply/service/edit/supply.edit-service.js';
 import SupplyDeleteService from '../../modules/supply/service/delete/supply.delete-service.js';
 import SupplyController from '../../modules/supply/supply.controller.js';
@@ -65,7 +67,9 @@ container.register({
   supplyGetAllService: asClass(SupplyGetAllUnverified).scoped(),
   supplyGetMineService: asClass(SupplyGetMineUnverified).scoped(),
   supplyGetOneService: asClass(SupplyGetOneUnverified).scoped(),
+  supplyGetReviewService: asClass(SupplyGetReview).scoped(),
   supplyCreateService: asClass(SupplyCreateService).scoped(),
+  supplyReviewService: asClass(SupplyReviewService).scoped(),
   supplyEditService: asClass(SupplyEditService).scoped(),
   supplyDeleteService: asClass(SupplyDeleteService).scoped(),
   supplyController: asClass(SupplyController).scoped(),
