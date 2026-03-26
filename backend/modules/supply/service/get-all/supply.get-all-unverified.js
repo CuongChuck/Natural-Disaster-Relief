@@ -11,12 +11,12 @@ class SupplyGetAllUnverified extends ISupplyGetAllService {
 
   format = (supplies, categories, units, users) => {
     return supplies.documents.map((record) => {
-      const { category, unit, userId, ...remain } = record.value;
+      const { category, unit, donorId, ...remain } = record.value;
       return {
         id: Number(record.id.split(':')[1]),
         category: categories[category] || 'N/A',
         unit: units[unit] || 'N/A',
-        donor: users[userId] || 'N/A',
+        donor: users[donorId] || 'N/A',
         ...remain
       }
     });
@@ -29,8 +29,8 @@ class SupplyGetAllUnverified extends ISupplyGetAllService {
         this.categoryGetAllService.getAll(),
         this.unitGetAllService.getAll()
       ]);
-      const userIds = [...new Set(supplies.documents.map((record) => record.value.userId))];
-      const users = await this.userGetManyService.getUsers(userIds);
+      const donorIds = [...new Set(supplies.documents.map((record) => record.value.donorId))];
+      const users = await this.userGetManyService.getUsers(donorIds);
       return this.format(supplies, categories, units, users);
     }
     catch (err) {

@@ -11,7 +11,7 @@ class SupplyEditService extends ISupplyEditService {
   }
 
   format = (id, supply, _category, _unit, username) => {
-    const { category, unit, userId, ...remain } = supply;
+    const { category, unit, donorId, ...remain } = supply;
     return {
       id: Number(id),
       category: _category,
@@ -25,13 +25,15 @@ class SupplyEditService extends ISupplyEditService {
     try {
       await this.supplyRepository.checkOwner({
         id: data.id,
-        userId: data.userId
+        donorId: data.donorId
       });
       data.updatedAt = new Date();
-      const supply = await this.supplyRepository.edit(data);
+      await this.supplyRepository.edit(data);
+      await this.supplyRepository.outdateReview({ id: data.id });
+      const supply = await this.supplyRepository.getOne({ id: data.id });
       const category = await this.categoryGetOneService.getOne({ id: supply.category });
       const unit = await this.unitGetOneService.getOne({ id: supply.unit });
-      const user = await this.userGetService.getUser({ userId: supply.userId });
+      const user = await this.userGetService.getUser({ userId: supply.donorId });
       return this.format(data.id, supply, category, unit, user.username);
     }
     catch (err) {

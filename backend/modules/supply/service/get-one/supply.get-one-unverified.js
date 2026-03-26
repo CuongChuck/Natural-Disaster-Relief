@@ -10,7 +10,7 @@ class SupplyGetOneUnverified extends ISupplyGetOneService {
   }
 
   format = (id, supply, _category, _unit, username) => {
-    const { category, unit, userId, ...remain } = supply;
+    const { category, unit, donorId, ...remain } = supply;
     return {
       id: Number(id),
       category: _category,
@@ -25,7 +25,7 @@ class SupplyGetOneUnverified extends ISupplyGetOneService {
       const supply = await this.supplyRepository.getOne(data);
       const category = await this.categoryGetOneService.getOne({ id: supply.category });
       const unit = await this.unitGetOneService.getOne({ id: supply.unit });
-      const user = await this.userGetService.getUser({ userId: supply.userId });
+      const user = await this.userGetService.getUser({ userId: supply.donorId });
       return this.format(data.id, supply, category, unit, user.username);
     }
     catch (err) {

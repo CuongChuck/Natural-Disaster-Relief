@@ -11,7 +11,7 @@ class SupplyGetMineUnverified extends ISupplyGetMineService {
 
   format = (supplies, categories, units, username) => {
     return supplies.documents.map((record) => {
-      const { category, unit, userId, ...remain } = record.value;
+      const { category, unit, donorId, ...remain } = record.value;
       return {
         id: Number(record.id.split(':')[1]),
         category: categories[category] || 'N/A',

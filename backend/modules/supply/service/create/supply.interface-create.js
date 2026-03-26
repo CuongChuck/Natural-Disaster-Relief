@@ -5,7 +5,7 @@ class ISupplyCreateService {
     }
   }
 
-  async create(data) {
+  create = async (data) => {
     throw new Error('Method not implemented.');
   }
 }
