@@ -6,12 +6,11 @@ class SupplyCreateService extends ISupplyCreateService {
     this.supplyRepository = supplyRepository;
   }
 
-  async create(data) {
+  create = async (data) => {
     try {
-      const { strategy, ...supply } = data;
-      supply.createdAt = new Date();
-      supply.updatedAt = new Date();
-      await this.supplyRepository.create(supply);
+      data.createdAt = new Date();
+      data.updatedAt = new Date();
+      await this.supplyRepository.create(data);
     }
     catch (err) {
       throw err;
