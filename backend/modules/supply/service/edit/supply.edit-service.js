@@ -1,25 +1,40 @@
 import ISupplyEditService from './supply.interface-edit.js';
 
 class SupplyEditService extends ISupplyEditService {
-  constructor({ db, supplyRepository }) {
+  constructor({ supplyRepository, categoryGetOneService, unitGetOneService, userGetService }) {
     super();
     this.supplyRepository = supplyRepository;
-    this.db = db;
+    this.categoryGetOneService = categoryGetOneService;
+    this.unitGetOneService = unitGetOneService;
+    this.userGetService = userGetService;
+
   }
 
-  async edit(data) {
-    const transaction = await this.db.sequelize.transaction();
+  format = (id, supply, _category, _unit, username) => {
+    const { category, unit, userId, ...remain } = supply;
+    return {
+      id: Number(id),
+      category: _category,
+      unit: _unit,
+      donor: username,
+      ...remain
+    }
+  }
+
+  edit = async (data) => {
     try {
-      const isAuthorized = await this.supplyRepository.findByDonor(data, transaction);
-      if (!isAuthorized) {
-        throw new Error("User is not authorized to edit this supply");
-      }
-      const supply = await this.supplyRepository.edit(data, transaction);
-      await transaction.commit();
-      return supply;
+      await this.supplyRepository.checkOwner({
+        id: data.id,
+        userId: data.userId
+      });
+      data.updatedAt = new Date();
+      const supply = await this.supplyRepository.edit(data);
+      const category = await this.categoryGetOneService.getOne({ id: supply.category });
+      const unit = await this.unitGetOneService.getOne({ id: supply.unit });
+      const user = await this.userGetService.getUser({ userId: supply.userId });
+      return this.format(data.id, supply, category, unit, user.username);
     }
     catch (err) {
-      await transaction.rollback();
       throw err;
     }
   }
