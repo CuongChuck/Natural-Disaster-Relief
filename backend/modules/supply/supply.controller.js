@@ -71,9 +71,9 @@ class SupplyController {
 
   edit = async (req, res, next) => {
     try {
-      const user = req.headers['token'];
       const { id } = req.params;
-      const data = { id, user, ...req.body };
+      const userId = req.userId;
+      const data = { id, userId, ...req.body };
       const result = await this.supplyFacade.edit(data);
       res.status(201).json({
         message: result.message,
@@ -87,11 +87,11 @@ class SupplyController {
 
   delete = async (req, res, next) => {
     try {
-      const user = req.headers['token'];
       const { id } = req.params;
-      const data = { id, user, ...req.body };
+      const userId = req.userId;
+      const data = { id, userId };
       const result = await this.supplyFacade.delete(data);
-      res.status(204).json({ message: result.message });
+      res.status(200).json({ message: result.message });
     }
     catch (err) {
       res.status(500).json({ message: err.message });
