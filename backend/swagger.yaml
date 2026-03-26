@@ -24,7 +24,12 @@ paths:
                     type: string
                     example: "User profile retrieval successfully"
                   user:
-                    $ref: '#/components/schemas/User'
+                    allOf:
+                      - $ref: '#/components/schemas/User'
+                      - type: object
+                        properties:
+                          role:
+                            type: string
         500:
           description: Error message
           content:
@@ -354,6 +359,8 @@ paths:
                   message:
                     type: string
                     example: "Supplies created successfully"
+                  supply:
+                    $ref: '#/components/schemas/Supply'
         500:
           description: Error message
           content:
@@ -431,6 +438,83 @@ paths:
                   message:
                     type: string
                     example: "Supply deletion successfully"
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  
+  /supply/{id}/review:
+    get:
+      summary: Get a review on a supply offer
+      tags:
+        - Supplies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get a review on a supply offer successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supply review retrieved successfully"
+                  review:
+                    $ref: '#/components/schemas/SupplyReview'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    post:
+      summary: Create a review for a supply offer
+      tags:
+        - Supplies
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyRequest'
+      responses:
+        201:
+          description: Create a review for a supply offer successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Supply review created successfully"
+                  supply:
+                    $ref: '#/components/schemas/SupplyReview'
         500:
           description: Error message
           content:
@@ -540,6 +624,31 @@ components:
           format: date-time
           example: "2025-12-28T21:23:27Z"
         updatedAt:
+          type: string
+          format: date-time
+          example: "2025-12-28T21:23:27Z"
+
+    SupplyReview:
+      type: object
+      properties:
+        id: { type: integer }
+        category: { type: string }
+        unit: { type: string }
+        donor: { type: string }
+        reviewer: { type: string }
+        name: { type: string }
+        quantity:
+          type: number
+          format: float
+          example: 19.99
+        count: { type: integer }
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+        updated:
+          type: boolean
+        createdAt:
           type: string
           format: date-time
           example: "2025-12-28T21:23:27Z"
