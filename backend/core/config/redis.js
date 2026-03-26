@@ -7,7 +7,7 @@ export const client = await createClient({
   .connect();
 
 await client.ft.dropIndex('idx:supplies').then(() => {}, () => {});
-await client.ft.dropIndex('idx:supplies_audited').then(() => {}, () => {});
+await client.ft.dropIndex('idx:supplies_review').then(() => {}, () => {});
 
 await client.ft.create('idx:supplies', {
   '$.id': {
@@ -23,7 +23,7 @@ await client.ft.create('idx:supplies', {
   PREFIX: ['supply:']
 });
 
-await client.ft.create('idx:supplies_audited', {
+await client.ft.create('idx:supplies_review', {
   '$.id': {
     type: SCHEMA_FIELD_TYPE.TEXT,
     AS: 'id'
