@@ -30,7 +30,7 @@ router.get('/supply/unverified/:id',
   controllerHelper.invoke('getOne', 'supplyController')
 ); // redis
 router.get('/supply/:id',
-  controllerHelper.invoke('getMine', 'supplyController')
+  controllerHelper.invoke('getOne', 'supplyController')
 );
 
 router.get('/supply/:id/review',
@@ -45,8 +45,9 @@ router.post('/supply',
 ); // redis
 router.post('/supply/:id',
   authHandler.verifyToken,
-  controllerHelper.invoke('create', 'supplyController')
+  controllerHelper.invoke('accept', 'supplyController')
 );
+
 router.post('/supply/:id/review',
   authHandler.verifyToken,
   containerHandler.useRedis,
