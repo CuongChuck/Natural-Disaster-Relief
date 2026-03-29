@@ -17,7 +17,7 @@ class UnitSqlRepository extends IUnitRepository {
 
   findOne = async (data) => {
     try {
-      return await this.redis.hGet('unit', data.id);
+      return await this.redis.hGet('unit', `${data.id}`);
     }
     catch (err) {
       throw new Error(`Unit ${data.id} retrieval failed: ` + err.message);

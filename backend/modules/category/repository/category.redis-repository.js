@@ -17,7 +17,7 @@ class CategoryRedisRepository extends ICategoryRepository {
 
   findOne = async (data) => {
     try {
-      return await this.redis.hGet('category', data.id);
+      return await this.redis.hGet('category', `${data.id}`);
     } catch (err) {
       throw new Error(`Category ${data.id} retrieval failed: ` + err.message);
     }
