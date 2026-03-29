@@ -8,12 +8,16 @@ export default (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Supply.belongsTo(models['User']);
+      Supply.belongsTo(models['User'], { as: 'donor', foreignKey: 'donorId' });
       Supply.belongsToMany(models['Event'], { through: 'SupplyEvent' });
     }
   }
   Supply.init({
-    UserId: {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    donorId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -44,11 +48,11 @@ export default (sequelize, DataTypes) => {
       }
     },
     category: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     unit: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     proof: {
@@ -88,7 +92,7 @@ export default (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Supply',
     indexes: [
-      { fields: ['UserId'] },
+      { fields: ['donorId'] },
     ],
   });
   return Supply;
