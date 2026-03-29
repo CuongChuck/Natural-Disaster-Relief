@@ -75,6 +75,18 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
+  checkOperator = async (data) => {
+    try {
+      const user = await this.User.findByPk(data.userId, {
+        attributes: [ 'role' ]
+      });
+      if (!(['ADMIN', 'VOLUNTEER'].includes(user.role)))
+        throw new Error('User is not authorized to perform this action');
+    } catch (err) {
+      throw new Error("Operator check failed: " + err.message);
+    }
+  }
+
   updateUser = async (data, transaction) => {
     try {
       const user = await this.User.findByPk(data.userId);
