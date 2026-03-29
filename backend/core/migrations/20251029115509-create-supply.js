@@ -5,10 +5,9 @@ export async function up(queryInterface, Sequelize) {
     id: {
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
       type: Sequelize.INTEGER
     },
-    UserId: {
+    donorId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
@@ -16,7 +15,7 @@ export async function up(queryInterface, Sequelize) {
         key: 'id'
       },
       onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
+      onDelete: 'SET NULL'
     },
     name: {
       type: Sequelize.STRING,
@@ -27,11 +26,11 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false
     },
     category: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false
     },
     unit: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false
     },
     count: {
@@ -78,7 +77,7 @@ export async function up(queryInterface, Sequelize) {
     }
   });
 
-  await queryInterface.addIndex('Supplies', ['UserId']);
+  await queryInterface.addIndex('Supplies', ['donorId']);
 }
 export async function down(queryInterface, Sequelize) {
   await queryInterface.dropTable('Supplies');
