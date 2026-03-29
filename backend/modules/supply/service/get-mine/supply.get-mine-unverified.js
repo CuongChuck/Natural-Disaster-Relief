@@ -24,11 +24,17 @@ class SupplyGetMineUnverified extends ISupplyGetMineService {
 
   getMine = async (data) => {
     try {
+      const limit = parseInt(data.size, 10);
+      const offset = (parseInt(data.page, 10) - 1) * limit;
+      data.limit = limit;
+      data.offset = offset;
+      delete data.size;
+      delete data.page;
       const [supplies, categories, units, user] = await Promise.all([
         this.supplyRepository.getMine(data),
         this.categoryGetAllService.getAll(),
         this.unitGetAllService.getAll(),
-        this.userGetService.getUser(data)
+        this.userGetService.getUser({ userId: data.donorId })
       ]);
       return this.format(supplies, categories, units, user.username);
     }

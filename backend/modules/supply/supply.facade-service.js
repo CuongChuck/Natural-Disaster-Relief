@@ -8,14 +8,16 @@ class SupplyFacadeService {
     this.deleteService = opts.supplyDeleteService;
     this.reviewService = opts.supplyReviewService;
     this.getReviewService = opts.supplyGetReviewService;
+    this.addProofService = opts.supplyAddProofService;
   }
 
-  getAll = async () => {
+  getAll = async (page, size) => {
     try {
-      const supplies = await this.getAllService.getAll();
+      const supplies = await this.getAllService.getAll(page, size);
       return {
         message: `All supplies retrieved successfully`,
-        supplies
+        supplies,
+        total_records: supplies.length
       };
     }
     catch (err) {
@@ -41,7 +43,8 @@ class SupplyFacadeService {
       const supplies = await this.getMineService.getMine(data);
       return {
         message: `My supplies retrieved successfully`,
-        supplies
+        supplies,
+        total_records: supplies.length
       };
     }
     catch (err) {
@@ -75,6 +78,15 @@ class SupplyFacadeService {
     try {
       const review = await this.reviewService.review(data);
       return { message: `Supply review created successfully`, review };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  addProof = async (data) => {
+    try {
+      await this.addProofService.addProof(data);
+      return { message: `Supply proof added successfully` };
     } catch (err) {
       throw err;
     }

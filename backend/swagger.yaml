@@ -157,6 +157,21 @@ paths:
     get:
       summary: Get all verified supply offers
       operationId: SupplyGetAllVerified_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
       responses:
         200:
           description: Get all verified supply offers successfully
@@ -175,6 +190,21 @@ paths:
     get:
       summary: Get all unverified supply offers
       operationId: SupplyGetAllUnverified_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
       responses:
         200:
           description: Get all unverified supply offers successfully
@@ -195,6 +225,21 @@ paths:
       operationId: SupplyGetMineVerified_getMine
       security:
         - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
       responses:
         200:
           description: Get all current user's verified supply offers successfully
@@ -215,6 +260,21 @@ paths:
       operationId: SupplyGetMineUnverified_getMine
       security:
         - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
       responses:
         200:
           description: Get all current user's unverified supply offers successfully

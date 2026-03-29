@@ -22,10 +22,12 @@ class SupplyGetAllUnverified extends ISupplyGetAllService {
     });
   }
 
-  getAll = async () => {
+  getAll = async (page, size) => {
     try {
+      const limit = parseInt(size, 10);
+      const offset = (parseInt(page, 10) - 1) * limit;
       const [supplies, categories, units] = await Promise.all([
-        this.supplyRepository.getAll(),
+        this.supplyRepository.getAll(offset, limit),
         this.categoryGetAllService.getAll(),
         this.unitGetAllService.getAll()
       ]);

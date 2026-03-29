@@ -5,7 +5,7 @@ class ISupplyGetAllService {
     }
   }
 
-  getAll = async () => {
+  getAll = async (page, size) => {
     throw new Error('Method not implemented.');
   }
 }

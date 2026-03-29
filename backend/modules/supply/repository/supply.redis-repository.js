@@ -7,9 +7,14 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
     this.redis = redisClient;
   }
 
-  getAll = async () => {
+  getAll = async (offset, limit) => {
     try {
-      return await this.redis.ft.search('idx:supplies', '*');
+      return await this.redis.ft.search('idx:supplies', '*', {
+        LIMIT: {
+          from: offset,
+          size: limit
+        }
+      });
     } catch (err) {
       throw new Error('Error in retrieving unverified supplies: ' + err.message);
     }
@@ -25,7 +30,12 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
 
   getMine = async (data) => {
     try {
-      return await this.redis.ft.search('idx:supplies', `@donorId:[${data.donorId} ${data.donorId}]`);
+      return await this.redis.ft.search('idx:supplies', `@donorId:[${data.donorId} ${data.donorId}]`, {
+        LIMIT: {
+          from: data.offset,
+          size: data.limit
+        }
+      });
     } catch (err) {
       throw new Error('Error in retrieving my unverified supplies: ' + err.message);
     }

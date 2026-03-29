@@ -5,7 +5,7 @@ class ISupplyRepository {
     }
   }
 
-  getAll = async () => {
+  getAll = async (offset, limit) => {
     throw new Error('Method not implemented.');
   }
 

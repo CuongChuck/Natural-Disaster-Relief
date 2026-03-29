@@ -5,11 +5,9 @@ class SupplyController {
 
   getAll = async (req, res, next) => {
     try {
-      const result = await this.supplyFacade.getAll();
-      res.status(200).json({
-        message: result.message,
-        supplies: result.supplies
-      });
+      let { page = 1, size = 100 } = req.query;
+      const result = await this.supplyFacade.getAll(page, size);
+      res.status(200).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -20,10 +18,7 @@ class SupplyController {
     try {
       const data = { id: req.params.id };
       const result = await this.supplyFacade.getOne(data);
-      res.status(200).json({
-        message: result.message,
-        supply: result.supply
-      });
+      res.status(200).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -34,10 +29,7 @@ class SupplyController {
     try {
       const data = { id: req.params.id };
       const result = await this.supplyFacade.getReview(data);
-      res.status(200).json({
-        message: result.message,
-        review: result.review
-      });
+      res.status(200).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -48,11 +40,11 @@ class SupplyController {
     try {
       const data = req.body || {};
       data.donorId = req.userId;
+      let { page = 1, size = 100 } = req.query;
+      data.page = page;
+      data.size = size;
       const result = await this.supplyFacade.getMine(data);
-      res.status(200).json({
-        message: result.message,
-        supplies: result.supplies
-      });
+      res.status(200).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -61,10 +53,10 @@ class SupplyController {
 
   addProof = async (req, res, next) => {
     try {
-      const data = req.body;
-      data.userId = req.userId;
-      const result = await this.supplyFacade.create(data);
-      res.status(201).json({ message: result.message });
+      const { id } = req.params;
+      const data = { id, userId: req.userId, ...req.body };
+      const result = await this.supplyFacade.addProof(data);
+      res.status(201).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -76,10 +68,7 @@ class SupplyController {
       const { id } = req.params;
       const data = { id, reviewerId: req.userId, ...req.body }
       const result = await this.supplyFacade.review(data);
-      res.status(201).json({
-        message: result.message,
-        review: result.review
-      });
+      res.status(201).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -89,12 +78,21 @@ class SupplyController {
   create = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const data = { id, donorId: req.userId, ...req.body }
+      const data = { id, userId: req.userId, ...req.body }
       const result = await this.supplyFacade.create(data);
-      res.status(201).json({
-        message: result.message,
-        supply: result.supply
-      });
+      res.status(201).json(result);
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
+  accept = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const data = { id, userId: req.userId }
+      const result = await this.supplyFacade.create(data);
+      res.status(201).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -106,10 +104,7 @@ class SupplyController {
       const { id } = req.params;
       const data = { id, donorId: req.userId, ...req.body };
       const result = await this.supplyFacade.edit(data);
-      res.status(201).json({
-        message: result.message,
-        supply: result.supply
-      });
+      res.status(201).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
@@ -121,7 +116,7 @@ class SupplyController {
       const { id } = req.params;
       const data = { id, donorId: req.userId };
       const result = await this.supplyFacade.delete(data);
-      res.status(200).json({ message: result.message });
+      res.status(200).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
