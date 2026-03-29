@@ -1,3 +1,3 @@
 HSET category 1 "thuốc" 2 "thực phẩm" 3 "nước" 4 "vật dụng" 5 "tiền"
 HSET unit 1 "kg" 2 "l" 3 "phần" 4 "cái" 5 "nghìn VND"
-SET supply_id 1
+SET supply_id 6
