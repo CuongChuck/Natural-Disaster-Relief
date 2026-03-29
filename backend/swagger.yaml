@@ -680,6 +680,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Supply'
+        total_records: { type: integer }
 
     SupplyResponse:
       type: object
