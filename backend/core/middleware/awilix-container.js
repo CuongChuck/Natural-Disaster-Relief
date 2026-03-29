@@ -12,12 +12,14 @@ import CategoryGetAllService from '../../modules/category/service/get/category.g
 import CategoryGetOneService from '../../modules/category/service/get-one/category.get-one.js';
 import CategoryController from '../../modules/category/category.controller.js';
 import SupplySqlRepository from '../../modules/supply/repository/supply.sql-repository.js';
+import SupplyRedisRepository from '../../modules/supply/repository/supply.redis-repository.js';
 import SupplyFacadeService from '../../modules/supply/supply.facade-service.js';
-import SupplyGetAllUnverified from '../../modules/supply/service/get-all/supply.get-all-unverified.js';
-import SupplyGetMineUnverified from '../../modules/supply/service/get-mine/supply.get-mine-unverified.js';
-import SupplyGetOneUnverified from '../../modules/supply/service/get-one/supply.get-one-unverified.js';
+import SupplyGetAllVerified from '../../modules/supply/service/get-all/supply.get-all-verified.js';
+import SupplyGetMineVerified from '../../modules/supply/service/get-mine/supply.get-mine-verified.js';
+import SupplyGetOneVerified from '../../modules/supply/service/get-one/supply.get-one-verified.js';
 import SupplyGetReview from '../../modules/supply/service/get-review/supply.get-review.js';
-import SupplyCreateService from '../../modules/supply/service/create/supply.create-service.js';
+import SupplyCreateAcceptService from '../../modules/supply/service/create/supply.create-accept.js';
+import SupplyAddProof from '../../modules/supply/service/add-proof/supply.add-proof.js';
 import SupplyReviewService from '../../modules/supply/service/review/supply.review-service.js';
 import SupplyEditService from '../../modules/supply/service/edit/supply.edit-service.js';
 import SupplyDeleteService from '../../modules/supply/service/delete/supply.delete-service.js';
@@ -33,6 +35,7 @@ import UserGetService from '../../modules/users/service/get/users.get-service.js
 import UserGetMany from '../../modules/users/service/get-many/users.get-many.js';
 import UserRegisterJwtService from '../../modules/users/service/register/users.register-jwt-service.js';
 import UserSignInJwtService from '../../modules/users/service/signin/users.signin-jwt-service.js';
+import UserCheckOperator from '../../modules/users/service/check-operator/users.check-operator.js';
 import UserEditService from '../../modules/users/service/edit/users.edit-service.js';
 import UserAdminEditService from '../../modules/users/service/edit/users.admin-edit-service.js';
 import UserDeleteService from '../../modules/users/service/delete/users.delete-service.js';
@@ -62,13 +65,16 @@ container.register({
   containerHandler: asClass(ContainerHandler).singleton(),
   controllerHelper: asClass(ControllerHelper).singleton(),
 
+  supplyRedisRepository: asClass(SupplyRedisRepository).scoped(),
+  supplySqlRepository: asClass(SupplySqlRepository).scoped(),
   supplyRepository: asClass(SupplySqlRepository).scoped(),
   supplyFacade: asClass(SupplyFacadeService).scoped(),
-  supplyGetAllService: asClass(SupplyGetAllUnverified).scoped(),
-  supplyGetMineService: asClass(SupplyGetMineUnverified).scoped(),
-  supplyGetOneService: asClass(SupplyGetOneUnverified).scoped(),
+  supplyGetAllService: asClass(SupplyGetAllVerified).scoped(),
+  supplyGetMineService: asClass(SupplyGetMineVerified).scoped(),
+  supplyGetOneService: asClass(SupplyGetOneVerified).scoped(),
   supplyGetReviewService: asClass(SupplyGetReview).scoped(),
-  supplyCreateService: asClass(SupplyCreateService).scoped(),
+  supplyCreateService: asClass(SupplyCreateAcceptService).scoped(),
+  supplyAddProofService: asClass(SupplyAddProof).scoped(),
   supplyReviewService: asClass(SupplyReviewService).scoped(),
   supplyEditService: asClass(SupplyEditService).scoped(),
   supplyDeleteService: asClass(SupplyDeleteService).scoped(),
@@ -86,6 +92,7 @@ container.register({
   userGetManyService: asClass(UserGetMany).singleton(),
   userRegisterJwtService: asClass(UserRegisterJwtService).singleton(),
   userSignInJwtService: asClass(UserSignInJwtService).singleton(),
+  userCheckService: asClass(UserCheckOperator).singleton(),
   userEditService: asClass(UserEditService).singleton(),
   userAdminEditService: asClass(UserAdminEditService).singleton(),
   userDeleteService: asClass(UserDeleteService).singleton(),
