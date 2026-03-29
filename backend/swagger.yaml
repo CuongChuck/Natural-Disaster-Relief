@@ -10,40 +10,24 @@ paths:
   /user:
     get:
       summary: Get User profile
-      tags:
-        - Users
+      operationId: User_getUser
       responses:
         201:
           description: User profile retrieved successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User profile retrieval successfully"
-                  user:
-                    allOf:
-                      - $ref: '#/components/schemas/User'
-                      - type: object
-                        properties:
-                          role:
-                            type: string
+                $ref: '#/components/schemas/User'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
     
     put:
       summary: User profile edit
-      tags:
-        - Users
+      operationId: User_editUser
       security:
         - bearerAuth: []
       requestBody:
@@ -51,39 +35,24 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/schemas/User'
-                - type: object
-                  properties:
-                    password:
-                      type: string
+              $ref: '#/components/schemas/UserProfile'
       responses:
         200:
           description: User profile edit successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User profile edit successfully"
-                  user:
-                    $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
     delete:
       summary: Delete User
-      tags:
-        - Users
+      operationId: User_deleteUser
       security:
         - bearerAuth: []
       responses:
@@ -92,26 +61,18 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User deleted successfully"
+                $ref: '#/components/schemas/Success'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
   /user/register:
     post:
       summary: Register a new user
-      tags:
-        - Users
+      operationId: User_registerUser
       requestBody:
         required: true
         content:
@@ -124,155 +85,134 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User registered successfully"
-                  token:
-                    type: string
-                    description: RS256 JWT token
+                $ref: '#/components/schemas/UserAuthentication'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
   /user/auth:
     post:
       summary: User login
-      tags:
-        - Users
+      operationId: User_signInUser
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/UserSignIn'
       responses:
         201:
           description: User signed in successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User signed in successfully"
-                  token:
-                    type: string
-                    description: RS256 JWT token
+                $ref: '#/components/schemas/UserAuthentication'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
   /categories:
     get:
       summary: Get all categories
-      tags:
-        - Categories
+      operationId: Category_getAll
       responses:
         200:
           description: Get all categories successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Categories retrieved successfully"
-                  categories:
-                    $ref: '#/components/schemas/Category'
+                $ref: '#/components/schemas/CategoriesResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
   /units:
     get:
       summary: Get all units
-      tags:
-        - Units
+      operationId: Unit_getAll
       responses:
         200:
           description: Get all units successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Units retrieved successfully"
-                  units:
-                    $ref: '#/components/schemas/Unit'
+                $ref: '#/components/schemas/UnitsResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
+
+  /supplies:
+    get:
+      summary: Get all verified supply offers
+      operationId: SupplyGetAllVerified_getAll
+      responses:
+        200:
+          description: Get all verified supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /supplies/unverified:
     get:
       summary: Get all unverified supply offers
-      tags:
-        - Supplies
+      operationId: SupplyGetAllUnverified_getAll
       responses:
         200:
           description: Get all unverified supply offers successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supplies retrieved successfully"
-                  supplies:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Supply'
+                $ref: '#/components/schemas/SuppliesResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
+
+  /supplies/me:
+    get:
+      summary: Get all current user's verified supply offers
+      operationId: SupplyGetMineVerified_getMine
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Get all current user's verified supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /supplies/me/unverified:
     get:
       summary: Get all current user's unverified supply offers
-      tags:
-        - Supplies
+      operationId: SupplyGetMineUnverified_getMine
       security:
         - bearerAuth: []
       responses:
@@ -281,30 +221,18 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "My supplies retrieved successfully"
-                  supplies:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Supply'
+                $ref: '#/components/schemas/SuppliesResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
   /supply/unverified/{id}:
     get:
-      summary: Get an unverified supply offers
-      tags:
-        - Supplies
+      summary: Get an unverified supply offer
+      operationId: SupplyGetOneUnverified_getOne
       parameters:
         - name: id
           in: path
@@ -314,32 +242,22 @@ paths:
             type: integer
       responses:
         200:
-          description: Get an unverified supply offers successfully
+          description: Get an unverified supply offer successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supply ID retrieved successfully"
-                  supply:
-                    $ref: '#/components/schemas/Supply'
+                $ref: '#/components/schemas/SupplyResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
   /supply:
     post:
       summary: Create a new supply offer
-      tags:
-        - Supplies
+      operationId: SupplyCreateService_create
       security:
         - bearerAuth: []
       requestBody:
@@ -354,28 +272,68 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supplies created successfully"
-                  supply:
-                    $ref: '#/components/schemas/Supply'
+                $ref: '#/components/schemas/SupplyResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
   /supply/{id}:
+    get:
+      summary: Get a verified supply offer
+      operationId: SupplyGetOneVerified_getOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get a verified supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Accept an unverified supply
+      operationId: SupplyCreateAcceptService_create
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Accept an unverified supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
     put:
       summary: Donor edit an unverified supply offer
-      tags:
-        - Supplies
+      operationId: Supply_edit
       security:
         - bearerAuth: []
       parameters:
@@ -397,27 +355,17 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supply edition successfully"
-                  supply:
-                    $ref: '#/components/schemas/Supply'
+                $ref: '#/components/schemas/SupplyResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
     delete:
       summary: Donor delete an unverified supply offer
-      tags:
-        - Supplies
+      operationId: Supply_delete
       security:
         - bearerAuth: []
       parameters:
@@ -433,26 +381,18 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supply deletion successfully"
+                $ref: '#/components/schemas/Success'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
   
   /supply/{id}/review:
     get:
       summary: Get a review on a supply offer
-      tags:
-        - Supplies
+      operationId: Supply_getReview
       parameters:
         - name: id
           in: path
@@ -466,27 +406,17 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supply review retrieved successfully"
-                  review:
-                    $ref: '#/components/schemas/SupplyReview'
+                $ref: '#/components/schemas/SupplyReviewResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
     post:
       summary: Create a review for a supply offer
-      tags:
-        - Supplies
+      operationId: Supply_review
       security:
         - bearerAuth: []
       parameters:
@@ -508,22 +438,46 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Supply review created successfully"
-                  supply:
-                    $ref: '#/components/schemas/SupplyReview'
+                $ref: '#/components/schemas/SupplyReviewResponse'
         500:
           description: Error message
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Error'
+
+  /supply/{id}/proof:
+    post:
+      summary: Add a photo url to a supply offer
+      operationId: Supply_addProof
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Proof'
+      responses:
+        201:
+          description: Add a photo url to a supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   securitySchemes:
@@ -532,20 +486,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    UserRequest:
-      type: object
-      properties:
-        email: { type: string }
-        password: { type: string }
-        name: { type: string }
-        username: { type: string }
-        phone: { type: string }
-        address_line: { type: string }
-        ward: { type: string }
-        district: { type: string }
-        city_province: { type: string }
-        role: { type: string }
-
     User:
       type: object
       properties:
@@ -558,7 +498,41 @@ components:
         district: { type: string }
         city_province: { type: string }
 
-    Category:
+    UserRequest:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            password: { type: string }
+            role: { type: string }
+
+    UserResponse:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            role: { type: string }
+
+    UserProfile:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            password: { type: string }
+
+    UserAuthentication:
+      type: object
+      properties:
+        message: { type: string }
+        token: { type: string }
+
+    UserSignIn:
+      type: object
+      properties:
+        username: { type: string }
+        password: { type: string }
+
+    Categories:
       type: object
       description: "A map of category IDs to unit names"
       additionalProperties:
@@ -569,8 +543,15 @@ components:
         "3": "nước"
         "4": "vật dụng"
         "5": "tiền"
+
+    CategoriesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        categories:
+          $ref: '#/components/schemas/Categories'
     
-    Unit:
+    Units:
       type: object
       description: "A map of unit IDs to unit names"
       additionalProperties:
@@ -581,16 +562,27 @@ components:
         "3": "phần"
         "4": "cái"
         "5": "nghìn VND"
-
-    SupplyRequest:
+    
+    UnitsResponse:
       type: object
       properties:
-        category:
-          type: string
-          example: "1"
-        unit:
-          type: string
-          example: "1"
+        message: { type: string }
+        units:
+          $ref: '#/components/schemas/Units'
+
+    SupplyRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseSupply'
+        - type: object
+          properties:
+            category:
+              type: integer
+            unit:
+              type: integer
+
+    BaseSupply:
+      type: object
+      properties:
         name: { type: string }
         count: { type: integer }
         quantity:
@@ -603,52 +595,74 @@ components:
         city_province: { type: string }
 
     Supply:
+      allOf:
+        - $ref: '#/components/schemas/BaseSupply'
+        - type: object
+          properties:
+            id: { type: integer }
+            category: { type: string }
+            unit: { type: string }
+            donor: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    SuppliesResponse:
       type: object
       properties:
-        id: { type: integer }
-        category: { type: string }
-        unit: { type: string }
-        donor: { type: string }
-        name: { type: string }
-        quantity:
-          type: number
-          format: float
-          example: 19.99
-        count: { type: integer }
-        address_line: { type: string }
-        ward: { type: string }
-        district: { type: string }
-        city_province: { type: string }
-        createdAt:
-          type: string
-          format: date-time
-          example: "2025-12-28T21:23:27Z"
-        updatedAt:
-          type: string
-          format: date-time
-          example: "2025-12-28T21:23:27Z"
+        message: { type: string }
+        supplies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supply'
+
+    SupplyResponse:
+      type: object
+      properties:
+        message: { type: string }
+        supply:
+          $ref: '#/components/schemas/Supply'
 
     SupplyReview:
+      allOf:
+        - $ref: '#/components/schemas/BaseSupply'
+        - type: object
+          properties:
+            id: { type: integer }
+            category: { type: string }
+            unit: { type: string }
+            donor: { type: string }
+            reviewer: { type: string }
+            updated:
+              type: boolean
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    SupplyReviewResponse:
       type: object
       properties:
-        id: { type: integer }
-        category: { type: string }
-        unit: { type: string }
-        donor: { type: string }
-        reviewer: { type: string }
-        name: { type: string }
-        quantity:
-          type: number
-          format: float
-          example: 19.99
-        count: { type: integer }
-        address_line: { type: string }
-        ward: { type: string }
-        district: { type: string }
-        city_province: { type: string }
-        updated:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-          example: "2025-12-28T21:23:27Z"
+        message: { type: string }
+        review:
+          $ref: '#/components/schemas/SupplyReview'
+
+    Success:
+      type: object
+      properties:
+        message: { type: string }
+
+    Proof:
+      type: object
+      properties:
+        proof: { type: string }
+
+    Error:
+      type: object
+      properties:
+        message: { type: string }
