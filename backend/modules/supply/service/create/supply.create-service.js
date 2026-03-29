@@ -25,6 +25,8 @@ class SupplyCreateService extends ISupplyCreateService {
     try {
       data.createdAt = new Date();
       data.updatedAt = new Date();
+      data.donorId = data.userId;
+      delete data.userId;
       const id = await this.supplyRepository.create(data);
       const supply = await this.supplyRepository.getOne({ id });
       const category = await this.categoryGetOneService.getOne({ id: supply.category });
