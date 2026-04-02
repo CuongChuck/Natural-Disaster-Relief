@@ -8,16 +8,23 @@ export async function up(queryInterface, Sequelize) {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
+    userId: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
+    },
     description: {
-      type: Sequelize.TEXT,
-      allowNull: false
+      type: Sequelize.TEXT
     },
     startTime: {
       type: Sequelize.DATE,
       allowNull: false
     },
     name: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false
     },
     address_line: {
@@ -44,6 +51,8 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.DATE
     }
   });
+
+  await queryInterface.addIndex('Events', ['userId']);
 }
 export async function down(queryInterface, Sequelize) {
   await queryInterface.dropTable('Events');

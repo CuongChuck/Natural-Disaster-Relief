@@ -8,21 +8,29 @@ export default (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Event.belongsToMany(models['Supply'], { through: 'SupplyEvent' });
-      Event.belongsToMany(models['User'], { through: 'UserEvent' });
+      Event.belongsToMany(models['Supply'], { through: 'SupplyEvent', foreignKey: 'eventId', otherKey: 'supplyId' });
+      Event.belongsTo(models['User'], { as: 'user', foreignKey: 'userId' });
     }
   }
   Event.init({
-    description: {
-      type: DataTypes.TEXT,
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    userId: {
+      type: DataTypes.INTEGER,
       allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT
     },
     startTime: {
       type: DataTypes.DATE,
       allowNull: false
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     address_line: {
@@ -43,6 +51,9 @@ export default (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
+    indexes: [
+      { fields: ['userId'] },
+    ],
   });
   return Event;
 };
