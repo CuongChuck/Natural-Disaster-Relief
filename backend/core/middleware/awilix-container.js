@@ -15,9 +15,14 @@ import SupplySqlRepository from '../../modules/supply/repository/supply.sql-repo
 import SupplyRedisRepository from '../../modules/supply/repository/supply.redis-repository.js';
 import SupplyFacadeService from '../../modules/supply/supply.facade-service.js';
 import SupplyGetAllVerified from '../../modules/supply/service/get-all/supply.get-all-verified.js';
+import SupplyGetAllUnverified from '../../modules/supply/service/get-all/supply.get-all-unverified.js';
+import SupplyGetAllByEvent from '../../modules/supply/service/get-all/supply.get-all-by-event.js';
 import SupplyGetMineVerified from '../../modules/supply/service/get-mine/supply.get-mine-verified.js';
+import SupplyGetMineUnverified from '../../modules/supply/service/get-mine/supply.get-mine-unverified.js';
 import SupplyGetOneVerified from '../../modules/supply/service/get-one/supply.get-one-verified.js';
+import SupplyGetOneUnverified from '../../modules/supply/service/get-one/supply.get-one-unverified.js';
 import SupplyGetReview from '../../modules/supply/service/get-review/supply.get-review.js';
+import SupplyCreateService from '../../modules/supply/service/create/supply.create-service.js';
 import SupplyCreateAcceptService from '../../modules/supply/service/create/supply.create-accept.js';
 import SupplyAddProof from '../../modules/supply/service/add-proof/supply.add-proof.js';
 import SupplyReviewService from '../../modules/supply/service/review/supply.review-service.js';
@@ -41,6 +46,14 @@ import UserAdminEditService from '../../modules/users/service/edit/users.admin-e
 import UserDeleteService from '../../modules/users/service/delete/users.delete-service.js';
 import UserAdminDeleteService from '../../modules/users/service/delete/users.admin-delete-service.js';
 import UserController from '../../modules/users/users.controller.js';
+import EventController from '../../modules/event/event.controller.js';
+import EventFacadeService from '../../modules/event/event.facade-service.js';
+import EventSqlRepository from '../../modules/event/repository/event.sql-repository.js';
+import EventRedisRepository from '../../modules/event/repository/event.redis-repository.js';
+import EventGetAllService from '../../modules/event/service/get-all/event.get-all-service.js';
+import EventGetOneService from '../../modules/event/service/get-one/event.get-one.js';
+import EventGetNamesService from '../../modules/event/service/get-names/event.get-names.js';
+import EventCreateService from '../../modules/event/service/create/event.create-service.js';
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -67,11 +80,17 @@ container.register({
 
   supplyRedisRepository: asClass(SupplyRedisRepository).scoped(),
   supplySqlRepository: asClass(SupplySqlRepository).scoped(),
-  supplyRepository: asClass(SupplySqlRepository).scoped(),
   supplyFacade: asClass(SupplyFacadeService).scoped(),
   supplyGetAllService: asClass(SupplyGetAllVerified).scoped(),
+  supplyGetAllVerified: asClass(SupplyGetAllVerified).scoped(),
+  supplyGetAllUnverified: asClass(SupplyGetAllUnverified).scoped(),
+  supplyGetAllByEvent: asClass(SupplyGetAllByEvent).scoped(),
   supplyGetMineService: asClass(SupplyGetMineVerified).scoped(),
+  supplyGetMineVerified: asClass(SupplyGetMineVerified).scoped(),
+  supplyGetMineUnverified: asClass(SupplyGetMineUnverified).scoped(),
   supplyGetOneService: asClass(SupplyGetOneVerified).scoped(),
+  supplyGetOneVerified: asClass(SupplyGetOneVerified).scoped(),
+  supplyGetOneUnverified: asClass(SupplyGetOneUnverified).scoped(),
   supplyGetReviewService: asClass(SupplyGetReview).scoped(),
   supplyCreateService: asClass(SupplyCreateAcceptService).scoped(),
   supplyAddProofService: asClass(SupplyAddProof).scoped(),
@@ -97,8 +116,16 @@ container.register({
   userAdminEditService: asClass(UserAdminEditService).singleton(),
   userDeleteService: asClass(UserDeleteService).singleton(),
   userAdminDeleteService: asClass(UserAdminDeleteService).singleton(),
-  userController: asClass(UserController).singleton()
+  userController: asClass(UserController).singleton(),
 
+  eventController: asClass(EventController).scoped(),
+  eventFacade: asClass(EventFacadeService).scoped(),
+  eventSqlRepository: asClass(EventSqlRepository).scoped(),
+  eventRedisRepository: asClass(EventRedisRepository).scoped(),
+  eventGetAllService: asClass(EventGetAllService).scoped(),
+  eventGetOneService: asClass(EventGetOneService).scoped(),
+  eventGetNamesService: asClass(EventGetNamesService).scoped(),
+  eventCreateService: asClass(EventCreateService).scoped(),
 });
 
 export default container;

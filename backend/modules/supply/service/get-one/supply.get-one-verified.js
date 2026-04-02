@@ -1,9 +1,9 @@
 import ISupplyGetOneService from './supply.interface-get-one.js';
 
-class SupplyGetOneVerified extends ISupplyGetOneService {
-  constructor({ supplyRepository, categoryGetOneService, unitGetOneService }) {
+export default class SupplyGetOneVerified extends ISupplyGetOneService {
+  constructor({ supplySqlRepository, categoryGetOneService, unitGetOneService }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplySqlRepository;
     this.categoryGetOneService = categoryGetOneService;
     this.unitGetOneService = unitGetOneService;
   }
@@ -31,5 +31,3 @@ class SupplyGetOneVerified extends ISupplyGetOneService {
     }
   }
 }
-
-export default SupplyGetOneVerified;

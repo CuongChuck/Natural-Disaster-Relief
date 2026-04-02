@@ -1,6 +1,6 @@
-import ISupplyGetMineService from './supply.interface-get-mine.js';
+import ISupplyGetAllService from './supply.interface-get-all.js';
 
-export default class SupplyGetMineVerified extends ISupplyGetMineService {
+export default class SupplyGetAllByEvent extends ISupplyGetAllService {
   constructor({ supplySqlRepository, categoryGetAllService, unitGetAllService }) {
     super();
     this.supplyRepository = supplySqlRepository;
@@ -19,16 +19,10 @@ export default class SupplyGetMineVerified extends ISupplyGetMineService {
     });
   }
 
-  getMine = async (data) => {
+  getAll = async (data) => {
     try {
-      const limit = parseInt(data.size, 10);
-      const offset = (parseInt(data.page, 10) - 1) * limit;
-      data.limit = limit;
-      data.offset = offset;
-      delete data.size;
-      delete data.page;
       const [supplies, categories, units] = await Promise.all([
-        this.supplyRepository.getMine(data),
+        this.supplyRepository.getByEvent(data),
         this.categoryGetAllService.getAll(),
         this.unitGetAllService.getAll()
       ]);

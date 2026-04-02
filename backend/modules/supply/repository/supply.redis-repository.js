@@ -7,12 +7,12 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
     this.redis = redisClient;
   }
 
-  getAll = async (offset, limit) => {
+  getAll = async (data) => {
     try {
       return await this.redis.ft.search('idx:supplies', '*', {
         LIMIT: {
-          from: offset,
-          size: limit
+          from: data.offset,
+          size: data.limit
         }
       });
     } catch (err) {
@@ -106,6 +106,14 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
   delete = async (data) => {
     try {
       await this.redis.json.del(`supply:${data.id}`, '$');
+    } catch (err) {
+      throw new Error('Error in deleting a supply: ' + err.message);
+    }
+  }
+
+  deleteReview = async (data) => {
+    try {
+      await this.redis.json.del(`supply_review:${data.id}`, '$');
     } catch (err) {
       throw new Error('Error in deleting a supply: ' + err.message);
     }

@@ -1,13 +1,13 @@
 import ISupplyReviewService from './supply.interface-review.js';
 
-class SupplyReviewService extends ISupplyReviewService {
-  constructor({ supplyRepository, categoryGetOneService, unitGetOneService, userGetService }) {
+export default class SupplyReviewService extends ISupplyReviewService {
+  constructor(opts) {
     super();
-    this.supplyRepository = supplyRepository;
-    this.categoryGetOneService = categoryGetOneService;
-    this.unitGetOneService = unitGetOneService;
-    this.userGetService = userGetService;
-
+    this.supplyRepository = opts.supplyRedisRepository;
+    this.categoryGetOneService = opts.categoryGetOneService;
+    this.unitGetOneService = opts.unitGetOneService;
+    this.userGetService = opts.userGetService;
+    this.eventCreateService = opts.eventCreateService;
   }
 
   format = (id, review, _category, _unit, donor, reviewer) => {
@@ -27,13 +27,21 @@ class SupplyReviewService extends ISupplyReviewService {
       const reviewer = await this.userGetService.getUser({ userId: data.reviewerId });
       if (!(['ADMIN', 'VOLUNTEER'].includes(reviewer.role)))
         throw new Error('User is not authorized to review supply');
-      const _review = await this.supplyRepository.getReview({ id: data.id });
-      if (_review && _review.updated) throw new Error('User has already review this supply');
       const supply = await this.supplyRepository.getOne({ id: data.id });
       data.donorId = supply.donorId;
       data.updated = true;
       data.createdAt = new Date();
       await this.supplyRepository.review(data);
+      await this.eventCreateService.create({
+        userId: data.reviewerId,
+        description: `Supply ${data.id}`,
+        name: 1,
+        startTime: new Date(),
+        address_line: null,
+        ward: "admin",
+        district: "admin",
+        city_province: "admin"
+      });
       const review = await this.supplyRepository.getReview({ id: data.id });
       const category = await this.categoryGetOneService.getOne({ id: review.category });
       const unit = await this.unitGetOneService.getOne({ id: review.unit });
@@ -45,5 +53,3 @@ class SupplyReviewService extends ISupplyReviewService {
     }
   }
 }
-
-export default SupplyReviewService;

@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       Supply.belongsTo(models['User'], { as: 'donor', foreignKey: 'donorId' });
-      Supply.belongsToMany(models['Event'], { through: 'SupplyEvent' });
+      Supply.belongsToMany(models['Event'], { through: 'SupplyEvent', foreignKey: 'supplyId', otherKey: 'eventId' });
     }
   }
   Supply.init({

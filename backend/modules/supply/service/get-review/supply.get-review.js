@@ -1,9 +1,9 @@
 import ISupplyGetReviewService from './supply.interface-get-review.js';
 
-class SupplyGetReview extends ISupplyGetReviewService {
-  constructor({ supplyRepository, categoryGetOneService, unitGetOneService, userGetService }) {
+export default class SupplyGetReview extends ISupplyGetReviewService {
+  constructor({ supplyRedisRepository, categoryGetOneService, unitGetOneService, userGetService }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplyRedisRepository;
     this.categoryGetOneService = categoryGetOneService;
     this.unitGetOneService = unitGetOneService;
     this.userGetService = userGetService;
@@ -35,5 +35,3 @@ class SupplyGetReview extends ISupplyGetReviewService {
     }
   }
 }
-
-export default SupplyGetReview;

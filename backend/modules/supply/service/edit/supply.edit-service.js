@@ -1,9 +1,9 @@
 import ISupplyEditService from './supply.interface-edit.js';
 
-class SupplyEditService extends ISupplyEditService {
-  constructor({ supplyRepository, categoryGetOneService, unitGetOneService, userGetService }) {
+export default class SupplyEditService extends ISupplyEditService {
+  constructor({ supplyRedisRepository, categoryGetOneService, unitGetOneService, userGetService }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplyRedisRepository;
     this.categoryGetOneService = categoryGetOneService;
     this.unitGetOneService = unitGetOneService;
     this.userGetService = userGetService;
@@ -41,5 +41,3 @@ class SupplyEditService extends ISupplyEditService {
     }
   }
 }
-
-export default SupplyEditService;

@@ -1,9 +1,9 @@
 import ISupplyGetAllService from './supply.interface-get-all.js';
 
-class SupplyGetAllUnverified extends ISupplyGetAllService {
-  constructor({ supplyRepository, categoryGetAllService, unitGetAllService, userGetManyService }) {
+export default class SupplyGetAllUnverified extends ISupplyGetAllService {
+  constructor({ supplyRedisRepository, categoryGetAllService, unitGetAllService, userGetManyService }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplyRedisRepository;
     this.categoryGetAllService = categoryGetAllService;
     this.unitGetAllService = unitGetAllService;
     this.userGetManyService = userGetManyService;
@@ -22,12 +22,12 @@ class SupplyGetAllUnverified extends ISupplyGetAllService {
     });
   }
 
-  getAll = async (page, size) => {
+  getAll = async (data) => {
     try {
-      const limit = parseInt(size, 10);
-      const offset = (parseInt(page, 10) - 1) * limit;
+      const limit = parseInt(data.size, 10);
+      const offset = (parseInt(data.page, 10) - 1) * limit;
       const [supplies, categories, units] = await Promise.all([
-        this.supplyRepository.getAll(offset, limit),
+        this.supplyRepository.getAll({ offset, limit }),
         this.categoryGetAllService.getAll(),
         this.unitGetAllService.getAll()
       ]);
@@ -40,5 +40,3 @@ class SupplyGetAllUnverified extends ISupplyGetAllService {
     }
   }
 }
-
-export default SupplyGetAllUnverified;

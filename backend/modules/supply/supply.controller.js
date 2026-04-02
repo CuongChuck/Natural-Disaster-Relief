@@ -1,4 +1,4 @@
-class SupplyController {
+export default class SupplyController {
   constructor({ supplyFacade }) {
     this.supplyFacade = supplyFacade;
   }
@@ -6,7 +6,8 @@ class SupplyController {
   getAll = async (req, res, next) => {
     try {
       let { page = 1, size = 100 } = req.query;
-      const result = await this.supplyFacade.getAll(page, size);
+      const data = { page, size };
+      const result = await this.supplyFacade.getAll(data);
       res.status(200).json(result);
     }
     catch (err) {
@@ -123,5 +124,3 @@ class SupplyController {
     }
   };
 }
-
-export default SupplyController;

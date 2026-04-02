@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models['Supply'], { foreignKey: 'donorId' });
       User.hasMany(models['Request']);
-      User.belongsToMany(models['Event'], { through: 'UserEvent' });
+      User.hasMany(models['Event'], { foreignKey: 'userId' });
     }
   }
   User.init({

@@ -1,9 +1,9 @@
 import ISupplyGetAllService from './supply.interface-get-all.js';
 
-class SupplyGetAllVerified extends ISupplyGetAllService {
-  constructor({ supplyRepository, categoryGetAllService, unitGetAllService }) {
+export default class SupplyGetAllVerified extends ISupplyGetAllService {
+  constructor({ supplySqlRepository, categoryGetAllService, unitGetAllService }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplySqlRepository;
     this.categoryGetAllService = categoryGetAllService;
     this.unitGetAllService = unitGetAllService;
   }
@@ -19,12 +19,12 @@ class SupplyGetAllVerified extends ISupplyGetAllService {
     });
   }
 
-  getAll = async (page, size) => {
+  getAll = async (data) => {
     try {
-      const limit = parseInt(size, 10);
-      const offset = (parseInt(page, 10) - 1) * limit;
+      const limit = parseInt(data.size, 10);
+      const offset = (parseInt(data.page, 10) - 1) * limit;
       const [supplies, categories, units] = await Promise.all([
-        this.supplyRepository.getAll(offset, limit),
+        this.supplyRepository.getAll({ offset, limit }),
         this.categoryGetAllService.getAll(),
         this.unitGetAllService.getAll()
       ]);
@@ -35,5 +35,3 @@ class SupplyGetAllVerified extends ISupplyGetAllService {
     }
   }
 }
-
-export default SupplyGetAllVerified;

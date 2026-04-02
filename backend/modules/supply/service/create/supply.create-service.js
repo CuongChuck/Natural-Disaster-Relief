@@ -1,9 +1,9 @@
 import ISupplyCreateService from './supply.interface-create.js';
 
-class SupplyCreateService extends ISupplyCreateService {
-  constructor({ supplyRepository, categoryGetOneService, unitGetOneService, userGetService }) {
+export default class SupplyCreateService extends ISupplyCreateService {
+  constructor({ supplyRedisRepository, categoryGetOneService, unitGetOneService, userGetService }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplyRedisRepository;
     this.categoryGetOneService = categoryGetOneService;
     this.unitGetOneService = unitGetOneService;
     this.userGetService = userGetService;
@@ -39,5 +39,3 @@ class SupplyCreateService extends ISupplyCreateService {
     }
   }
 }
-
-export default SupplyCreateService;

@@ -1,4 +1,4 @@
-class SupplyFacadeService {
+export default class SupplyFacadeService {
   constructor(opts) {
     this.getAllService = opts.supplyGetAllService;
     this.getMineService = opts.supplyGetMineService;
@@ -11,9 +11,9 @@ class SupplyFacadeService {
     this.addProofService = opts.supplyAddProofService;
   }
 
-  getAll = async (page, size) => {
+  getAll = async (data) => {
     try {
-      const supplies = await this.getAllService.getAll(page, size);
+      const supplies = await this.getAllService.getAll(data);
       return {
         message: `All supplies retrieved successfully`,
         supplies,
@@ -115,5 +115,3 @@ class SupplyFacadeService {
     }
   }
 }
-
-export default SupplyFacadeService;

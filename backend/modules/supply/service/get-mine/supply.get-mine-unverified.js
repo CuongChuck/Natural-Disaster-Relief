@@ -1,9 +1,9 @@
 import ISupplyGetMineService from './supply.interface-get-mine.js';
 
-class SupplyGetMineUnverified extends ISupplyGetMineService {
-  constructor({ supplyRepository, categoryGetAllService, unitGetAllService, userGetService }) {
+export default class SupplyGetMineUnverified extends ISupplyGetMineService {
+  constructor({ supplyRedisRepository, categoryGetAllService, unitGetAllService, userGetService }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplyRedisRepository;
     this.categoryGetAllService = categoryGetAllService;
     this.unitGetAllService = unitGetAllService;
     this.userGetService = userGetService;
@@ -43,5 +43,3 @@ class SupplyGetMineUnverified extends ISupplyGetMineService {
     }
   }
 }
-
-export default SupplyGetMineUnverified;

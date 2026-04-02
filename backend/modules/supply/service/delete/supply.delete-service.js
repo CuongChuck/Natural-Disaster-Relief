@@ -1,9 +1,9 @@
 import ISupplyDeleteService from './supply.interface-delete.js';
 
-class SupplyDeleteService extends ISupplyDeleteService {
-  constructor({ supplyRepository }) {
+export default class SupplyDeleteService extends ISupplyDeleteService {
+  constructor({ supplyRedisRepository }) {
     super();
-    this.supplyRepository = supplyRepository;
+    this.supplyRepository = supplyRedisRepository;
   }
 
   delete = async (data) => {
@@ -16,5 +16,3 @@ class SupplyDeleteService extends ISupplyDeleteService {
     }
   }
 }
-
-export default SupplyDeleteService;

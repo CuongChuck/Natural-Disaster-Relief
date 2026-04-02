@@ -10,17 +10,17 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     this.db = db;
   }
 
-  getAll = async (offset, limit) => {
+  getAll = async (data) => {
     try {
       return await this.db.sequelize.query(
-        `SELECT "Supply"."id", "Supply"."name", "Supply"."quantity",
-        "Supply"."count", "Supply"."category", "Supply"."unit", "Supply"."address_line",
-        "Supply"."ward", "Supply"."district", "Supply"."city_province", "Supply"."createdAt",
-        "Supply"."updatedAt", "Users"."username" AS "donor", "Supply"."proof"
-        FROM "Supplies" AS "Supply"
-        LEFT OUTER JOIN "Users" ON "Supply"."donorId" = "Users"."id"
-        LIMIT ${limit}
-        OFFSET ${offset};`,
+        `SELECT S."id", S."name", S."quantity",
+        S."count", S."category", S."unit", S."address_line",
+        S."ward", S."district", S."city_province", S."createdAt",
+        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        FROM "Supplies" AS S
+        LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
+        LIMIT ${data.limit}
+        OFFSET ${data.offset};`,
         { type: this.db.sequelize.QueryTypes.SELECT, }
       );
     }
@@ -32,13 +32,13 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
   getOne = async (data) => {
     try {
       const result = await this.db.sequelize.query(
-        `SELECT "Supply"."id", "Supply"."name", "Supply"."quantity",
-        "Supply"."count", "Supply"."category", "Supply"."unit", "Supply"."address_line",
-        "Supply"."ward", "Supply"."district", "Supply"."city_province", "Supply"."createdAt",
-        "Supply"."updatedAt", "Users"."username" AS "donor", "Supply"."proof"
-        FROM "Supplies" AS "Supply"
-        LEFT OUTER JOIN "Users" ON "Supply"."donorId" = "Users"."id"
-        WHERE "Supply"."id" = ${data.id};`,
+        `SELECT S."id", S."name", S."quantity",
+        S."count", S."category", S."unit", S."address_line",
+        S."ward", S."district", S."city_province", S."createdAt",
+        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        FROM "Supplies" AS S
+        LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
+        WHERE S."id" = ${data.id};`,
         { type: this.db.sequelize.QueryTypes.SELECT, }
       );
       return result[0];
@@ -51,19 +51,56 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
   getMine = async (data) => {
     try {
       return await this.db.sequelize.query(
-        `SELECT "Supply"."id", "Supply"."name", "Supply"."quantity",
-        "Supply"."count", "Supply"."category", "Supply"."unit", "Supply"."address_line",
-        "Supply"."ward", "Supply"."district", "Supply"."city_province", "Supply"."createdAt",
-        "Supply"."updatedAt", "Users"."username" AS "donor", "Supply"."proof"
-        FROM "Supplies" AS "Supply"
-        LEFT OUTER JOIN "Users" ON "Supply"."donorId" = "Users"."id"
-        WHERE "Supply"."donorId" = ${data.donorId}
+        `SELECT S."id", S."name", S."quantity",
+        S."count", S."category", S."unit", S."address_line",
+        S."ward", S."district", S."city_province", S."createdAt",
+        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        FROM "Supplies" AS S
+        LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
+        WHERE S."donorId" = ${data.donorId}
         LIMIT ${data.limit}
         OFFSET ${data.offset};`,
         { type: this.db.sequelize.QueryTypes.SELECT, }
       );
     } catch (err) {
       throw new Error("Supply retrieval failed: " + err.message);
+    }
+  }
+
+  getByEvent = async (data) => {
+    try {
+      return await this.db.sequelize.query(
+        `SELECT S."id", S."name", S."quantity",
+        S."count", S."category", S."unit", S."address_line",
+        S."ward", S."district", S."city_province", S."createdAt",
+        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        FROM "Supplies" AS S
+		    LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId"
+        LEFT JOIN "Users" ON S."donorId" = "Users"."id"
+        WHERE SE."eventId" = ${data.id}
+        LIMIT ${data.limit}
+        OFFSET ${data.offset};`,
+        {
+          type: this.db.sequelize.QueryTypes.SELECT,
+        }
+      );
+    } catch (err) {
+      throw new Error("Supplies retrieval failed: " + err.message);
+    }
+  }
+
+  getIdByEvent = async (data) => {
+    try {
+      return await this.db.sequelize.query(
+        `SELECT SE."supplyId"
+        FROM "SupplyEvent" SE
+        WHERE SE."eventId" = ${data.id};`,
+        {
+          type: this.db.sequelize.QueryTypes.SELECT,
+        }
+      );
+    } catch (err) {
+      throw new Error("Supply id retrieval failed: " + err.message);
     }
   }
 

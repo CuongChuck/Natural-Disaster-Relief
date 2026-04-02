@@ -1,13 +1,14 @@
 import ISupplyCreateService from './supply.interface-create.js';
 
-class SupplyCreateAcceptService extends ISupplyCreateService {
-  constructor({ supplyRedisRepository, supplySqlRepository, categoryGetOneService, unitGetOneService, userCheckService }) {
+export default class SupplyCreateAcceptService extends ISupplyCreateService {
+  constructor(opts) {
     super();
-    this.supplyRedis = supplyRedisRepository;
-    this.supplySQL = supplySqlRepository;
-    this.categoryGetOneService = categoryGetOneService;
-    this.unitGetOneService = unitGetOneService;
-    this.userCheckService = userCheckService;
+    this.supplyRedis = opts.supplyRedisRepository;
+    this.supplySQL = opts.supplySqlRepository;
+    this.categoryGetOneService = opts.categoryGetOneService;
+    this.unitGetOneService = opts.unitGetOneService;
+    this.userCheckService = opts.userCheckService;
+    this.eventCreateService = opts.eventCreateService;
   }
 
   format = (supply, _category, _unit) => {
@@ -33,6 +34,18 @@ class SupplyCreateAcceptService extends ISupplyCreateService {
         this.unitGetOneService.getOne({ id: supply.unit })
       ]);
       await this.supplyRedis.delete({ id });
+      await this.supplyRedis.deleteReview({ id });
+      await this.eventCreateService.create({
+        userId: data.userId,
+        description: null,
+        name: 2,
+        startTime: new Date(),
+        address_line: null,
+        ward: "admin",
+        district: "admin",
+        city_province: "admin",
+        supplies: [id]
+      });
       return this.format(result, category, unit);
     }
     catch (err) {
@@ -40,5 +53,3 @@ class SupplyCreateAcceptService extends ISupplyCreateService {
     }
   }
 }
-
-export default SupplyCreateAcceptService;
