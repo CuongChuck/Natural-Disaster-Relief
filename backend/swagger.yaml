@@ -10,6 +10,8 @@ paths:
   /user:
     get:
       summary: Get User profile
+      security:
+        - bearerAuth: []
       operationId: User_getUser
       responses:
         201:
@@ -156,7 +158,7 @@ paths:
   /supplies:
     get:
       summary: Get all verified supply offers
-      operationId: SupplyGetAllVerified_getAll
+      operationId: Supply_getAllVerified
       parameters:
         - name: page
           in: query
@@ -189,7 +191,7 @@ paths:
   /supplies/unverified:
     get:
       summary: Get all unverified supply offers
-      operationId: SupplyGetAllUnverified_getAll
+      operationId: Supply_getAllUnverified
       parameters:
         - name: page
           in: query
@@ -222,7 +224,7 @@ paths:
   /supplies/me:
     get:
       summary: Get all current user's verified supply offers
-      operationId: SupplyGetMineVerified_getMine
+      operationId: Supply_getMineVerified
       security:
         - bearerAuth: []
       parameters:
@@ -257,7 +259,7 @@ paths:
   /supplies/me/unverified:
     get:
       summary: Get all current user's unverified supply offers
-      operationId: SupplyGetMineUnverified_getMine
+      operationId: Supply_getMineUnverified
       security:
         - bearerAuth: []
       parameters:
@@ -292,7 +294,7 @@ paths:
   /supply/unverified/{id}:
     get:
       summary: Get an unverified supply offer
-      operationId: SupplyGetOneUnverified_getOne
+      operationId: Supply_getOneUnverified
       parameters:
         - name: id
           in: path
@@ -317,7 +319,7 @@ paths:
   /supply:
     post:
       summary: Create a new supply offer
-      operationId: SupplyCreateService_create
+      operationId: Supply_create
       security:
         - bearerAuth: []
       requestBody:
@@ -343,7 +345,7 @@ paths:
   /supply/{id}:
     get:
       summary: Get a verified supply offer
-      operationId: SupplyGetOneVerified_getOne
+      operationId: Supply_getOneVerified
       parameters:
         - name: id
           in: path
@@ -367,7 +369,7 @@ paths:
 
     post:
       summary: Accept an unverified supply
-      operationId: SupplyCreateAcceptService_create
+      operationId: Supply_accept
       security:
         - bearerAuth: []
       parameters:
@@ -539,6 +541,124 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /event/names:
+    get:
+      summary: Get all event names
+      operationId: Event_getNames
+      responses:
+        200:
+          description: Get all event names successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventNamesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events:
+    get:
+      summary: Get all events
+      operationId: Event_getAll
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all events successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /event/{id}:
+    get:
+      summary: Get an event's information
+      operationId: Event_getOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of event's supplies to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get an event successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /event:
+    post:
+      summary: Create a new event
+      operationId: Event_create
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+      responses:
+        201:
+          description: Create a new event successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -585,6 +705,8 @@ components:
       properties:
         message: { type: string }
         token: { type: string }
+        role: { type: string }
+        name: { type: string }
 
     UserSignIn:
       type: object
@@ -622,6 +744,105 @@ components:
         "3": "phần"
         "4": "cái"
         "5": "nghìn VND"
+
+    EventNames:
+      type: object
+      description: "A map of IDs to event names"
+      additionalProperties:
+        type: string
+      example:
+        "3": "Thêm hình ảnh minh chứng cho kiện hàng"
+        "4": "Xe vận chuyển xuất phát"
+        "5": "Xe vận chuyển dừng lại"
+        "6": "Giao hàng đến người nhận"
+        "7": "Xác minh phản hồi"
+        "8": "Chấp nhận phản hồi"
+        "9": "Kết thúc vận chuyển"
+
+    EventNamesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        names:
+          $ref: '#/components/schemas/EventNames'
+
+    BaseEvent:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string }
+        startTime:
+          type: string
+          format: date-time
+          example: "2025-12-28T21:23:27Z"
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+
+    Event:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          properties:
+            id: { type: integer }
+            user: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+    
+    EventRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          properties:
+            supplies:
+              type: array
+              items:
+                type: integer
+
+    Events:
+      allOf:
+        - $ref: '#/components/schemas/Event'
+        - type: object
+          properties:
+            total_supplies:
+              type: integer
+
+    EventsResponse:
+      type: object
+      properties:
+        message: { type: string }
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Events'
+        total_records: { type: integer }
+
+    EventResponse:
+      type: object
+      properties:
+        message: { type: string }
+        event:
+          $ref: '#/components/schemas/Event'
+        user:
+          type: object
+          properties:
+            name: { type: string }
+            email: { type: string }
+            phone: { type: string }
+            role: { type: string }
+        supplies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supply'
+        total_supplies: { type: integer }
+
     
     UnitsResponse:
       type: object
