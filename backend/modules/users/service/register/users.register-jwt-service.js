@@ -17,7 +17,9 @@ class UserRegisterJwtService extends IUserRegisterService {
       const user = await this.userRepository.createUser(data, transaction);
       await transaction.commit();
       return {
-        token: this.jwtService.generateToken({ id: user.id, role: user.role })
+        token: this.jwtService.generateToken({ id: user.id, role: user.role }),
+        role: user.role,
+        name: user.name
       };
     }
     catch (err) {

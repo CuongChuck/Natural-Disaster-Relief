@@ -21,10 +21,10 @@ class UserFacadeService {
 
   registerUser = async (data) => {
     try {
-      const { token } = await this.registerService.registerUser(data);
+      const result = await this.registerService.registerUser(data);
       return {
-        message: `User registered successfully`,
-        token
+        message: `Người dùng đăng ký thành công`,
+        ...result
       };
     }
     catch (err) {
@@ -34,10 +34,10 @@ class UserFacadeService {
 
   signInUser = async (data) => {
     try {
-      const { token } = await this.signInService.signInUser(data);
+      const result = await this.signInService.signInUser(data);
       return {
         message: `User signed in successfully`,
-        token
+        ...result
       };
     }
     catch (err) {
