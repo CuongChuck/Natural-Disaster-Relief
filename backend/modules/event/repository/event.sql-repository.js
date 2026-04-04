@@ -13,7 +13,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       return await this.db.sequelize.query(`
         SELECT E."id", E."name", E."description", E."startTime", E."address_line",
         E."ward", E."district", E."city_province", E."createdAt", E."updatedAt",
-        U."name" AS "user", COUNT(SE."supplyId")
+        U."name" AS "user", COUNT(SE."supplyId") AS total_supplies
         FROM "Events" E
         LEFT JOIN "SupplyEvent" SE ON E."id" = SE."eventId"
         LEFT JOIN "Users" U ON E."userId" = U."id"
@@ -67,7 +67,6 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       if (data.supplies) await event.setSupplies(data.supplies);
       return event;
     } catch (err) {
-      console.error(err);
       throw new Error('Error in creating new event: ' + err.message);
     }
   }
