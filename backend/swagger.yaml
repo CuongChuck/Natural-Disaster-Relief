@@ -563,8 +563,6 @@ paths:
     get:
       summary: Get all events
       operationId: Event_getAll
-      security:
-        - bearerAuth: []
       parameters:
         - name: page
           in: query
@@ -602,7 +600,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: The ID of supply offer
+          description: The ID of event
           schema:
             type: integer
         - name: page
@@ -652,6 +650,166 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disaster/types:
+    get:
+      summary: Get all disaster types
+      operationId: Map_getDisasterTypes
+      responses:
+        200:
+          description: Get all disaster types successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterTypesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disasters:
+    get:
+      summary: Get all disasters
+      operationId: Map_getAllDisasters
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all disaster records successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisastersResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disaster/{id}:
+    get:
+      summary: Get a disaster's information
+      operationId: Map_getDisaster
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of disaster
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Disaster retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    patch:
+      summary: Edit a disaster record
+      operationId: Map_editDisaster
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of disaster
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseDisaster'
+      responses:
+        200:
+          description: Disaster edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete disaster
+      operationId: Map_deleteDisaster
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of disaster
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Disaster deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disaster:
+    post:
+      summary: Create a new disaster record
+      operationId: Map_createDisaster
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisasterRequest'
+      responses:
+        201:
+          description: Disaster created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterResponse'
         500:
           description: Error message
           content:
@@ -751,7 +909,6 @@ components:
       additionalProperties:
         type: string
       example:
-        "3": "Thêm hình ảnh minh chứng cho kiện hàng"
         "4": "Xe vận chuyển xuất phát"
         "5": "Xe vận chuyển dừng lại"
         "6": "Giao hàng đến người nhận"
@@ -948,3 +1105,104 @@ components:
       type: object
       properties:
         message: { type: string }
+
+    BaseDisaster:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string }
+        severity: { type: string }
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+        area:
+          type: array
+          items:
+            type: array
+            minItems: 1
+            items:
+              type: array
+              minItems: 2
+              items:
+                type: number
+              description: "[longitude, latitude]"
+
+    DisasterRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseDisaster'
+        - type: object
+          properties:
+            type: { type: integer }
+
+    Disaster:
+      allOf:
+        - $ref: '#/components/schemas/BaseDisaster'
+        - type: object
+          properties:
+            id: { type: integer }
+            type: { type: string }
+            user name: { type: string }
+            user email: { type: string }
+            user phone: { type: string }
+            user role: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    DisasterResponse:
+      type: object
+      properties:
+        message: { type: string }
+        disaster:
+          $ref: '#/components/schemas/Disaster'
+
+    Disasters:
+      allOf:
+        - $ref: '#/components/schemas/BaseDisaster'
+        - type: object
+          properties:
+            id: { type: integer }
+            type: { type: string }
+            user: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    DisastersResponse:
+      type: object
+      properties:
+        message: { type: string }
+        disasters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Disasters'
+        total_records: { type: integer }
+
+    DisasterTypes:
+      type: object
+      description: "A map of IDs to disaster types"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Lũ lụt"
+        "2": "Sạt lở"
+        "3": "Bão"
+        "4": "Hạn hán"
+
+    DisasterTypesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        types:
+          $ref: '#/components/schemas/DisasterTypes'

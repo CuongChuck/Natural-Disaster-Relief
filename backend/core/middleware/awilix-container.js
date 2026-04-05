@@ -54,6 +54,16 @@ import EventGetAllService from '../../modules/event/service/get-all/event.get-al
 import EventGetOneService from '../../modules/event/service/get-one/event.get-one.js';
 import EventGetNamesService from '../../modules/event/service/get-names/event.get-names.js';
 import EventCreateService from '../../modules/event/service/create/event.create-service.js';
+import MapController from '../../modules/map/map.controller.js';
+import MapFacadeService from '../../modules/map/map.facade-service.js';
+import MapSqlRepository from '../../modules/map/repository/map.sql-repository.js';
+import MapRedisRepository from '../../modules/map/repository/map.redis-repository.js';
+import MapCreateDisaster from '../../modules/map/service/create-disaster/map.create-disaster.js';
+import MapGetOneDisaster from '../../modules/map/service/get-one-disaster/map.get-one-disaster.js';
+import MapGetAllDisasters from '../../modules/map/service/get-all-disasters/map.get-all-disasters.js';
+import MapGetDisasterTypes from '../../modules/map/service/get-disaster-types/map.get-disaster-types.js';
+import MapEditDisaster from '../../modules/map/service/edit-disaster/map.edit-disaster.js';
+import MapDeleteDisaster from '../../modules/map/service/delete-disaster/map.delete-disaster.js';
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -126,6 +136,17 @@ container.register({
   eventGetOneService: asClass(EventGetOneService).scoped(),
   eventGetNamesService: asClass(EventGetNamesService).scoped(),
   eventCreateService: asClass(EventCreateService).scoped(),
+
+  mapController: asClass(MapController).scoped(),
+  mapFacade: asClass(MapFacadeService).scoped(),
+  mapSqlRepository: asClass(MapSqlRepository).scoped(),
+  mapRedisRepository: asClass(MapRedisRepository).scoped(),
+  mapCreateDisaster: asClass(MapCreateDisaster).scoped(),
+  mapGetOneDisaster: asClass(MapGetOneDisaster).scoped(),
+  mapGetAllDisasters: asClass(MapGetAllDisasters).scoped(),
+  mapGetDisasterTypes: asClass(MapGetDisasterTypes).scoped(),
+  mapEditDisaster: asClass(MapEditDisaster).scoped(),
+  mapDeleteDisaster: asClass(MapDeleteDisaster).scoped(),
 });
 
 export default container;

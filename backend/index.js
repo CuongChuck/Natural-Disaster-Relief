@@ -14,6 +14,7 @@ import categoryRoutes from './modules/category/category.route.js';
 import unitRoutes from './modules/unit/unit.route.js';
 import supplyRoutes from './modules/supply/supply.route.js';
 import eventRoutes from './modules/event/event.route.js';
+import mapRoutes from './modules/map/map.route.js';
 import container from './core/middleware/awilix-container.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,12 +28,12 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use(errorHandler);
 app.use('/', userRoutes);
 app.use('/', categoryRoutes);
 app.use('/', unitRoutes);
 app.use('/', supplyRoutes);
 app.use('/', eventRoutes);
+app.use('/map', mapRoutes);
 
 const swaggerPath = path.join(__dirname, './swagger.yaml');
 const swaggerSpec = yaml.load(fs.readFileSync(swaggerPath, 'utf-8'));
@@ -49,6 +50,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.set('container', container);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
