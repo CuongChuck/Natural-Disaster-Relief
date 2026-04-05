@@ -9,6 +9,9 @@ const authHandler = container.resolve('authHandler');
 router.get('/events/names',
   controllerHelper.invoke('getNames', 'eventController'));
 router.get('/events', controllerHelper.invoke('getAll', 'eventController'));
+router.get('/events/me',
+  authHandler.verifyToken,
+  controllerHelper.invoke('getMine', 'eventController'));
 router.get('/event/:id',
   controllerHelper.invoke('getOne', 'eventController'));
 router.post('/event',

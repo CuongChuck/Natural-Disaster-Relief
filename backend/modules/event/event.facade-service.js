@@ -4,6 +4,7 @@ export default class EventFacadeService {
     this.getAllService = opts.eventGetAllService;
     this.getOneService = opts.eventGetOneService;
     this.createService = opts.eventCreateService;
+    this.getMineService = opts.eventGetMineService;
   }
 
   getNames = async () => {
@@ -24,6 +25,20 @@ export default class EventFacadeService {
       const events = await this.getAllService.getAll(page, size);
       return {
         message: `All events retrieved successfully`,
+        events,
+        total_records: events.length
+      };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+  getMine = async (data) => {
+    try {
+      const events = await this.getMineService.getMine(data);
+      return {
+        message: `My events retrieved successfully`,
         events,
         total_records: events.length
       };

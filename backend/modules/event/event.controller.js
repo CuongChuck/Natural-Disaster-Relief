@@ -24,6 +24,17 @@ export default class EventController {
     }
   };
 
+  getMine = async (req, res, next) => {
+    try {
+      let { page = 1, size = 100 } = req.query;
+      const result = await this.eventFacade.getMine({ userId: req.userId, page, size });
+      res.status(200).json(result);
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
+
   getOne = async (req, res, next) => {
     try {
       let { page = 1, size = 100 } = req.query;

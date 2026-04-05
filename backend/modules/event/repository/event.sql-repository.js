@@ -28,6 +28,27 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
   }
 
+  getMine = async (data) => {
+    try {
+      return await this.db.sequelize.query(`
+        SELECT E."id", E."name", E."description", E."startTime", E."address_line",
+        E."ward", E."district", E."city_province", E."createdAt", E."updatedAt",
+        U."name" AS "user", COUNT(SE."supplyId") AS total_supplies
+        FROM "Events" E
+        LEFT JOIN "SupplyEvent" SE ON E."id" = SE."eventId"
+        LEFT JOIN "Users" U ON E."userId" = U."id"
+        WHERE E."userId" = ${data.userId}
+        GROUP BY E."id", U."name"
+        LIMIT ${data.limit}
+        OFFSET ${data.offset};`,
+        { type: this.db.sequelize.QueryTypes.SELECT },
+      );
+    }
+    catch (err) {
+      throw new Error("My events retrieval failed: " + err.message);
+    }
+  }
+
   getSupplyIds = async (data) => {
     try {
       return await this.db.sequelize.query(`

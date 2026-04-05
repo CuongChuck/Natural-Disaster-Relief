@@ -3,6 +3,10 @@ export const IEventStorageRepository = (Base) => class extends Base {
     throw new Error('Method not implemented.');
   }
 
+  getMine = async (data) => {
+    throw new Error('Method not implemented.');
+  }
+
   getOne = async (data) => {
     throw new Error('Method not implemented.');
   }
