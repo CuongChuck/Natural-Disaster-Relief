@@ -708,6 +708,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /map/disasters/me:
+    get:
+      summary: Get my created disasters
+      operationId: Map_getMyDisasters
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get my created disaster records successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisastersResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /map/disaster/{id}:
     get:
       summary: Get a disaster's information

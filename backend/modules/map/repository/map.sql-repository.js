@@ -44,6 +44,25 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
     }
   }
 
+  getMyDisasters = async (data) => {
+    try {
+      return await this.db.sequelize.query(`
+        SELECT D."id", D."name", D."description", D."type", D."severity", D."address_line",
+        D."ward", D."district", D."city_province", D."createdAt", D."updatedAt",
+        U."name" AS "user", (ST_AsGeoJSON(D."area")::json)->'coordinates' AS area
+        FROM "Disasters" D
+        LEFT JOIN "Users" U ON D."userId" = U."id"
+        WHERE D."userId" = ${data.userId}
+        LIMIT ${data.limit}
+        OFFSET ${data.offset};`,
+        { type: this.db.sequelize.QueryTypes.SELECT },
+      );
+    }
+    catch (err) {
+      throw new Error("Disasters retrieval failed: " + err.message);
+    }
+  }
+
   getOneDisaster = async (data) => {
     try {
       return await this.db.sequelize.query(`

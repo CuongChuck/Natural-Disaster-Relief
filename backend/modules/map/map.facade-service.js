@@ -6,6 +6,7 @@ export default class MapFacadeService {
     this.getDisasterTypesService = opts.mapGetDisasterTypes;
     this.editDisasterService = opts.mapEditDisaster;
     this.deleteDisasterService = opts.mapDeleteDisaster;
+    this.getMyDisasterService = opts.mapGetMyDisasters;
   }
 
   createDisaster = async (data) => {
@@ -60,6 +61,19 @@ export default class MapFacadeService {
       const disasters = await this.getAllDisastersService.getAll(data);
       return {
         message: `All disasters retrieved successfully`,
+        disasters,
+        total_record: disasters.length
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  getMyDisasters = async (data) => {
+    try {
+      const disasters = await this.getMyDisasterService.getMine(data);
+      return {
+        message: `All my disasters retrieved successfully`,
         disasters,
         total_record: disasters.length
       };

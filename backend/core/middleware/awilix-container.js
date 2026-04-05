@@ -64,6 +64,7 @@ import MapGetAllDisasters from '../../modules/map/service/get-all-disasters/map.
 import MapGetDisasterTypes from '../../modules/map/service/get-disaster-types/map.get-disaster-types.js';
 import MapEditDisaster from '../../modules/map/service/edit-disaster/map.edit-disaster.js';
 import MapDeleteDisaster from '../../modules/map/service/delete-disaster/map.delete-disaster.js';
+import MapGetMyDisasters from '../../modules/map/service/get-my-disasters/map.get-my-disasters.js';
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -147,6 +148,7 @@ container.register({
   mapGetDisasterTypes: asClass(MapGetDisasterTypes).scoped(),
   mapEditDisaster: asClass(MapEditDisaster).scoped(),
   mapDeleteDisaster: asClass(MapDeleteDisaster).scoped(),
+  mapGetMyDisasters: asClass(MapGetMyDisasters).scoped(),
 });
 
 export default container;

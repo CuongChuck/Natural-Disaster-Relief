@@ -9,6 +9,9 @@ const authHandler = container.resolve('authHandler');
 router.get('/disaster/types',
   controllerHelper.invoke('getDisasterTypes', 'mapController'));
 router.get('/disasters', controllerHelper.invoke('getAllDisaster', 'mapController'));
+router.get('/disasters/me',
+  authHandler.verifyToken,
+  controllerHelper.invoke('getMyDisasters', 'mapController'));
 router.get('/disaster/:id',
   controllerHelper.invoke('getOneDisaster', 'mapController'));
 router.post('/disaster',
