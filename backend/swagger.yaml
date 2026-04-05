@@ -592,6 +592,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /events/me:
+    get:
+      summary: Get my created events
+      operationId: Event_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get my created events successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /event/{id}:
     get:
       summary: Get an event's information
