@@ -9,7 +9,7 @@ export default class IEventGetAllService {
     throw new Error('Method not implemented.');
   }
 
-  getAll = async (page, size) => {
+  getAll = async (data) => {
     throw new Error('Method not implemented.');
   }
 }

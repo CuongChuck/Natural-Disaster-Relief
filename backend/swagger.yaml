@@ -308,7 +308,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SupplyResponse'
+                $ref: '#/components/schemas/SupplyGetResponse'
         500:
           description: Error message
           content:
@@ -359,7 +359,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SupplyResponse'
+                $ref: '#/components/schemas/SupplyGetResponse'
         500:
           description: Error message
           content:
@@ -1119,6 +1119,21 @@ components:
               type: string
               format: date-time
               example: "2025-12-28T21:23:27Z"
+
+    SupplyGet:
+      allOf:
+        - $ref: '#/components/schemas/Supply'
+        - type: object
+          properties:
+            events:
+              $ref: '#/components/schemas/Events'
+
+    SupplyGetResponse:
+      type: object
+      properties:
+        message: { type: string }
+        supply:
+          $ref: '#/components/schemas/SupplyGet'
 
     SuppliesResponse:
       type: object

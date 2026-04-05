@@ -1,6 +1,6 @@
 import IEventGetAllService from "./event.interface-get-all.js";
 
-export default class EventGetAllService extends IEventGetAllService {
+export default class EventGetAllBySupplyService extends IEventGetAllService {
   constructor({ eventSqlRepository, eventRedisRepository }) {
     super();
     this.eventSql = eventSqlRepository;
@@ -18,7 +18,7 @@ export default class EventGetAllService extends IEventGetAllService {
     try {
       const limit = parseInt(data.size, 10);
       const offset = (parseInt(data.page, 10) - 1) * limit;
-      const events = await this.eventSql.getAll(offset, limit);
+      const events = await this.eventSql.getBySupply({ supplyId: data.supplyId, offset, limit });
       const names = await this.eventRedis.getNames();
       return this.format(names, events);
     }

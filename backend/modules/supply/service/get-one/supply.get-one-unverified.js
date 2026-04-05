@@ -1,12 +1,13 @@
 import ISupplyGetOneService from './supply.interface-get-one.js';
 
 export default class SupplyGetOneUnverified extends ISupplyGetOneService {
-  constructor({ supplyRedisRepository, categoryGetOneService, unitGetOneService, userGetService }) {
+  constructor(opts) {
     super();
-    this.supplyRepository = supplyRedisRepository;
-    this.categoryGetOneService = categoryGetOneService;
-    this.unitGetOneService = unitGetOneService;
-    this.userGetService = userGetService;
+    this.supplyRepository = opts.supplyRedisRepository;
+    this.categoryGetOneService = opts.categoryGetOneService;
+    this.unitGetOneService = opts.unitGetOneService;
+    this.userGetService = opts.userGetService;
+    this.eventGetBySupply = opts.eventGetAllBySupplyService;
   }
 
   format = (id, supply, _category, _unit, username) => {
@@ -26,7 +27,12 @@ export default class SupplyGetOneUnverified extends ISupplyGetOneService {
       const category = await this.categoryGetOneService.getOne({ id: supply.category });
       const unit = await this.unitGetOneService.getOne({ id: supply.unit });
       const user = await this.userGetService.getUser({ userId: supply.donorId });
-      return this.format(data.id, supply, category, unit, user.username);
+      const size = 100;
+      const page = 1;
+      const events = await this.eventGetBySupply.getAll({ supplyId: data.id, size, page });
+      const result = this.format(data.id, supply, category, unit, user.username);
+      result.events = events;
+      return result;
     }
     catch (err) {
       throw err;

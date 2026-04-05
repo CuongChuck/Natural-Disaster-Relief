@@ -20,9 +20,9 @@ export default class EventFacadeService {
     }
   }
 
-  getAll = async (page, size) => {
+  getAll = async (data) => {
     try {
-      const events = await this.getAllService.getAll(page, size);
+      const events = await this.getAllService.getAll(data);
       return {
         message: `All events retrieved successfully`,
         events,

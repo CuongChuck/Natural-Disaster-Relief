@@ -1,11 +1,12 @@
 import ISupplyGetOneService from './supply.interface-get-one.js';
 
 export default class SupplyGetOneVerified extends ISupplyGetOneService {
-  constructor({ supplySqlRepository, categoryGetOneService, unitGetOneService }) {
+  constructor(opts) {
     super();
-    this.supplyRepository = supplySqlRepository;
-    this.categoryGetOneService = categoryGetOneService;
-    this.unitGetOneService = unitGetOneService;
+    this.supplyRepository = opts.supplySqlRepository;
+    this.categoryGetOneService = opts.categoryGetOneService;
+    this.unitGetOneService = opts.unitGetOneService;
+    this.eventGetBySupply = opts.eventGetAllBySupplyService;
   }
 
   format = (supply, _category, _unit) => {
@@ -24,7 +25,12 @@ export default class SupplyGetOneVerified extends ISupplyGetOneService {
         this.categoryGetOneService.getOne({ id: supply.category }),
         this.unitGetOneService.getOne({ id: supply.unit })
       ]);
-      return this.format(supply, category, unit);
+      const size = 100;
+      const page = 1;
+      const events = await this.eventGetBySupply.getAll({ supplyId: data.id, size, page });
+      const result = this.format(supply, category, unit);
+      result.events = events;
+      return result;
     }
     catch (err) {
       throw err;

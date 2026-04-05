@@ -16,7 +16,7 @@ export default class EventController {
   getAll = async (req, res, next) => {
     try {
       let { page = 1, size = 100 } = req.query;
-      const result = await this.eventFacade.getAll(page, size);
+      const result = await this.eventFacade.getAll({ page, size });
       res.status(200).json(result);
     }
     catch (err) {
