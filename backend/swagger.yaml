@@ -167,7 +167,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
@@ -200,7 +200,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
@@ -235,7 +235,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
@@ -270,7 +270,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
@@ -571,7 +571,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
@@ -606,7 +606,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
@@ -645,7 +645,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of event's supplies to return
           required: false
@@ -722,7 +722,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
@@ -757,7 +757,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: size
           in: query
           description: The number of items to return
           required: false
