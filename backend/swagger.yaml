@@ -982,9 +982,6 @@ components:
         "4": "Xe vận chuyển xuất phát"
         "5": "Xe vận chuyển dừng lại"
         "6": "Giao hàng đến người nhận"
-        "7": "Xác minh phản hồi"
-        "8": "Chấp nhận phản hồi"
-        "9": "Kết thúc vận chuyển"
 
     EventNamesResponse:
       type: object

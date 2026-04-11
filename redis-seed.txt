@@ -1,5 +1,5 @@
 HSET category 1 "thuốc" 2 "thực phẩm" 3 "nước" 4 "vật dụng" 5 "tiền"
 HSET unit 1 "kg" 2 "l" 3 "phần" 4 "cái" 5 "nghìn VND"
 HSET disaster 1 "Lũ lụt" 2 "Sạt lở" 3 "Bão" 4 "Hạn hán"
-HSET event 1 "Yêu cầu chỉnh sửa kiện hàng" 2 "Chấp nhận kiện hàng" 3 "Thêm hình ảnh minh chứng cho kiện hàng" 4 "Xe vận chuyển xuất phát" 5 "Xe vận chuyển dừng lại" 6 "Giao hàng đến người nhận" 7 "Xác minh phản hồi" 8 "Chấp nhận phản hồi" 9 "Kết thúc vận chuyển"
+HSET event 1 "Yêu cầu chỉnh sửa kiện hàng" 2 "Chấp nhận kiện hàng" 3 "Thêm hình ảnh minh chứng cho kiện hàng" 4 "Xe vận chuyển xuất phát" 5 "Xe vận chuyển dừng lại" 6 "Giao hàng đến người nhận"
 SET supply_id 6

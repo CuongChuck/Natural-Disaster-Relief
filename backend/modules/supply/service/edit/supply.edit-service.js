@@ -29,7 +29,8 @@ export default class SupplyEditService extends ISupplyEditService {
       });
       data.updatedAt = new Date();
       await this.supplyRepository.edit(data);
-      await this.supplyRepository.outdateReview({ id: data.id });
+      const review = await this.supplyRepository.getReview({ id: data.id });
+      if (review) await this.supplyRepository.outdateReview({ id: data.id });
       const supply = await this.supplyRepository.getOne({ id: data.id });
       const category = await this.categoryGetOneService.getOne({ id: supply.category });
       const unit = await this.unitGetOneService.getOne({ id: supply.unit });
