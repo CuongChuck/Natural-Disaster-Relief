@@ -24,7 +24,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       );
     }
     catch (err) {
-      throw new Error("Events retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Events retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -46,7 +47,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       );
     }
     catch (err) {
-      throw new Error("Events retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Events retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -67,7 +69,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       );
     }
     catch (err) {
-      throw new Error("My events retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("My events retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -82,7 +85,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         { type: this.db.sequelize.QueryTypes.SELECT },
       );
     } catch (err) {
-      throw new Error('Supply ids retrieval failed: ' + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error('Supply ids retrieval failed: ' + (errors || err.message));
     }
   }
 
@@ -91,7 +95,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       return await this.Event.findByPk(data.id);
     }
     catch (err) {
-      throw new Error(`Event ${data.id} retrieval failed: ` + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error(`Event ${data.id} retrieval failed: ` + (errors || err.message));
     }
   }
 
@@ -110,7 +115,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       if (data.supplies) await event.setSupplies(data.supplies);
       return event;
     } catch (err) {
-      throw new Error('Error in creating new event: ' + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error('Error in creating new event: ' + (errors || err.message));
     }
   }
 }

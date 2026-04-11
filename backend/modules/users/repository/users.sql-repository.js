@@ -24,7 +24,8 @@ class UserSqlRepository extends IUserRepository {
       if (!user) throw new Error('There is no such user');
       return user.toJSON();
     } catch (err) {
-      throw new Error("User retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("User retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -38,7 +39,8 @@ class UserSqlRepository extends IUserRepository {
         raw: true
       });
     } catch (err) {
-      throw new Error("User retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("User retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -60,7 +62,8 @@ class UserSqlRepository extends IUserRepository {
       return user.toJSON();
     }
     catch (err) {
-      throw new Error("User creation failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("User creation failed: " + (errors || err.message));
     }
   }
 
@@ -71,7 +74,8 @@ class UserSqlRepository extends IUserRepository {
       return user.toJSON();
     }
     catch (err) {
-      throw new Error("User retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("User retrieval failed: " + errors || err.message);
     }
   }
 
@@ -83,7 +87,8 @@ class UserSqlRepository extends IUserRepository {
       if (!(['ADMIN', 'VOLUNTEER'].includes(user.role)))
         throw new Error('User is not authorized to perform this action');
     } catch (err) {
-      throw new Error("Operator check failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Operator check failed: " + (errors || err.message));
     }
   }
 
@@ -114,7 +119,8 @@ class UserSqlRepository extends IUserRepository {
       ], transaction });
     }
     catch (err) {
-      throw new Error("User profile update failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("User profile update failed: " + (errors || err.message));
     }
   }
 
@@ -125,7 +131,8 @@ class UserSqlRepository extends IUserRepository {
       await this.User.destroy({ where: { id: data.userId }, force: true, transaction: transaction });
     }
     catch (err) {
-      throw new Error("User deletion failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("User deletion failed: " + (errors || err.message));
     }
   }
 }

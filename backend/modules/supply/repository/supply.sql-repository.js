@@ -25,7 +25,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       );
     }
     catch (err) {
-      throw new Error("Supplies retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Supplies retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -44,7 +45,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       return result[0];
     }
     catch (err) {
-      throw new Error("Supply retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Supply retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -63,7 +65,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         { type: this.db.sequelize.QueryTypes.SELECT, }
       );
     } catch (err) {
-      throw new Error("Supply retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Supply retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -85,7 +88,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         }
       );
     } catch (err) {
-      throw new Error("Supplies retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Supplies retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -100,7 +104,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         }
       );
     } catch (err) {
-      throw new Error("Supply id retrieval failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Supply id retrieval failed: " + (errors || err.message));
     }
   }
 
@@ -122,7 +127,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         updatedAt: data.updatedAt
       });
     } catch (err) {
-      throw new Error("Supply creation failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Supply creation failed: " + (errors || err.message));
     }
   }
 
@@ -132,7 +138,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         proof: data.proof
       }, { where: { id: data.id }, },);
     } catch (err) {
-      throw new Error("Photo proof addition failed: " + err.message);
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Photo proof addition failed: " + (errors || err.message));
     }
   }
 }
