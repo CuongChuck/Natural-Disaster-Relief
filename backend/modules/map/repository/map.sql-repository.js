@@ -47,6 +47,16 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
     }
   }
 
+  countAllDisasters = async () => {
+    try {
+      return await this.Disaster.count();
+    }
+    catch (err) {
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Counting all disasters failed: " + (errors || err.message));
+    }
+  }
+
   getMyDisasters = async (data) => {
     try {
       return await this.db.sequelize.query(`
@@ -64,6 +74,20 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
     catch (err) {
       const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
       throw new Error("Disasters retrieval failed: " + (errors || err.message));
+    }
+  }
+
+  countMyDisasters = async (data) => {
+    try {
+      return await this.Disaster.count({
+        where: {
+          userId: data.userId
+        }
+      });
+    }
+    catch (err) {
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Counting my disasters failed: " + (errors || err.message));
     }
   }
 

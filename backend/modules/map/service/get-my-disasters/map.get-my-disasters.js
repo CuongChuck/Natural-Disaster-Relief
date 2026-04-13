@@ -11,12 +11,18 @@ export default class MapGetMyDisasters extends IMapGetMyDisasters {
     try {
       const limit = parseInt(data.size, 10);
       const offset = (parseInt(data.page, 10) - 1) * 10;
-      const disasters = await this.mapSql.getMyDisasters({ limit, offset, userId: data.userId });
-      const types = await this.mapRedis.getTypes();
-      return disasters.map((record) => {
-        const { type, ...remain } = record;
-        return { type: types[type], ...remain };
-      });
+      const [disasters, count, types] = await Promise.all([
+        this.mapSql.getMyDisasters({ limit, offset, userId: data.userId }),
+        this.mapSql.countMyDisasters({ userId: data.userId }),
+        this.mapRedis.getTypes()
+      ]);
+      return {
+        disasters: disasters.map((record) => {
+          const { type, ...remain } = record;
+          return { type: types[type], ...remain };
+        }),
+        total_records: count
+      }
     } catch (err) {
       throw err;
     }

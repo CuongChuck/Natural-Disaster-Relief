@@ -30,6 +30,15 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     }
   }
 
+  countAll = async () => {
+    try {
+      return await this.Supply.count();
+    } catch (err) {
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Count supplies failed: " + (errors || err.message));
+    }
+  }
+
   getOne = async (data) => {
     try {
       const result = await this.db.sequelize.query(
@@ -70,6 +79,19 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     }
   }
 
+  countMine = async (data) => {
+    try {
+      return await this.Supply.count({
+        where: {
+          donorId: data.donorId
+        }
+      });
+    } catch (err) {
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Count my supplies failed: " + (errors || err.message));
+    }
+  }
+
   getByEvent = async (data) => {
     try {
       return await this.db.sequelize.query(
@@ -89,7 +111,25 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       );
     } catch (err) {
       const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Supplies retrieval failed: " + (errors || err.message));
+      throw new Error("Supplies retrieval by event failed: " + (errors || err.message));
+    }
+  }
+
+  countByEvent = async (data) => {
+    try {
+      const result = await this.db.sequelize.query(
+        `SELECT COUNT(*)
+        FROM "Supplies" AS S
+		    LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId"
+        WHERE SE."eventId" = ${data.id};`,
+        {
+          type: this.db.sequelize.QueryTypes.SELECT,
+        }
+      );
+      return result[0]['count'];
+    } catch (err) {
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Counting supplies by event failed: " + (errors || err.message));
     }
   }
 

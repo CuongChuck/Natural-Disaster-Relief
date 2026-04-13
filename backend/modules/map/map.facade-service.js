@@ -58,11 +58,10 @@ export default class MapFacadeService {
 
   getAllDisasters = async (data) => {
     try {
-      const disasters = await this.getAllDisastersService.getAll(data);
+      const result = await this.getAllDisastersService.getAll(data);
       return {
         message: `All disasters retrieved successfully`,
-        disasters,
-        total_record: disasters.length
+        ...result
       };
     } catch (err) {
       throw err;
@@ -71,11 +70,10 @@ export default class MapFacadeService {
 
   getMyDisasters = async (data) => {
     try {
-      const disasters = await this.getMyDisasterService.getMine(data);
+      const result = await this.getMyDisasterService.getMine(data);
       return {
         message: `All my disasters retrieved successfully`,
-        disasters,
-        total_record: disasters.length
+        ...result
       };
     } catch (err) {
       throw err;

@@ -20,6 +20,15 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
     }
   }
 
+  countAll = async () => {
+    try {
+      const info = await this.redis.ft.info('idx:supplies');
+      return info.num_records;
+    } catch (err) {
+      throw new Error('Error in counting unverified supplies: ' + err.message);
+    }
+  }
+
   getOne = async (data) => {
     try {
       return await this.redis.json.get(`supply:${data.id}`);
@@ -38,6 +47,20 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
       });
     } catch (err) {
       throw new Error('Error in retrieving my unverified supplies: ' + err.message);
+    }
+  }
+
+  countMine = async (data) => {
+    try {
+      const result = await this.redis.ft.search('idx:supplies', `@donorId:[${data.donorId} ${data.donorId}]`, {
+        LIMIT: {
+          from: 0,
+          size: 0
+        }
+      });
+      return result.total;
+    } catch (err) {
+      throw new Error('Error in counting unverified supplies: ' + err.message);
     }
   }
 

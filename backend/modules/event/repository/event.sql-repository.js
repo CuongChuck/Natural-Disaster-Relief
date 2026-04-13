@@ -29,6 +29,15 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
   }
 
+  countAll = async () => {
+    try {
+      return await this.Event.count();
+    } catch (err) {
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Count events failed: " + (errors || err.message));
+    }
+  }
+
   getBySupply = async (data) => {
     try {
       return await this.db.sequelize.query(`
@@ -71,6 +80,19 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     catch (err) {
       const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
       throw new Error("My events retrieval failed: " + (errors || err.message));
+    }
+  }
+
+  countMine = async (data) => {
+    try {
+      return await this.Event.count({
+        where: {
+          userId: data.userId
+        }
+      });
+    } catch (err) {
+      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
+      throw new Error("Count my events failed: " + (errors || err.message));
     }
   }
 

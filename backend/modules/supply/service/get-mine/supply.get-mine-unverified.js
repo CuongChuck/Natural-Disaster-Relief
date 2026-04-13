@@ -30,13 +30,14 @@ export default class SupplyGetMineUnverified extends ISupplyGetMineService {
       data.offset = offset;
       delete data.size;
       delete data.page;
-      const [supplies, categories, units, user] = await Promise.all([
+      const [supplies, categories, units, user, count] = await Promise.all([
         this.supplyRepository.getMine(data),
         this.categoryGetAllService.getAll(),
         this.unitGetAllService.getAll(),
-        this.userGetService.getUser({ userId: data.donorId })
+        this.userGetService.getUser({ userId: data.donorId }),
+        this.supplyRepository.countMine(data)
       ]);
-      return this.format(supplies, categories, units, user.username);
+      return { supplies: this.format(supplies, categories, units, user.username), total_records: count };
     }
     catch (err) {
       throw err;

@@ -22,11 +22,10 @@ export default class EventFacadeService {
 
   getAll = async (data) => {
     try {
-      const events = await this.getAllService.getAll(data);
+      const result = await this.getAllService.getAll(data);
       return {
         message: `All events retrieved successfully`,
-        events,
-        total_records: events.length
+        ...result
       };
     }
     catch (err) {
@@ -36,11 +35,10 @@ export default class EventFacadeService {
 
   getMine = async (data) => {
     try {
-      const events = await this.getMineService.getMine(data);
+      const result = await this.getMineService.getMine(data);
       return {
         message: `My events retrieved successfully`,
-        events,
-        total_records: events.length
+        ...result
       };
     }
     catch (err) {

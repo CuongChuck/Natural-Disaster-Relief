@@ -26,14 +26,15 @@ export default class SupplyGetAllUnverified extends ISupplyGetAllService {
     try {
       const limit = parseInt(data.size, 10);
       const offset = (parseInt(data.page, 10) - 1) * limit;
-      const [supplies, categories, units] = await Promise.all([
+      const [supplies, categories, units, count] = await Promise.all([
         this.supplyRepository.getAll({ offset, limit }),
         this.categoryGetAllService.getAll(),
-        this.unitGetAllService.getAll()
+        this.unitGetAllService.getAll(),
+        this.supplyRepository.countAll()
       ]);
       const donorIds = [...new Set(supplies.documents.map((record) => record.value.donorId))];
       const users = await this.userGetManyService.getUsers(donorIds);
-      return this.format(supplies, categories, units, users);
+      return { supplies: this.format(supplies, categories, units, users), total_records: count };
     }
     catch (err) {
       throw err;

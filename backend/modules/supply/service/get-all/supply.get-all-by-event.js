@@ -21,12 +21,13 @@ export default class SupplyGetAllByEvent extends ISupplyGetAllService {
 
   getAll = async (data) => {
     try {
-      const [supplies, categories, units] = await Promise.all([
+      const [supplies, categories, units, count] = await Promise.all([
         this.supplyRepository.getByEvent(data),
         this.categoryGetAllService.getAll(),
-        this.unitGetAllService.getAll()
+        this.unitGetAllService.getAll(),
+        this.supplyRepository.countByEvent(data)
       ]);
-      return this.format(supplies, categories, units);
+      return { supplies: this.format(supplies, categories, units), total_records: count };
     }
     catch (err) {
       throw err;

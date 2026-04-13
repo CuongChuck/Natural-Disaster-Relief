@@ -13,11 +13,10 @@ export default class SupplyFacadeService {
 
   getAll = async (data) => {
     try {
-      const supplies = await this.getAllService.getAll(data);
+      const result = await this.getAllService.getAll(data);
       return {
         message: `All supplies retrieved successfully`,
-        supplies,
-        total_records: supplies.length
+        ...result
       };
     }
     catch (err) {
@@ -40,11 +39,10 @@ export default class SupplyFacadeService {
 
   getMine = async (data) => {
     try {
-      const supplies = await this.getMineService.getMine(data);
+      const result = await this.getMineService.getMine(data);
       return {
         message: `My supplies retrieved successfully`,
-        supplies,
-        total_records: supplies.length
+        ...result
       };
     }
     catch (err) {

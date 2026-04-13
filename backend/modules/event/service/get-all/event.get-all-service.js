@@ -18,9 +18,12 @@ export default class EventGetAllService extends IEventGetAllService {
     try {
       const limit = parseInt(data.size, 10);
       const offset = (parseInt(data.page, 10) - 1) * limit;
-      const events = await this.eventSql.getAll(offset, limit);
-      const names = await this.eventRedis.getNames();
-      return this.format(names, events);
+      const [events, count, names] = await Promise.all([
+        this.eventSql.getAll(offset, limit),
+        this.eventSql.countAll(),
+        this.eventRedis.getNames()
+      ]);
+      return { events: this.format(names, events), total_records: count };
     }
     catch (err) {
       throw err;

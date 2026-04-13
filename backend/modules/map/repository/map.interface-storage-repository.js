@@ -3,6 +3,10 @@ export const IMapStorageRepository = (Base) => class extends Base {
     throw new Error('Method not implemented.');
   }
 
+  countAllDisasters = async () => {
+    throw new Error('Method not implemented.');
+  }
+
   getOneDisaster = async (data) => {
     throw new Error('Method not implemented.');
   }
