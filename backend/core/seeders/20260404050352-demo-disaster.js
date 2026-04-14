@@ -4,7 +4,6 @@
 export async function up(queryInterface, Sequelize) {
   await queryInterface.bulkInsert('Disasters', [
     {
-      id: 1,
       userId: 1,
       name: 'Lũ quét Sa Pa',
       description: null,

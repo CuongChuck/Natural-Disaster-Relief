@@ -4,7 +4,6 @@
 export async function up(queryInterface, Sequelize) {
   return queryInterface.bulkInsert('Users', [
     {
-      id: 1,
       email: 'a@mail.com',
       username: 'admin',
       password: '$2b$10$jnjn1yHc.4XqOL7.WT8.0uBfHF53/a/bakX7DzJm1fU/kcEJQgpaW',
@@ -18,7 +17,6 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      id: 2,
       email: 'b@mail.com',
       username: 'vol1',
       password: '$2b$10$okIDv0CfZmjzPjgG5AUBq.OGlac2L2rHdW9x5QmnnSdyW25KbaE82',

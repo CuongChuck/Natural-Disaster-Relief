@@ -4,7 +4,6 @@
 export async function up(queryInterface, Sequelize) {
   return queryInterface.bulkInsert('Supplies', [
     {
-      id: 1,
       donorId: 1,
       name: "Chăn cứu trợ",
       quantity: 1,
@@ -18,7 +17,6 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      id: 2,
       donorId: 1,
       name: "Gạo",
       quantity: 10,
@@ -32,7 +30,6 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      id: 3,
       donorId: 1,
       name: "Tiền mặt",
       quantity: 200000,
@@ -46,7 +43,6 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      id: 4,
       donorId: 1,
       name: "Cơm hộp",
       quantity: 1,
@@ -60,7 +56,6 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: new Date(),
     },
     {
-      id: 5,
       donorId: 1,
       name: "Tiền mặt",
       quantity: 500000,

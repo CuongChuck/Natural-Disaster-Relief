@@ -4,7 +4,6 @@
 export async function up(queryInterface, Sequelize) {
   await queryInterface.bulkInsert('Events', [
     {
-      id: 1,
       userId: 1,
       description: null,
       startTime: new Date(),
