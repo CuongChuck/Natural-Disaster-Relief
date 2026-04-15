@@ -10,6 +10,8 @@ export default class SupplyGetReview extends ISupplyGetReviewService {
   }
 
   format = (id, review, _category, _unit, donor, reviewer) => {
+    review.updated = true;
+    delete review.updatedAt;
     const { category, unit, donorId, reviewerId, ...remain } = review;
     return {
       id: Number(id),
