@@ -32,14 +32,12 @@ export default class SupplyGetReview extends ISupplyGetReviewService {
 
   getReview = async (data) => {
     try {
-      let supply;
-      const review = await this.supplyRepository.getReview(data) || {};
-      if (this.isEmpty(review)) supply = await this.supplyRepository.getOne(data);
-      const category = await this.categoryGetOneService.getOne({ id: review.category || supply.category });
-      const unit = await this.unitGetOneService.getOne({ id: review.unit || supply.unit });
-      const donor = await this.userGetService.getUser({ userId: review.donorId || supply.donorId });
-      const reviewer = this.isEmpty(review) ? { username: null } : await this.userGetService.getUser({ userId: review.reviewerId });
-      return this.format(data.id, this.isEmpty(review) ? supply : review, category, unit, donor.username, reviewer.username);
+      const review = await this.supplyRepository.getReview(data) || await this.supplyRepository.getOne(data);
+      const category = await this.categoryGetOneService.getOne({ id: review.category });
+      const unit = await this.unitGetOneService.getOne({ id: review.unit });
+      const donor = await this.userGetService.getUser({ userId: review.donorId });
+      const reviewer = review.reviewerId ? await this.userGetService.getUser({ userId: review.reviewerId }) : { username: null };
+      return this.format(data.id, review, category, unit, donor.username, reviewer.username);
     }
     catch (err) {
       throw err;
