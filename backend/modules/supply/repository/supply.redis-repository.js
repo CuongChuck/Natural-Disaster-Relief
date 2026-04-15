@@ -100,7 +100,7 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
   review = async (data) => {
     try {
       const { id, ...input } = data;
-      await this.redis.json.set(`supply_review:${id}`, '$', data);
+      await this.redis.json.set(`supply_review:${id}`, '$', input);
     } catch (err) {
       throw new Error('Error in reviewing a supply: ' + err.message);
     }

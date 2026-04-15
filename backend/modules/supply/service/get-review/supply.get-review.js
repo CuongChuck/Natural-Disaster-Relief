@@ -23,13 +23,6 @@ export default class SupplyGetReview extends ISupplyGetReviewService {
     }
   }
 
-  isEmpty = (obj) => {
-    for (let key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
-    }
-    return true;
-  }
-
   getReview = async (data) => {
     try {
       const review = await this.supplyRepository.getReview(data) || await this.supplyRepository.getOne(data);
