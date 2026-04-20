@@ -1228,6 +1228,12 @@ components:
             user email: { type: string }
             user phone: { type: string }
             user role: { type: string }
+            center:
+              type: array
+              minItems: 2
+              items:
+                type: number
+              description: "[longitude, latitude]"
             createdAt:
               type: string
               format: date-time
@@ -1252,6 +1258,12 @@ components:
             id: { type: integer }
             type: { type: string }
             user: { type: string }
+            center:
+              type: array
+              minItems: 2
+              items:
+                type: number
+              description: "[longitude, latitude]"
             createdAt:
               type: string
               format: date-time

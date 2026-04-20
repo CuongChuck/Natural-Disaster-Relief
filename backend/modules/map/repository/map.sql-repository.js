@@ -33,7 +33,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       return await this.db.sequelize.query(`
         SELECT D."id", D."name", D."description", D."type", D."severity", D."address_line",
         D."ward", D."district", D."city_province", D."createdAt", D."updatedAt",
-        U."name" AS "user", (ST_AsGeoJSON(D."area")::json)->'coordinates' AS area
+        U."name" AS "user", (ST_AsGeoJSON(D."area")::json)->'coordinates' AS area,
+		    (ST_AsGeoJSON(ST_PointOnSurface(D."area"))::json)->'coordinates' AS center
         FROM "Disasters" D
         LEFT JOIN "Users" U ON D."userId" = U."id"
         LIMIT ${limit}
@@ -62,7 +63,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       return await this.db.sequelize.query(`
         SELECT D."id", D."name", D."description", D."type", D."severity", D."address_line",
         D."ward", D."district", D."city_province", D."createdAt", D."updatedAt",
-        U."name" AS "user", (ST_AsGeoJSON(D."area")::json)->'coordinates' AS area
+        U."name" AS "user", (ST_AsGeoJSON(D."area")::json)->'coordinates' AS area,
+        (ST_AsGeoJSON(ST_PointOnSurface(D."area"))::json)->'coordinates' AS center
         FROM "Disasters" D
         LEFT JOIN "Users" U ON D."userId" = U."id"
         WHERE D."userId" = ${data.userId}
@@ -98,7 +100,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         D."ward", D."district", D."city_province", D."createdAt", D."updatedAt",
         U."name" AS "user name", U."email" AS "user email",
         U."phone" AS "user phone", U."role" AS "user role",
-        (ST_AsGeoJSON(D."area")::json)->'coordinates' AS area
+        (ST_AsGeoJSON(D."area")::json)->'coordinates' AS area,
+        (ST_AsGeoJSON(ST_PointOnSurface(D."area"))::json)->'coordinates' AS center
         FROM "Disasters" D
         LEFT JOIN "Users" U ON D."userId" = U."id"
         WHERE D."id" = ${data.id};`,
