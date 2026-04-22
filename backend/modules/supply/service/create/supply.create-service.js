@@ -26,6 +26,7 @@ export default class SupplyCreateService extends ISupplyCreateService {
       data.createdAt = new Date();
       data.updatedAt = new Date();
       data.donorId = data.userId;
+      data.status = 0;
       delete data.userId;
       const id = await this.supplyRepository.create(data);
       const supply = await this.supplyRepository.getOne({ id });

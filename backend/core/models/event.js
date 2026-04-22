@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Event.belongsToMany(models['Supply'], { through: 'SupplyEvent', foreignKey: 'eventId', otherKey: 'supplyId' });
+      Event.hasMany(models['SupplyEvent'], { foreignKey: 'eventId' });
       Event.belongsTo(models['User'], { as: 'user', foreignKey: 'userId' });
     }
   }

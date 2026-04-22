@@ -10,6 +10,8 @@ export default class SupplyDeleteService extends ISupplyDeleteService {
     try {
       await this.supplyRepository.checkOwner(data);
       await this.supplyRepository.delete(data);
+      if (await this.supplyRepository.getReview(data))
+        await this.supplyRepository.deleteReview(data);
     }
     catch (err) {
       throw err;

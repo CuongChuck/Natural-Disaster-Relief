@@ -40,6 +40,11 @@ export async function up(queryInterface, Sequelize) {
     proof: {
       type: Sequelize.STRING
     },
+    status: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
     address_line: {
       type: Sequelize.STRING
     },

@@ -27,6 +27,7 @@ export default class SupplyCreateAcceptService extends ISupplyCreateService {
       const supply = await this.supplyRedis.getOne({ id });
       supply.id = id;
       supply.updatedAt = new Date();
+      supply.status = 2;
       await this.supplySQL.create(supply);
       const [result, category, unit] = await Promise.all([
         this.supplySQL.getOne({ id }),

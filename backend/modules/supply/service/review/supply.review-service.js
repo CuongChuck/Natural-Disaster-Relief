@@ -40,8 +40,10 @@ export default class SupplyReviewService extends ISupplyReviewService {
         address_line: null,
         ward: "admin",
         district: "admin",
-        city_province: "admin"
+        city_province: "admin",
+        supplies: [data.id]
       });
+      await this.supplyRepository.updateStatus({ id: data.id, status: 1 });
       const review = await this.supplyRepository.getReview({ id: data.id });
       const category = await this.categoryGetOneService.getOne({ id: review.category });
       const unit = await this.unitGetOneService.getOne({ id: review.unit });

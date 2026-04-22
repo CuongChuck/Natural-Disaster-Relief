@@ -11,13 +11,7 @@ export async function up(queryInterface, Sequelize) {
     },
     supplyId: {
       type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Supplies',
-        key: 'id'
-      },
-      onDelete: 'RESTRICT',
-      onUpdate: 'RESTRICT'
+      allowNull: false
     },
     eventId: {
       type: Sequelize.INTEGER,

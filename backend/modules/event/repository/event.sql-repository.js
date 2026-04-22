@@ -2,9 +2,10 @@ import IEventRepository from './event.interface-repository.js';
 import { IEventStorageRepository } from './event.interface-storage-repository.js';
 
 export default class EventSqlRepository extends IEventStorageRepository(IEventRepository) {
-  constructor({ db, Event }) {
+  constructor({ db, Event, SupplyEvent }) {
     super();
     this.Event = Event;
+    this.SupplyEvent = SupplyEvent;
     this.db = db;
   }
 
@@ -134,7 +135,11 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         district: data.district,
         city_province: data.city_province
       });
-      if (data.supplies) await event.setSupplies(data.supplies);
+      const records = data.supplies.map(id => ({
+        eventId: event.id,
+        supplyId: id
+      }));
+      await this.SupplyEvent.bulkCreate(records);
       return event;
     } catch (err) {
       const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;

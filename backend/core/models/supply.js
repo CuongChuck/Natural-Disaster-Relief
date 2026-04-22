@@ -9,7 +9,6 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       Supply.belongsTo(models['User'], { as: 'donor', foreignKey: 'donorId' });
-      Supply.belongsToMany(models['Event'], { through: 'SupplyEvent', foreignKey: 'supplyId', otherKey: 'eventId' });
     }
   }
   Supply.init({
@@ -60,6 +59,11 @@ export default (sequelize, DataTypes) => {
       validate: {
         isUrl: true
       }
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
     },
     address_line: {
       type: DataTypes.STRING

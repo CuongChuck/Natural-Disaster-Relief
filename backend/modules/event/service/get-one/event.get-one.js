@@ -19,14 +19,19 @@ export default class EventGetOneService extends IEventGetOneService {
       const user = await event.getUser({
         attributes: ['name', 'email', 'phone', 'role'], raw: true
       });
-      const event_supplies = event.name === 1
-        ? await this.supplyGetOne.getOne({ id: event.description.split(' ')[1] })
-        : await this.supplyGetAll.getAll({ id: event.id, offset, limit });
+      let event_supplies;
+      let array = false;
+      try {
+        event_supplies = [await this.supplyGetOne.getOne({ id: event.description.split(' ')[1] })];
+        array = true;
+      } catch (err) {
+        event_supplies = await this.supplyGetAll.getAll({ id: event.id, offset, limit });
+      }
       const name = await this.eventRedis.getName({ id: event.name });
       const result = event.toJSON();
       result.name = name;
-      const supplies = event.name === 1 ? event_supplies : event_supplies.supplies;
-      const total_records = event.name === 1 ? 1 : event_supplies.total_records;
+      const supplies = array ? event_supplies : event_supplies.supplies;
+      const total_records = array ? 1 : event_supplies.total_records;
       return { event: result, user, supplies, total_records };
     }
     catch (err) {

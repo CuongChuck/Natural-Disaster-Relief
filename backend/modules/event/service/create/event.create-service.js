@@ -17,9 +17,12 @@ export default class EventCreateService extends IEventCreateService {
       const user = await event.getUser({
         attributes: ['name', 'email', 'phone', 'role'], raw: true
       });
-      const supplies = event.name === 1
-        ? await this.supplyGetOne.getOne({ id: event.description.split(' ')[1] })
-        : await this.supplyGetAll.getAll({ id: event.id, offset, limit });
+      let supplies = [];
+      try {
+        supplies = [await this.supplyGetOne.getOne({ id: event.description.split(' ')[1] })];
+      } catch (err) {
+        supplies = await this.supplyGetAll.getAll({ id: event.id, offset, limit }); 
+      }
       const name = await this.eventRedis.getName({ id: event.name });
       const result = event.toJSON();
       result.name = name;

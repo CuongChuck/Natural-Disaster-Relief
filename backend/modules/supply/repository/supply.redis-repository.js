@@ -126,6 +126,14 @@ class SupplyRedisRepository extends ISupplyCacheRepository(ISupplyRepository) {
     }
   }
 
+  updateStatus = async (data) => {
+    try {
+      await this.redis.json.set(`supply:${data.id}`, '$.status', data.status);
+    } catch (err) {
+      throw new Error('Error in updating status of a supply: ' + err.message);
+    }
+  };
+
   delete = async (data) => {
     try {
       await this.redis.json.del(`supply:${data.id}`, '$');
