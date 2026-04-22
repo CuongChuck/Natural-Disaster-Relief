@@ -1,26 +1,21 @@
 import IMapGetMyDisasters from "./map.interface-get-my-disasters.js";
 
 export default class MapGetMyDisasters extends IMapGetMyDisasters {
-  constructor({ mapSqlRepository, mapRedisRepository }) {
+  constructor({ mapSqlRepository }) {
     super();
     this.mapSql = mapSqlRepository;
-    this.mapRedis = mapRedisRepository;
   }
 
   getMine = async (data) => {
     try {
       const limit = parseInt(data.size, 10);
       const offset = (parseInt(data.page, 10) - 1) * 10;
-      const [disasters, count, types] = await Promise.all([
+      const [disasters, count] = await Promise.all([
         this.mapSql.getMyDisasters({ limit, offset, userId: data.userId }),
-        this.mapSql.countMyDisasters({ userId: data.userId }),
-        this.mapRedis.getTypes()
+        this.mapSql.countMyDisasters({ userId: data.userId })
       ]);
       return {
-        disasters: disasters.map((record) => {
-          const { type, ...remain } = record;
-          return { type: types[type], ...remain };
-        }),
+        disasters,
         total_records: count
       }
     } catch (err) {

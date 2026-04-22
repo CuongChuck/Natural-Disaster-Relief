@@ -872,7 +872,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DisasterRequest'
+              $ref: '#/components/schemas/BaseDisaster'
       responses:
         201:
           description: Disaster created successfully
@@ -1198,24 +1198,9 @@ components:
         ward: { type: string }
         district: { type: string }
         city_province: { type: string }
+        type: { type: integer }
         area:
-          type: array
-          items:
-            type: array
-            minItems: 1
-            items:
-              type: array
-              minItems: 2
-              items:
-                type: number
-              description: "[longitude, latitude]"
-
-    DisasterRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseDisaster'
-        - type: object
-          properties:
-            type: { type: integer }
+          $ref: '#/components/schemas/GeoJSONPolygon'
 
     Disaster:
       allOf:
@@ -1223,17 +1208,12 @@ components:
         - type: object
           properties:
             id: { type: integer }
-            type: { type: string }
             user name: { type: string }
             user email: { type: string }
             user phone: { type: string }
             user role: { type: string }
             center:
-              type: array
-              minItems: 2
-              items:
-                type: number
-              description: "[longitude, latitude]"
+              $ref: '#/components/schemas/GeoJSONPoint'
             createdAt:
               type: string
               format: date-time
@@ -1256,14 +1236,9 @@ components:
         - type: object
           properties:
             id: { type: integer }
-            type: { type: string }
             user: { type: string }
             center:
-              type: array
-              minItems: 2
-              items:
-                type: number
-              description: "[longitude, latitude]"
+              $ref: '#/components/schemas/GeoJSONPoint'
             createdAt:
               type: string
               format: date-time
@@ -1300,3 +1275,55 @@ components:
         message: { type: string }
         types:
           $ref: '#/components/schemas/DisasterTypes'
+
+    GeoJSONPolygon:
+      type: object
+      required:
+        - type
+        - coordinates
+      properties:
+        type:
+          type: string
+          enum: [Polygon]
+          description: "The geometry type must be Polygon"
+        coordinates:
+          type: array
+          description: "An array of linear rings. The first ring is the exterior boundary."
+          items:
+            type: array
+            description: "A linear ring (array of points). The first and last points must be identical."
+            items:
+              type: array
+              minItems: 2
+              maxItems: 2
+              items:
+                type: number
+              description: "[longitude, latitude]"
+              example: [103.84, 22.33]
+      example:
+        type: "Polygon"
+        coordinates:
+          - - [103.84, 22.33]
+            - [103.86, 22.33]
+            - [103.86, 22.35]
+            - [103.84, 22.35]
+            - [103.84, 22.33]
+
+    GeoJSONPoint:
+      type: object
+      required:
+        - type
+        - coordinates
+      properties:
+        type:
+          type: string
+          enum: [Point]
+          description: "The geometry type must be Point"
+        coordinates:
+          type: array
+          minItems: 2
+          maxItems: 2
+          items:
+            type: number
+          description: "[longitude, latitude]"
+          example: [103.84, 22.33]

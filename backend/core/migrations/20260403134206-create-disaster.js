@@ -1,6 +1,11 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
+  await queryInterface.sequelize.query(`
+    CREATE EXTENSION IF NOT EXISTS postgis;
+    CREATE EXTENSION IF NOT EXISTS postgis_topology;
+  `);
+
   await queryInterface.createTable('Disasters', {
     id: {
       allowNull: false,
