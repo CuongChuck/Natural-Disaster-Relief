@@ -54,11 +54,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    proof: {
+    proof_url: {
       type: DataTypes.STRING,
       validate: {
         isUrl: true
       }
+    },
+    proof_public_id: {
+      type: DataTypes.STRING,
     },
     status: {
       type: DataTypes.INTEGER,

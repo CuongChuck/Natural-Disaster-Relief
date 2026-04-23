@@ -524,9 +524,9 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Proof'
+              $ref: '#/components/schemas/Image'
       responses:
         201:
           description: Add a photo url to a supply offer successfully
@@ -1178,10 +1178,13 @@ components:
       properties:
         message: { type: string }
 
-    Proof:
+    Image:
       type: object
       properties:
-        proof: { type: string }
+        image:
+          type: string
+          format: binary
+          description: The image file to upload
 
     Error:
       type: object

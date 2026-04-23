@@ -2,10 +2,13 @@ import { createContainer, asClass, asValue, InjectionMode } from 'awilix';
 
 import db from '../models/index.js';
 import { client } from '../config/redis.js';
+import { upload } from '../config/multer.js';
+import cloudinary from '../config/cloudinary.js';
 import JwtService from './jwt-service.js';
 import ContainerHandler from './container-handler.js';
 import ControllerHelper from './controller-helper.js';
 import AuthHandler from './auth-handler.js';
+import ImageUploader from './image-uploader.js';
 import CategoryRedisRepository from '../../modules/category/repository/category.redis-repository.js';
 import CategoryFacadeService from '../../modules/category/category.facade-service.js';
 import CategoryGetAllService from '../../modules/category/service/get/category.get-all-service.js';
@@ -86,10 +89,13 @@ container.register({
 
   db: asValue(db),
   redisClient: asValue(client),
+  multerUpload: asValue(upload),
+  cloudinary: asValue(cloudinary),
   jwtService: asClass(JwtService).singleton(),
   authHandler: asClass(AuthHandler).singleton(),
   containerHandler: asClass(ContainerHandler).singleton(),
   controllerHelper: asClass(ControllerHelper).singleton(),
+  imageUploader: asClass(ImageUploader).singleton(),
 
   supplyRedisRepository: asClass(SupplyRedisRepository).scoped(),
   supplySqlRepository: asClass(SupplySqlRepository).scoped(),

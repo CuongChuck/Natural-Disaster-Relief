@@ -23,3 +23,6 @@ export const DB_PASS = process.env.DB_PASS || process.env.DEV_DB_PASS;
 export const DB_NAME = process.env.DB_NAME || process.env.DEV_DB_NAME;
 export const JWT_PRIVATE_KEY_PATH = process.env.JWT_PRIVATE_KEY_PATH;
 export const JWT_PUBLIC_KEY_PATH = process.env.JWT_PUBLIC_KEY_PATH;
+export const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+export const CLOUD_API_KEY = process.env.CLOUDINARY_API_KEY;
+export const CLOUD_API_SECRET = process.env.CLOUDINARY_API_SECRET;

@@ -175,7 +175,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
   addProof = async (data) => {
     try {
       await this.Supply.update({
-        proof: data.proof
+        proof_url: data.url,
+        proof_public_id: data.public_id
       }, { where: { id: data.id }, },);
     } catch (err) {
       const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;

@@ -37,8 +37,11 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false
     },
-    proof: {
+    proof_url: {
       type: Sequelize.STRING
+    },
+    proof_public_id: {
+      type: Sequelize.STRING,
     },
     status: {
       type: Sequelize.INTEGER,

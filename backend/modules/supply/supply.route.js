@@ -6,6 +6,8 @@ const router = express.Router();
 const controllerHelper = container.resolve('controllerHelper');
 const containerHandler = container.resolve('containerHandler');
 const authHandler = container.resolve('authHandler');
+const upload = container.resolve('multerUpload');
+const imageUploader = container.resolve('imageUploader');
 
 router.get('/supplies',
   controllerHelper.invoke('getAll', 'supplyController')
@@ -55,7 +57,9 @@ router.post('/supply/:id/review',
 ); // redis
 
 router.post('/supply/:id/proof',
-  authHandler.verifyToken,
+  // authHandler.verifyToken,
+  upload.single('proof'),
+  imageUploader.cloudinaryUpload('supply'),
   controllerHelper.invoke('addProof', 'supplyController')
 );
 
