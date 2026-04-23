@@ -16,7 +16,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         `SELECT S."id", S."name", S."quantity",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
-        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
         LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
         LIMIT ${data.limit}
@@ -45,7 +45,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         `SELECT S."id", S."name", S."quantity",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
-        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        S."updatedAt", "Users"."username" AS "donor", S."proof_url"  AS proof
         FROM "Supplies" AS S
         LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
         WHERE S."id" = ${data.id};`,
@@ -65,7 +65,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         `SELECT S."id", S."name", S."quantity",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
-        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
         LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
         WHERE S."donorId" = ${data.donorId}
@@ -98,7 +98,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         `SELECT S."id", S."name", S."quantity",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
-        S."updatedAt", "Users"."username" AS "donor", S."proof"
+        S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
 		    LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId"
         LEFT JOIN "Users" ON S."donorId" = "Users"."id"
