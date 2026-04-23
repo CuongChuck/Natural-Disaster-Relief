@@ -14,8 +14,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         attributes: ['userId'], raw: true
       });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Get disaster creator failed: " + (errors || err.message));
+      throw new Error('Error in retrieving disaster creator: ' + err.message);
     }
   }
 
@@ -23,8 +22,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
     try {
       await this.Disaster.destroy({ where: { id: data.id }, force: true });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Delete disaster failed: " + (errors || err.message));
+      throw new Error('Error in deleting a disaster: ' + err.message);
     }
   }
 
@@ -43,8 +41,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       );
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Disasters retrieval failed: " + (errors || err.message));
+      throw new Error('Error in retrieving all disasters: ' + err.message);
     }
   }
 
@@ -53,8 +50,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       return await this.Disaster.count();
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Counting all disasters failed: " + (errors || err.message));
+      throw new Error('Error in counting all disasters: ' + err.message);
     }
   }
 
@@ -74,8 +70,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       );
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Disasters retrieval failed: " + (errors || err.message));
+      throw new Error('Error in retrieving my disasters: ' + err.message);
     }
   }
 
@@ -88,8 +83,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       });
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Counting my disasters failed: " + (errors || err.message));
+      throw new Error('Error in counting my disasters: ' + err.message);
     }
   }
 
@@ -109,8 +103,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       );
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error(`Disaster ${data.id} retrieval failed: ` + (errors || err.message));
+      throw new Error('Error in retrieving a disaster: ' + err.message);
     }
   }
 
@@ -122,7 +115,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         name: data.name,
         area: this.db.sequelize.fn(
           'ST_GeomFromGeoJSON',
-          data.area
+          JSON.stringify(data.area)
         ),
         severity: data.severity,
         type: data.type,
@@ -133,8 +126,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       });
       return await this.getOneDisaster({ id: disaster.id });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error('Error in creating new disaster: ' + (errors || err.message));
+      throw new Error('Error in creating disaster: ' + err.message);
     }
   }
 
@@ -145,7 +137,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         name: data.name,
         area: this.db.sequelize.fn(
           'ST_GeomFromGeoJSON',
-          data.area
+          JSON.stringify(data.area)
         ),
         severity: data.severity,
         address_line: data.address_line,
@@ -154,8 +146,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         city_province: data.city_province
       }, { where: { id: data.id } });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error('Error in editing disaster: ' + (errors || err.message));
+      throw new Error('Error in updating disaster: ' + err.message);
     }
   }
 }
