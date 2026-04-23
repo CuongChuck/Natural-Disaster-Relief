@@ -526,11 +526,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                proof:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/Image'
       responses:
         201:
           description: Add a photo url to a supply offer successfully
@@ -1184,14 +1180,11 @@ components:
 
     Image:
       type: object
-      required:
-        - proof
       properties:
         proof:
           type: string
           format: binary
           description: The image file to upload
-          x-typescript-type: any
 
     Error:
       type: object
