@@ -57,7 +57,7 @@ router.post('/supply/:id/review',
 ); // redis
 
 router.post('/supply/:id/proof',
-  // authHandler.verifyToken,
+  authHandler.verifyToken,
   upload.single('image'),
   imageUploader.cloudinaryUpload('supply'),
   controllerHelper.invoke('addProof', 'supplyController')
