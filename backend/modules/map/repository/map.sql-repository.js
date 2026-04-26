@@ -95,7 +95,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
 
   getOneDisaster = async (data) => {
     try {
-      return await this.db.sequelize.query(`
+      const result = await this.db.sequelize.query(`
         SELECT D."id", D."name", D."description", D."type", D."severity", D."address_line",
         D."ward", D."district", D."city_province", D."createdAt", D."updatedAt",
         U."name" AS "user name", U."email" AS "user email",
@@ -107,6 +107,7 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         WHERE D."id" = ${data.id};`,
         { type: this.db.sequelize.QueryTypes.SELECT },
       );
+      return result[0];
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
