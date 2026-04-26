@@ -14,7 +14,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         attributes: ['userId'], raw: true
       });
     } catch (err) {
-      throw new Error('Error in retrieving disaster creator: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -22,7 +23,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
     try {
       await this.Disaster.destroy({ where: { id: data.id }, force: true });
     } catch (err) {
-      throw new Error('Error in deleting a disaster: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -41,7 +43,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       );
     }
     catch (err) {
-      throw new Error('Error in retrieving all disasters: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -50,7 +53,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       return await this.Disaster.count();
     }
     catch (err) {
-      throw new Error('Error in counting all disasters: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -70,7 +74,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       );
     }
     catch (err) {
-      throw new Error('Error in retrieving my disasters: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -83,7 +88,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       });
     }
     catch (err) {
-      throw new Error('Error in counting my disasters: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -103,7 +109,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       );
     }
     catch (err) {
-      throw new Error('Error in retrieving a disaster: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -126,7 +133,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       });
       return await this.getOneDisaster({ id: disaster.id });
     } catch (err) {
-      throw new Error('Error in creating disaster: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -146,7 +154,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         city_province: data.city_province
       }, { where: { id: data.id } });
     } catch (err) {
-      throw new Error('Error in updating disaster: ' + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 }

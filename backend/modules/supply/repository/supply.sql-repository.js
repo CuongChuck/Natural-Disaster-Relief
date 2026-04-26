@@ -25,8 +25,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       );
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Supplies retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -34,8 +34,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     try {
       return await this.Supply.count();
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Count supplies failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -54,8 +54,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       return result[0];
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Supply retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -74,8 +74,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         { type: this.db.sequelize.QueryTypes.SELECT, }
       );
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Supply retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -87,8 +87,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         }
       });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Count my supplies failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -110,8 +110,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         }
       );
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Supplies retrieval by event failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -128,8 +128,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       );
       return result[0]['count'];
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Counting supplies by event failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -144,8 +144,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         }
       );
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Supply id retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -167,8 +167,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         updatedAt: data.updatedAt
       });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Supply creation failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -179,8 +179,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         proof_public_id: data.public_id
       }, { where: { id: data.id }, },);
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Photo proof addition failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 }

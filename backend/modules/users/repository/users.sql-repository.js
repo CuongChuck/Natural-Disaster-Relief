@@ -24,8 +24,8 @@ class UserSqlRepository extends IUserRepository {
       if (!user) throw new Error('There is no such user');
       return user.toJSON();
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("User retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -39,8 +39,8 @@ class UserSqlRepository extends IUserRepository {
         raw: true
       });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("User retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -62,8 +62,8 @@ class UserSqlRepository extends IUserRepository {
       return user.toJSON();
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("User creation failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -74,8 +74,8 @@ class UserSqlRepository extends IUserRepository {
       return user.toJSON();
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("User retrieval failed: " + errors || err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -87,8 +87,8 @@ class UserSqlRepository extends IUserRepository {
       if (!(['ADMIN', 'VOLUNTEER'].includes(user.role)))
         throw new Error('User is not authorized to perform this action');
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Operator check failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -119,8 +119,8 @@ class UserSqlRepository extends IUserRepository {
       ], transaction });
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("User profile update failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -131,8 +131,8 @@ class UserSqlRepository extends IUserRepository {
       await this.User.destroy({ where: { id: data.userId }, force: true, transaction: transaction });
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("User deletion failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 }

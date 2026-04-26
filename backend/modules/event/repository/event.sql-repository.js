@@ -25,8 +25,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       );
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Events retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -34,8 +34,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     try {
       return await this.Event.count();
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Count events failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -57,8 +57,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       );
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Events retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -79,8 +79,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       );
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("My events retrieval failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -92,8 +92,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         }
       });
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error("Count my events failed: " + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -108,8 +108,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         { type: this.db.sequelize.QueryTypes.SELECT },
       );
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error('Supply ids retrieval failed: ' + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -118,8 +118,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       return await this.Event.findByPk(data.id);
     }
     catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error(`Event ${data.id} retrieval failed: ` + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
@@ -142,8 +142,8 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       await this.SupplyEvent.bulkCreate(records);
       return event;
     } catch (err) {
-      const errors = err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') || null;
-      throw new Error('Error in creating new event: ' + (errors || err.message));
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 }
