@@ -1209,7 +1209,9 @@ components:
         city_province: { type: string }
         type: { type: integer }
         area:
-          $ref: '#/components/schemas/GeoJSONPolygon'
+          oneOf:
+            - $ref: '#/components/schemas/GeoJSONPolygon'
+            - $ref: '#/components/schemas/GeoJSONMultiPolygon'
 
     Disaster:
       allOf:
@@ -1317,6 +1319,25 @@ components:
             - [103.86, 22.35]
             - [103.84, 22.35]
             - [103.84, 22.33]
+
+    GeoJSONMultiPolygon:
+      type: object
+      required: [type, coordinates]
+      properties:
+        type:
+          type: string
+          enum: [MultiPolygon]
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: array
+                minItems: 2
+                maxItems: 2
+                items: { type: number }
 
     GeoJSONPoint:
       type: object

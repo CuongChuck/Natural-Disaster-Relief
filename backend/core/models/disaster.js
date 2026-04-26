@@ -33,8 +33,16 @@ export default (sequelize, DataTypes) => {
       allowNull: false
     },
     area: {
-      type: DataTypes.GEOMETRY('POLYGON', 4326),
-      allowNull: false
+      type: DataTypes.GEOMETRY('GEOMETRY', 4326),
+      allowNull: false,
+      validate: {
+        isPolygon(value) {
+          if (!value) return;
+          const allowed_types = ['Polygon', 'MultiPolygon'];
+          if (!allowed_types.includes(value.type))
+            throw new Error('Area must be either a Polygon or a MultiPolygon.')
+        }
+      }
     },
     severity: {
       type: DataTypes.ENUM('Thấp', 'Trung bình', 'Cao'),
