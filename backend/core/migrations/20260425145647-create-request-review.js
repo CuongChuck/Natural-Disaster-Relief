@@ -1,22 +1,31 @@
 'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('Requests', {
+  await queryInterface.createTable('RequestReview', {
     id: {
+      type: Sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
-      type: Sequelize.INTEGER
+      autoIncrement: true
     },
-    recipientId: {
+    requestId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Requests',
+        key: 'id'
+      },
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
+    },
+    reviewerId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
         key: 'id'
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
     },
     name: {
       type: Sequelize.STRING,
@@ -24,7 +33,7 @@ export async function up(queryInterface, Sequelize) {
     },
     quantity: {
       type: Sequelize.FLOAT,
-      allowNull: false,
+      allowNull: false
     },
     category: {
       type: Sequelize.INTEGER,
@@ -34,19 +43,9 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false
     },
-    status: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
     priority: {
-      type: Sequelize.ENUM("LOW, MEDIUM, HIGH, URGENT"),
+      type: Sequelize.ENUM('Thấp', 'Trung bình', 'Cao'),
       allowNull: false
-    },
-    proof_url: {
-      type: Sequelize.STRING,
-    },
-    proof_public_id: {
-      type: Sequelize.STRING,
     },
     address_line: {
       type: Sequelize.STRING
@@ -73,8 +72,9 @@ export async function up(queryInterface, Sequelize) {
     }
   });
 
-  await queryInterface.addIndex('Requests', ['recipientId']);
+  await queryInterface.addIndex('RequestReview', ['requestId']);
+  await queryInterface.addIndex('RequestReview', ['reviewerId']);
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('Requests');
+  await queryInterface.dropTable('RequestReview');
 }

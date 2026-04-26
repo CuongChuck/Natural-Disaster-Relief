@@ -70,6 +70,20 @@ import MapGetDisasterTypes from '../../modules/map/service/get-disaster-types/ma
 import MapEditDisaster from '../../modules/map/service/edit-disaster/map.edit-disaster.js';
 import MapDeleteDisaster from '../../modules/map/service/delete-disaster/map.delete-disaster.js';
 import MapGetMyDisasters from '../../modules/map/service/get-my-disasters/map.get-my-disasters.js';
+import RequestController from '../../modules/request/request.controller.js';
+import RequestFacadeService from '../../modules/request/request.facade-service.js';
+import RequestSqlRepository from '../../modules/request/repository/request.sql-repository.js';
+import RequestRedisRepository from '../../modules/request/repository/request.redis-repository.js';
+import RequestGetAllService from '../../modules/request/service/get-all/request.get-all.js';
+import RequestGetStatusService from '../../modules/request/service/get-status/request.get-status.js';
+import RequestCreateService from '../../modules/request/service/create/request.create-service.js';
+import RequestEditService from '../../modules/request/service/edit/request.edit-service.js';
+import RequestDeleteService from '../../modules/request/service/delete/request.delete-service.js';
+import RequestReviewService from '../../modules/request/service/review/request.review-service.js';
+import RequestAddProof from '../../modules/request/service/add-proof/request.add-proof.js';
+import RequestGetMineService from '../../modules/request/service/get-mine/request.get-mine.js';
+import RequestGetOneService from '../../modules/request/service/get-one/request.get-one.js';
+import RequestGetReview from '../../modules/request/service/get-review/request.get-review.js';
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -159,6 +173,21 @@ container.register({
   mapEditDisaster: asClass(MapEditDisaster).scoped(),
   mapDeleteDisaster: asClass(MapDeleteDisaster).scoped(),
   mapGetMyDisasters: asClass(MapGetMyDisasters).scoped(),
+
+  requestController: asClass(RequestController).scoped(),
+  requestFacade: asClass(RequestFacadeService).scoped(),
+  requestSqlRepository: asClass(RequestSqlRepository).scoped(),
+  requestRedisRepository: asClass(RequestRedisRepository).scoped(),
+  requestGetAllService: asClass(RequestGetAllService).scoped(),
+  requestGetStatusService: asClass(RequestGetStatusService).scoped(),
+  requestCreateService: asClass(RequestCreateService).scoped(),
+  requestEditService: asClass(RequestEditService).scoped(),
+  requestDeleteService: asClass(RequestDeleteService).scoped(),
+  requestReviewService: asClass(RequestReviewService).scoped(),
+  requestAddProofService: asClass(RequestAddProof).scoped(),
+  requestGetMineService: asClass(RequestGetMineService).scoped(),
+  requestGetOneService: asClass(RequestGetOneService).scoped(),
+  requestGetReviewService: asClass(RequestGetReview).scoped()
 });
 
 export default container;

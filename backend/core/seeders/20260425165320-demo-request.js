@@ -1,0 +1,85 @@
+'use strict';
+
+/** @type {import('sequelize-cli').Migration} */
+export async function up(queryInterface, Sequelize) {
+  return queryInterface.bulkInsert('Requests', [
+    {
+      id: 1,
+      recipientId: 1,
+      name: "Chăn cứu trợ",
+      quantity: 1,
+      category: 4,
+      unit: 4,
+      status: 1,
+      priority: 'Thấp',
+      ward: "Nghệ An",
+      district: "Nghệ An",
+      city_province: "Nghệ An",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 2,
+      recipientId: 1,
+      name: "Gạo",
+      quantity: 10,
+      category: 2,
+      unit: 1,
+      status: 1,
+      priority: 'Cao',
+      ward: "Quảng Bình",
+      district: "Quảng Bình",
+      city_province: "Quảng Bình",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 3,
+      recipientId: 1,
+      name: "Tiền mặt",
+      quantity: 200000,
+      category: 5,
+      unit: 5,
+      status: 1,
+      priority: 'Trung bình',
+      ward: "Huế",
+      district: "Huế",
+      city_province: "Huế",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 4,
+      recipientId: 1,
+      name: "Cơm hộp",
+      quantity: 1,
+      category: 2,
+      unit: 3,
+      status: 1,
+      priority: 'Cao',
+      ward: "Hà Tĩnh",
+      district: "Hà Tĩnh",
+      city_province: "Hà Tĩnh",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 5,
+      recipientId: 1,
+      name: "Tiền mặt",
+      quantity: 500000,
+      category: 5,
+      unit: 5,
+      status: 1,
+      priority: 'Trung bình',
+      ward: "Huế",
+      district: "Huế",
+      city_province: "Huế",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  ]);
+}
+export async function down(queryInterface, Sequelize) {
+  return queryInterface.bulkDelete('Requests', null, {});
+}

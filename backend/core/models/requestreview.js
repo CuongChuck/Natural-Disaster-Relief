@@ -1,24 +1,28 @@
 'use strict';
 import { Model } from 'sequelize';
 export default (sequelize, DataTypes) => {
-  class Request extends Model {
+  class RequestReview extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Request.belongsTo(models['User'], { as: 'recipient', foreignKey: 'recipientId' });
-      Request.hasOne(models['RequestReview'], { foreignKey: 'requestId' });
+      RequestReview.belongsTo(models['Request'], { as: 'review', foreignKey: 'requestId' });
+      RequestReview.belongsTo(models['User'], { as: 'reviewer', foreignKey: 'reviewerId' });
     }
   }
-  Request.init({
+  RequestReview.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    recipientId: {
+    requestId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    reviewerId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -45,22 +49,9 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    status: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
     priority: {
       type: DataTypes.ENUM('Thấp', 'Trung bình', 'Cao'),
       allowNull: false
-    },
-    proof_url: {
-      type: DataTypes.STRING,
-      validate: {
-        isUrl: true
-      }
-    },
-    proof_public_id: {
-      type: DataTypes.STRING,
     },
     address_line: {
       type: DataTypes.STRING
@@ -85,12 +76,14 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE
     }
-  },  {
+  }, {
     sequelize,
-    modelName: 'Request',
+    modelName: 'RequestReview',
+    tableName: 'RequestReview',
+    freezeTableName: true,
     indexes: [
-      { fields: ['recipientId'] },
-    ],
+      { fields: ['requestId'] }
+    ]
   });
-  return Request;
+  return RequestReview;
 };

@@ -5,6 +5,7 @@ import SupplyGetAllUnverified from "../../modules/supply/service/get-all/supply.
 import SupplyGetOneUnverified from "../../modules/supply/service/get-one/supply.get-one-unverified.js";
 import SupplyGetMineUnverified from "../../modules/supply/service/get-mine/supply.get-mine-unverified.js";
 import SupplyCreateService from "../../modules/supply/service/create/supply.create-service.js";
+import RequestEditService from "../../modules/request/service/edit/request.edit-service.js";
 
 export default class ContainerHandler {
   useRedis = (req, res, next) => {
@@ -17,6 +18,20 @@ export default class ContainerHandler {
         supplyGetOneService: asClass(SupplyGetOneUnverified).scoped(),
         supplyGetMineService: asClass(SupplyGetMineUnverified).scoped(),
         supplyCreateService: asClass(SupplyCreateService).scoped()
+      });
+      req.scope = scope;
+      next();
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  acceptRequest = (req, res, next) => {
+    try {
+      const container = req.app.get('container');
+      const scope = req.scope || container.createScope();
+      scope.register({
+        requestEditService: asClass(RequestEditService).scoped()
       });
       req.scope = scope;
       next();
