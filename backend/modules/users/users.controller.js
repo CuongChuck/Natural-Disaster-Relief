@@ -8,7 +8,7 @@ class UserController {
       const data = req.body || {};
       data.userId = req.userId;
       const result = await this.userFacade.getUser(data);
-      res.status(201).json({
+      res.status(200).json({
         message: result.message,
         user: result.user
       });
@@ -43,7 +43,7 @@ class UserController {
       data.userId = req.userId;
       data.userRole = req.userRole;
       const result = await this.userFacade.editUser(data);
-      res.status(200).json(result);
+      res.status(201).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });

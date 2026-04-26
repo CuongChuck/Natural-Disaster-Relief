@@ -39,7 +39,7 @@ paths:
             schema:
               $ref: '#/components/schemas/UserProfile'
       responses:
-        200:
+        201:
           description: User profile edit successfully
           content:
             application/json:
@@ -828,7 +828,7 @@ paths:
             schema:
               $ref: '#/components/schemas/BaseDisaster'
       responses:
-        200:
+        201:
           description: Disaster edited successfully
           content:
             application/json:
