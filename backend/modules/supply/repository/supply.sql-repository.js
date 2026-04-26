@@ -26,7 +26,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("All supplies retrieval failed: " + errors);
     }
   }
 
@@ -35,7 +35,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       return await this.Supply.count();
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("All supplies count failed: " + errors);
     }
   }
 
@@ -55,7 +55,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Supply retrieval failed: " + errors);
     }
   }
 
@@ -75,7 +75,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       );
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("My supplies retrieval failed: " + errors);
     }
   }
 
@@ -88,7 +88,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("My supplies count failed: " + errors);
     }
   }
 
@@ -111,7 +111,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       );
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Supply retrieved by event failed: " + errors);
     }
   }
 
@@ -129,7 +129,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       return result[0]['count'];
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Supplies counted by event failed: " + errors);
     }
   }
 
@@ -145,7 +145,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       );
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Supply retrieved by event failed: " + errors);
     }
   }
 
@@ -168,7 +168,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Supply creation failed: " + errors);
     }
   }
 
@@ -180,7 +180,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       }, { where: { id: data.id }, },);
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Supply proof addition failed: " + errors);
     }
   }
 }

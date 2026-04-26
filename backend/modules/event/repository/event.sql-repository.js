@@ -26,7 +26,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("All events retrieval failed: " + errors);
     }
   }
 
@@ -35,7 +35,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       return await this.Event.count();
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("All events count failed: " + errors);
     }
   }
 
@@ -58,7 +58,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("All events retrieved by supply failed: " + errors);
     }
   }
 
@@ -80,7 +80,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("My events retrieval failed: " + errors);
     }
   }
 
@@ -93,7 +93,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("My events count failed: " + errors);
     }
   }
 
@@ -109,7 +109,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       );
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Supplies ids retrieved by event failed: " + errors);
     }
   }
 
@@ -119,7 +119,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Event retrieval failed: " + errors);
     }
   }
 
@@ -143,7 +143,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
       return event;
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Event creation failed: " + errors);
     }
   }
 }

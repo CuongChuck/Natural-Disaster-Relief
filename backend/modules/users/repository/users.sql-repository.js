@@ -40,7 +40,7 @@ class UserSqlRepository extends IUserRepository {
       });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Users retrieval failed: " + errors);
     }
   }
 
@@ -63,7 +63,7 @@ class UserSqlRepository extends IUserRepository {
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("User creation failed: " + errors);
     }
   }
 
@@ -88,7 +88,7 @@ class UserSqlRepository extends IUserRepository {
         throw new Error('User is not authorized to perform this action');
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("Operator check failed: " + errors);
     }
   }
 
@@ -120,7 +120,7 @@ class UserSqlRepository extends IUserRepository {
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("User edit failed: " + errors);
     }
   }
 
@@ -132,7 +132,7 @@ class UserSqlRepository extends IUserRepository {
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("User retrieval failed: " + errors);
+      throw new Error("User delete failed: " + errors);
     }
   }
 }
