@@ -9,7 +9,7 @@ export default class MapGetAllDisasters extends IMapGetAllDisasters {
   getAll = async (data) => {
     try {
       const limit = parseInt(data.size, 10);
-      const offset = (parseInt(data.page, 10) - 1) * 10;
+      const offset = (parseInt(data.page, 10) - 1) * limit;
       const [disasters, count] = await Promise.all([
         this.mapSql.getAllDisasters(offset, limit),
         this.mapSql.countAllDisasters()
