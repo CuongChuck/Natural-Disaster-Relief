@@ -98,8 +98,8 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
       const result = await this.db.sequelize.query(`
         SELECT D."id", D."name", D."description", D."type", D."severity", D."address_line",
         D."ward", D."district", D."city_province", D."createdAt", D."updatedAt",
-        U."name" AS "user name", U."email" AS "user email",
-        U."phone" AS "user phone", U."role" AS "user role",
+        U."name" AS "user_name", U."email" AS "user_email",
+        U."phone" AS "user_phone", U."role" AS "user_role",
         ST_AsGeoJSON(D."area")::json AS area,
         ST_AsGeoJSON(ST_PointOnSurface(D."area"))::json AS center
         FROM "Disasters" D

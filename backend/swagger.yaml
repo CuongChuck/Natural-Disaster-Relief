@@ -1219,10 +1219,10 @@ components:
         - type: object
           properties:
             id: { type: integer }
-            user name: { type: string }
-            user email: { type: string }
-            user phone: { type: string }
-            user role: { type: string }
+            user_name: { type: string }
+            user_email: { type: string }
+            user_phone: { type: string }
+            user_role: { type: string }
             center:
               $ref: '#/components/schemas/GeoJSONPoint'
             createdAt:
@@ -1289,9 +1289,6 @@ components:
 
     GeoJSONPolygon:
       type: object
-      required:
-        - type
-        - coordinates
       properties:
         type:
           type: string
@@ -1322,7 +1319,6 @@ components:
 
     GeoJSONMultiPolygon:
       type: object
-      required: [type, coordinates]
       properties:
         type:
           type: string
