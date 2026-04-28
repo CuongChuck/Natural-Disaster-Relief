@@ -39,7 +39,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false
     },
     priority: {
-      type: Sequelize.ENUM("LOW, MEDIUM, HIGH, URGENT"),
+      type: Sequelize.ENUM('Thấp', 'Trung bình', 'Cao'),
       allowNull: false
     },
     proof_url: {
