@@ -893,6 +893,337 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /requests:
+    get:
+      summary: Get all requests
+      operationId: Request_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: type
+          in: query
+          description: The status of requests
+          required: false
+          schema:
+            type: integer
+            default: null
+      responses:
+        200:
+          description: Get all requests successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /requests/me:
+    get:
+      summary: Get my requests
+      operationId: Request_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: type
+          in: query
+          description: The status of requests
+          required: false
+          schema:
+            type: integer
+            default: null
+      responses:
+        200:
+          description: Get my requests successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/{id}:
+    get:
+      summary: Get a request's information
+      operationId: Request_getOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Request retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Request edit
+      operationId: Request_edit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseRequest'
+      responses:
+        201:
+          description: Request edit successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      summary: Accept request
+      operationId: Request_accept
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Request accepted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete a request
+      operationId: Request_delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Delete a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/{id}/review:
+    get:
+      summary: Get a review on a request
+      operationId: Request_getReview
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get a review on a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestReviewResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create a review for a request
+      operationId: Request_review
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseRequest'
+      responses:
+        201:
+          description: Create a review for a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestReviewResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/{id}/proof:
+    post:
+      summary: Add a photo to a request
+      operationId: Request_addProof
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Add a photo to a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request:
+    post:
+      summary: Create a new request
+      operationId: Request_create
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseRequest'
+      responses:
+        201:
+          description: Create a new request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/status:
+    get:
+      summary: Get all request status types
+      operationId: Request_getStatus
+      responses:
+        200:
+          description: Get all request status types successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestStatusResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1212,6 +1543,11 @@ components:
           oneOf:
             - $ref: '#/components/schemas/GeoJSONPolygon'
             - $ref: '#/components/schemas/GeoJSONMultiPolygon'
+          discriminator:
+            propertyName: type
+            mapping:
+              Polygon: '#/components/schemas/GeoJSONPolygon'
+              MultiPolygon: '#/components/schemas/GeoJSONMultiPolygon'
 
     Disaster:
       allOf:
@@ -1353,3 +1689,94 @@ components:
             type: number
           description: "[longitude, latitude]"
           example: [103.84, 22.33]
+
+    BaseRequest:
+      type: object
+      properties:
+        name: { type: string }
+        quantity:
+          type: number
+          format: float
+          example: 19.99
+        category: { type: integer }
+        unit: { type: integer }
+        priority: { type: string }
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+
+    Request:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            id: { type: integer }
+            status: { type: integer }
+            proof: { type: string }
+            recipient: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    RequestsResponse:
+      type: object
+      properties:
+        message: { type: string }
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+
+    RequestResponse:
+      type: object
+      properties:
+        message: { type: string }
+        request:
+          $ref: '#/components/schemas/Request'
+
+    RequestReview:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            id: { type: integer }
+            reviewer: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+    
+    RequestReviewResponse:
+      type: object
+      properties:
+        message: { type: string }
+        request:
+          $ref: '#/components/schemas/RequestReview'
+
+    RequestStatus:
+      type: object
+      description: "A map of IDs to request status"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Chờ xác nhận"
+        "2": "Yêu cầu chỉnh sửa"
+        "3": "Đang thực hiện"
+        "4": "Từ chối"
+
+    RequestStatusResponse:
+      type: object
+      properties:
+        message: { type: string }
+        request:
+          $ref: '#/components/schemas/RequestStatus'
