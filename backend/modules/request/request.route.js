@@ -41,7 +41,7 @@ router.post('/request/:id/review',
 router.post('/request/:id/proof',
   authHandler.verifyToken,
   upload.single('image'),
-  imageUploader.cloudinaryUpload('request'),
+  imageUploader.cloudinaryUpload('ndrs/request'),
   controllerHelper.invoke('addProof', 'requestController')
 );
 router.put('/request/:id',
