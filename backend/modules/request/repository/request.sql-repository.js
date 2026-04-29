@@ -134,7 +134,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
 
   create = async (data) => {
     try {
-      await this.Request.create({
+      return await this.Request.create({
         category: data.category,
         unit: data.unit,
         recipientId: data.recipientId,

@@ -8,7 +8,8 @@ export default class RequestCreateService extends IRequestCreateService {
 
   create = async (data) => {
     try {
-      return await this.requestRepository.create(data);
+      const result = await this.requestRepository.create(data);
+      return await this.requestRepository.getOne({ id: result.id });
     }
     catch (err) {
       throw err;
