@@ -40,7 +40,8 @@ export default (sequelize, DataTypes) => {
     tableName: 'SupplyEvent',
     freezeTableName: true,
     indexes: [
-      { fields: ['supplyId', 'eventId'] },
+      { fields: ['supplyId'] },
+      { fields: ['eventId'] },
     ],
   });
   return SupplyEvent;
