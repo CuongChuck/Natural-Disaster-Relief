@@ -59,7 +59,7 @@ router.post('/supply/:id/review',
 router.post('/supply/:id/proof',
   authHandler.verifyToken,
   upload.single('image'),
-  imageUploader.cloudinaryUpload('supply'),
+  imageUploader.cloudinaryUpload('ndrs/supply'),
   controllerHelper.invoke('addProof', 'supplyController')
 );
 
