@@ -85,8 +85,7 @@ export default class RequestController {
 
   create = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const data = { id, recipientId: req.userId, ...req.body }
+      const data = { recipientId: req.userId, ...req.body }
       const result = await this.requestFacade.create(data);
       res.status(201).json(result);
     }
