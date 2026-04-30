@@ -9,8 +9,12 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.hasMany(models['Supply'], { foreignKey: 'donorId' });
+      User.hasMany(models['SupplyReview'], { foreignKey: 'reviewerId' });
       User.hasMany(models['Request'], { foreignKey: 'recipientId' });
+      User.hasMany(models['RequestReview'], { foreignKey: 'reviewerId' });
       User.hasMany(models['Event'], { foreignKey: 'userId' });
+      User.hasMany(models['Delivery'], { foreignKey: 'recipientId' });
+      User.hasMany(models['Delivery'], { foreignKey: 'operatorId' });
     }
   }
   User.init({

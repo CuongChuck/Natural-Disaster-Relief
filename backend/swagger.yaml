@@ -188,6 +188,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /supplies/all:
+    get:
+      summary: Get all supply offers
+      operationId: Supply_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /supplies/unverified:
     get:
       summary: Get all unverified supply offers
@@ -291,31 +324,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /supply/unverified/{id}:
-    get:
-      summary: Get an unverified supply offer
-      operationId: Supply_getOneUnverified
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of supply offer
-          schema:
-            type: integer
-      responses:
-        200:
-          description: Get an unverified supply offer successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SupplyGetResponse'
-        500:
-          description: Error message
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
   /supply:
     post:
       summary: Create a new supply offer
@@ -327,7 +335,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SupplyRequest'
+              $ref: '#/components/schemas/BaseSupply'
       responses:
         201:
           description: Create a new supply offer successfully
@@ -410,7 +418,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SupplyRequest'
+              $ref: '#/components/schemas/BaseSupply'
       responses:
         201:
           description: Edit a supply offer successfully
@@ -493,7 +501,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SupplyRequest'
+              $ref: '#/components/schemas/BaseSupply'
       responses:
         201:
           description: Create a review for a supply offer successfully
@@ -540,6 +548,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supply/status:
+    get:
+      summary: Get all supply status types
+      operationId: Supply_getStatus
+      responses:
+        200:
+          description: Get all supply status types successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStatusResponse'
         500:
           description: Error message
           content:
@@ -1412,21 +1438,13 @@ components:
         units:
           $ref: '#/components/schemas/Units'
 
-    SupplyRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseSupply'
-        - type: object
-          properties:
-            category:
-              type: integer
-            unit:
-              type: integer
-
     BaseSupply:
       type: object
       properties:
         name: { type: string }
         count: { type: integer }
+        category: { type: integer }
+        unit: { type: integer }
         quantity:
           type: number
           format: float
@@ -1442,8 +1460,6 @@ components:
         - type: object
           properties:
             id: { type: integer }
-            category: { type: string }
-            unit: { type: string }
             donor: { type: string }
             createdAt:
               type: string
@@ -1492,12 +1508,11 @@ components:
         - type: object
           properties:
             id: { type: integer }
-            category: { type: string }
-            unit: { type: string }
-            donor: { type: string }
             reviewer: { type: string }
-            updated:
-              type: boolean
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
             createdAt:
               type: string
               format: date-time
@@ -1509,6 +1524,26 @@ components:
         message: { type: string }
         review:
           $ref: '#/components/schemas/SupplyReview'
+
+    SupplyStatus:
+      type: object
+      description: "A map of IDs to supply status"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Chờ xác nhận"
+        "2": "Yêu cầu chỉnh sửa"
+        "3": "Đang vận chuyển"
+        "4": "Chờ giao"
+        "5": "Đang giao"
+        "6": "Đã giao"
+
+    SupplyStatusResponse:
+      type: object
+      properties:
+        message: { type: string }
+        status:
+          $ref: '#/components/schemas/SupplyStatus'
 
     Success:
       type: object
@@ -1772,11 +1807,16 @@ components:
         "1": "Chờ xác nhận"
         "2": "Yêu cầu chỉnh sửa"
         "3": "Đang thực hiện"
-        "4": "Từ chối"
+        "4": "Đã giao"
 
     RequestStatusResponse:
       type: object
       properties:
         message: { type: string }
-        request:
+        status:
           $ref: '#/components/schemas/RequestStatus'
+
+    BaseDelivery:
+      type: object
+      properties:
+        

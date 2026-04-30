@@ -1,17 +1,37 @@
 import ISupplyRepository from './supply.interface-repository.js';
 import { ISupplyStorageRepository } from "./supply.interface-storage-repository.js";
 
+import { Op } from 'sequelize';
+
 class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
-  constructor({ Supply, Event, User, db }) {
+  constructor({ Supply, Event, User, SupplyReview, db }) {
     super();
     this.Supply = Supply;
+    this.SupplyReview = SupplyReview;
     this.Event = Event;
     this.User = User;
     this.db = db;
   }
 
+  checkOwner = async (data) => {
+    try {
+      const supply = await this.Supply.findOne({
+        where: {
+          id: data.id,
+          donorId: data.donorId
+        }
+      });
+      if (request.length === 0) throw new Error('User is not authorized to modify this supply');
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Supply owner check failed: " + errors);
+    }
+  }
+
   getAll = async (data) => {
     try {
+      const status = data.status ? `WHERE S."status" IN (${data.status})` : '';
+      const order = data.order ? `ORDER BY S."status" ${data.order}` : '';
       return await this.db.sequelize.query(
         `SELECT S."id", S."name", S."quantity",
         S."count", S."category", S."unit", S."address_line",
@@ -19,6 +39,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
         LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
+        ${status}
+        ${order}
         LIMIT ${data.limit}
         OFFSET ${data.offset};`,
         { type: this.db.sequelize.QueryTypes.SELECT, }
@@ -30,9 +52,10 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     }
   }
 
-  countAll = async () => {
+  countAll = async (data) => {
     try {
-      return await this.Supply.count();
+      const whereClause = data.status ? { status: { [Op.in]: data.status } } : {};
+      return await this.Supply.count({ where: whereClause });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("All supplies count failed: " + errors);
@@ -61,6 +84,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   getMine = async (data) => {
     try {
+      const status = data.status ? `AND S."status" IN (${data.status})` : '';
+      const order = data.order ? `ORDER BY S."status" ${data.order}` : '';
       return await this.db.sequelize.query(
         `SELECT S."id", S."name", S."quantity",
         S."count", S."category", S."unit", S."address_line",
@@ -68,7 +93,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
         LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
-        WHERE S."donorId" = ${data.donorId}
+        WHERE S."donorId" = ${data.donorId} ${status}
+        ${order}
         LIMIT ${data.limit}
         OFFSET ${data.offset};`,
         { type: this.db.sequelize.QueryTypes.SELECT, }
@@ -81,11 +107,10 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   countMine = async (data) => {
     try {
-      return await this.Supply.count({
-        where: {
-          donorId: data.donorId
-        }
-      });
+      const whereClause = data.status ?
+        { donorId: data.donorId, status: { [Op.in]: data.status } } :
+        { donorId: data.donorId };
+      return await this.Supply.count({ where: whereClause });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("My supplies count failed: " + errors);
@@ -149,26 +174,98 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     }
   }
 
+  getReview = async (data) => {
+    try {
+      const result = await this.db.sequelize.query(
+        `SELECT SR."id", SR."name", SR."quantity",
+        SR."count", SR."category", SR."unit", SR."address_line",
+        SR."ward", SR."district", SR."city_province", SR."createdAt",
+        SR."updatedAt", R."username" AS "reviewer", D."username" AS "donor"
+        FROM "SupplyReviews" SR
+        LEFT OUTER JOIN "Supplies" S ON SR."supplyId" = S."id"
+        LEFT OUTER JOIN "Users" D ON S."donorId" = D."id"
+        LEFT OUTER JOIN "Users" R ON SR."reviewerId" = R."id"
+        WHERE SR."supplyId" = ${data.id};`,
+        { type: this.db.sequelize.QueryTypes.SELECT, }
+      );
+      return result[0];
+    }
+    catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Supply review retrieval failed: " + errors);
+    }
+  }
+
   create = async (data) => {
     try {
-      await this.Supply.create({
-        id: data.id,
+      return await this.Supply.create({
         category: data.category,
         unit: data.unit,
         donorId: data.donorId,
         name: data.name,
         count: data.count,
         quantity: data.quantity,
+        status: 1,
         address_line: data.address_line,
         ward: data.ward,
         district: data.district,
-        city_province: data.city_province,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt
+        city_province: data.city_province
       });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Supply creation failed: " + errors);
+    }
+  }
+
+  review = async (data) => {
+    try {
+      await this.SupplyReview.create({
+        category: data.category,
+        unit: data.unit,
+        name: data.name,
+        count: data.count,
+        quantity: data.quantity,
+        reviewerId: data.reviewerId,
+        supplyId: data.id,
+        address_line: data.address_line,
+        ward: data.ward,
+        district: data.district,
+        city_province: data.city_province
+      });
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Supply review creation failed: " + errors);
+    }
+  }
+
+  edit = async (data) => {
+    try {
+      await this.Supply.update({
+        category: data.category,
+        unit: data.unit,
+        name: data.name,
+        count: data.count,
+        quantity: data.quantity,
+        status: 1,
+        address_line: data.address_line,
+        ward: data.ward,
+        district: data.district,
+        city_province: data.city_province
+      }, { where: { id: data.id, status: { [Op.in]: [1,2] } } });
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Supply edit failed: " + errors);
+    }
+  }
+
+  updateStatus = async (data) => {
+    try {
+      await this.Supply.update({
+        status: data.status
+      }, { where: { id: data.id } });
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Supply update status failed: " + errors);
     }
   }
 
@@ -181,6 +278,15 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Supply proof addition failed: " + errors);
+    }
+  }
+
+  delete = async (data) => {
+    try {
+      await this.Supply.destroy({ where: { id: data.id, status: { [Op.in]: [1,2] } }, force: true });
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Supply deletion failed: " + errors);
     }
   }
 }

@@ -17,15 +17,15 @@ class ISupplyRepository {
     throw new Error('Method not implemented.');
   }
 
+  getReview = async (data) => {
+    throw new Error('Method not implemented.');
+  }
+
   getMine = async (data) => {
     throw new Error('Method not implemented.');
   }
 
   countMine = async (data) => {
-    throw new Error('Method not implemented.');
-  }
-
-  create = async (data) => {
     throw new Error('Method not implemented.');
   }
 }

@@ -1,41 +1,18 @@
 import ISupplyCreateService from './supply.interface-create.js';
 
 export default class SupplyCreateAcceptService extends ISupplyCreateService {
-  constructor(opts) {
+  constructor({ supplySqlRepository, userCheckService, eventCreateService }) {
     super();
-    this.supplyRedis = opts.supplyRedisRepository;
-    this.supplySQL = opts.supplySqlRepository;
-    this.categoryGetOneService = opts.categoryGetOneService;
-    this.unitGetOneService = opts.unitGetOneService;
-    this.userCheckService = opts.userCheckService;
-    this.eventCreateService = opts.eventCreateService;
+    this.supplyRepository = supplySqlRepository;
+    this.userCheckService = userCheckService;
+    this.eventCreateService = eventCreateService;
   }
 
-  format = (supply, _category, _unit) => {
-    const { category, unit, ...remain } = supply;
-    return {
-      category: _category,
-      unit: _unit,
-      ...remain
-    }
-  }
-
-  create = async (data) => {
+  accept = async (data) => {
     try {
       await this.userCheckService.checkOperator({ userId: data.userId });
       const id = data.id;
-      const supply = await this.supplyRedis.getOne({ id });
-      supply.id = id;
-      supply.updatedAt = new Date();
-      supply.status = 2;
-      await this.supplySQL.create(supply);
-      const [result, category, unit] = await Promise.all([
-        this.supplySQL.getOne({ id }),
-        this.categoryGetOneService.getOne({ id: supply.category }),
-        this.unitGetOneService.getOne({ id: supply.unit })
-      ]);
-      await this.supplyRedis.delete({ id });
-      await this.supplyRedis.deleteReview({ id });
+      await this.supplyRepository.updateStatus({ id, status: 3 });
       await this.eventCreateService.create({
         userId: data.userId,
         description: null,
@@ -47,7 +24,6 @@ export default class SupplyCreateAcceptService extends ISupplyCreateService {
         city_province: "admin",
         supplies: [id]
       });
-      return this.format(result, category, unit);
     }
     catch (err) {
       throw err;

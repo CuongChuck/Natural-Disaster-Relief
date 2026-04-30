@@ -1,22 +1,31 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('Supplies', {
+  await queryInterface.createTable('SupplyReviews', {
     id: {
-      allowNull: false,
+      type: Sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
-      type: Sequelize.INTEGER
+      autoIncrement: true
     },
-    donorId: {
+    supplyId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Supplies',
+        key: 'id'
+      },
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
+    },
+    reviewerId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
         model: 'Users',
         key: 'id'
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
     },
     name: {
       type: Sequelize.STRING,
@@ -26,25 +35,15 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.FLOAT,
       allowNull: false
     },
+    count: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
     category: {
       type: Sequelize.INTEGER,
       allowNull: false
     },
     unit: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
-    count: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
-    proof_url: {
-      type: Sequelize.STRING
-    },
-    proof_public_id: {
-      type: Sequelize.STRING,
-    },
-    status: {
       type: Sequelize.INTEGER,
       allowNull: false
     },
@@ -73,8 +72,9 @@ export async function up(queryInterface, Sequelize) {
     }
   });
 
-  await queryInterface.addIndex('Supplies', ['donorId']);
+  await queryInterface.addIndex('SupplyReviews', ['supplyId']);
+  await queryInterface.addIndex('SupplyReviews', ['reviewerId']);
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('Supplies');
+  await queryInterface.dropTable('SupplyReviews');
 }

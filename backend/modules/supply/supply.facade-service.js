@@ -1,5 +1,6 @@
 export default class SupplyFacadeService {
   constructor(opts) {
+    this.getStatusService = opts.supplyGetStatusService;
     this.getAllService = opts.supplyGetAllService;
     this.getMineService = opts.supplyGetMineService;
     this.getOneService = opts.supplyGetOneService;
@@ -9,6 +10,19 @@ export default class SupplyFacadeService {
     this.reviewService = opts.supplyReviewService;
     this.getReviewService = opts.supplyGetReviewService;
     this.addProofService = opts.supplyAddProofService;
+  }
+
+  getStatus = async () => {
+    try {
+      const status = await this.getStatusService.getStatus();
+      return {
+        message: `All supply status retrieved successfully`,
+        status
+      };
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   getAll = async (data) => {
@@ -67,6 +81,15 @@ export default class SupplyFacadeService {
     try {
       const supply = await this.createService.create(data);
       return { message: `Supply created successfully`, supply };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  accept = async (data) => {
+    try {
+      const supply = await this.editService.edit(data);
+      return { message: `Supply accepted successfully` };
     } catch (err) {
       throw err;
     }

@@ -3,17 +3,27 @@ export default class SupplyController {
     this.supplyFacade = supplyFacade;
   }
 
+  getStatus = async (req, res, next) => {
+    try {
+      const result = await this.supplyFacade.getStatus();
+      res.status(200).json(result);
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
   getAll = async (req, res, next) => {
     try {
       let { page = 1, size = 100 } = req.query;
-      const data = { page, size };
+      const data = { page, size, status: req.status, order: req.order };
       const result = await this.supplyFacade.getAll(data);
       res.status(200).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   getOne = async (req, res, next) => {
     try {
@@ -24,7 +34,7 @@ export default class SupplyController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   getReview = async (req, res, next) => {
     try {
@@ -35,22 +45,19 @@ export default class SupplyController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   getMine = async (req, res, next) => {
     try {
-      const data = req.body || {};
-      data.donorId = req.userId;
       let { page = 1, size = 100 } = req.query;
-      data.page = page;
-      data.size = size;
+      const data = { donorId: req.userId, page, size, status: req.status, order: req.order };
       const result = await this.supplyFacade.getMine(data);
       res.status(200).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   addProof = async (req, res, next) => {
     try {
@@ -62,7 +69,7 @@ export default class SupplyController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   review = async (req, res, next) => {
     try {
@@ -74,31 +81,31 @@ export default class SupplyController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   create = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const data = { id, userId: req.userId, ...req.body }
+      const data = { id, donorId: req.userId, ...req.body }
       const result = await this.supplyFacade.create(data);
       res.status(201).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   accept = async (req, res, next) => {
     try {
       const { id } = req.params;
       const data = { id, userId: req.userId }
-      const result = await this.supplyFacade.create(data);
+      const result = await this.supplyFacade.accept(data);
       res.status(201).json(result);
     }
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   edit = async (req, res, next) => {
     try {
@@ -110,7 +117,7 @@ export default class SupplyController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   delete = async (req, res, next) => {
     try {
@@ -122,5 +129,5 @@ export default class SupplyController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 }

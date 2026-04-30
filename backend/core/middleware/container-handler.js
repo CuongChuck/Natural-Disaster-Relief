@@ -1,23 +1,17 @@
 import { asClass } from "awilix";
 
-import SupplyRedisRepository from "../../modules/supply/repository/supply.redis-repository.js";
-import SupplyGetAllUnverified from "../../modules/supply/service/get-all/supply.get-all-unverified.js";
-import SupplyGetOneUnverified from "../../modules/supply/service/get-one/supply.get-one-unverified.js";
-import SupplyGetMineUnverified from "../../modules/supply/service/get-mine/supply.get-mine-unverified.js";
-import SupplyCreateService from "../../modules/supply/service/create/supply.create-service.js";
-import RequestEditService from "../../modules/request/service/edit/request.edit-service.js";
+import SupplyAcceptService from "../../modules/supply/service/edit/supply.accept-service.js";
+import RequestAcceptService from "../../modules/request/service/edit/request.accept-service.js";
+import EventGetAllBySupplyService from "../../modules/event/service/get-all/event.get-all-by-supply.js";
 
 export default class ContainerHandler {
-  useRedis = (req, res, next) => {
+  accept = (req, res, next) => {
     try {
       const container = req.app.get('container');
       const scope = req.scope || container.createScope();
       scope.register({
-        supplyRepository: asClass(SupplyRedisRepository).scoped(),
-        supplyGetAllService: asClass(SupplyGetAllUnverified).scoped(),
-        supplyGetOneService: asClass(SupplyGetOneUnverified).scoped(),
-        supplyGetMineService: asClass(SupplyGetMineUnverified).scoped(),
-        supplyCreateService: asClass(SupplyCreateService).scoped()
+        requestEditService: asClass(RequestAcceptService).scoped(),
+        supplyEditService: asClass(SupplyAcceptService).scoped()
       });
       req.scope = scope;
       next();
@@ -26,12 +20,12 @@ export default class ContainerHandler {
     }
   }
 
-  acceptRequest = (req, res, next) => {
+  getSupplyByEvent = (req, res, next) => {
     try {
       const container = req.app.get('container');
       const scope = req.scope || container.createScope();
       scope.register({
-        requestEditService: asClass(RequestEditService).scoped()
+        eventGetAllService: asClass(EventGetAllBySupplyService).scoped()
       });
       req.scope = scope;
       next();

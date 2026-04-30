@@ -1,26 +1,28 @@
 'use strict';
 import { Model } from 'sequelize';
 export default (sequelize, DataTypes) => {
-  class Supply extends Model {
+  class SupplyReview extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Supply.belongsTo(models['User'], { as: 'donor', foreignKey: 'donorId' });
-      Supply.hasOne(models['Delivery'], { foreignKey: 'supplyId' });
-      Supply.hasOne(models['SupplyReview'], { foreignKey: 'supplyId' });
+      SupplyReview.belongsTo(models['User'], { as: 'reviewer', foreignKey: 'reviewerId' });
+      SupplyReview.belongsTo(models['Supply'], { as: 'supply', foreignKey: 'supplyId' });
     }
   }
-  Supply.init({
+  SupplyReview.init({
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
+    },
+    reviewerId: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    donorId: {
+    supplyId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -58,19 +60,6 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    proof_url: {
-      type: DataTypes.STRING,
-      validate: {
-        isUrl: true
-      }
-    },
-    proof_public_id: {
-      type: DataTypes.STRING,
-    },
-    status: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     address_line: {
       type: DataTypes.STRING
     },
@@ -85,13 +74,14 @@ export default (sequelize, DataTypes) => {
     city_province: {
       type: DataTypes.STRING,
       allowNull: false
-    },
+    }
   }, {
     sequelize,
-    modelName: 'Supply',
+    modelName: 'SupplyReview',
     indexes: [
-      { fields: ['donorId'] },
-    ],
+      { fields: ['reviewerId'] },
+      { fields: ['supplyId'] }
+    ]
   });
-  return Supply;
+  return SupplyReview;
 };

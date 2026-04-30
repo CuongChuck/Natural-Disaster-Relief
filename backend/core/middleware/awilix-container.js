@@ -1,8 +1,8 @@
-import { createContainer, asClass, asValue, InjectionMode } from 'awilix';
+import { createContainer, asClass, asValue, InjectionMode, asFunction } from 'awilix';
 
 import db from '../models/index.js';
 import { client } from '../config/redis.js';
-import { upload } from '../config/multer.js';
+import { upload, uploads } from '../config/multer.js';
 import cloudinary from '../config/cloudinary.js';
 import JwtService from './jwt-service.js';
 import ContainerHandler from './container-handler.js';
@@ -17,16 +17,13 @@ import CategoryController from '../../modules/category/category.controller.js';
 import SupplySqlRepository from '../../modules/supply/repository/supply.sql-repository.js';
 import SupplyRedisRepository from '../../modules/supply/repository/supply.redis-repository.js';
 import SupplyFacadeService from '../../modules/supply/supply.facade-service.js';
-import SupplyGetAllVerified from '../../modules/supply/service/get-all/supply.get-all-verified.js';
-import SupplyGetAllUnverified from '../../modules/supply/service/get-all/supply.get-all-unverified.js';
+import SupplyGetAllService from '../../modules/supply/service/get-all/supply.get-all.js';
 import SupplyGetAllByEvent from '../../modules/supply/service/get-all/supply.get-all-by-event.js';
-import SupplyGetMineVerified from '../../modules/supply/service/get-mine/supply.get-mine-verified.js';
-import SupplyGetMineUnverified from '../../modules/supply/service/get-mine/supply.get-mine-unverified.js';
-import SupplyGetOneVerified from '../../modules/supply/service/get-one/supply.get-one-verified.js';
-import SupplyGetOneUnverified from '../../modules/supply/service/get-one/supply.get-one-unverified.js';
+import SupplyGetMineService from '../../modules/supply/service/get-mine/supply.get-mine.js';
+import SupplyGetOneService from '../../modules/supply/service/get-one/supply.get-one.js';
 import SupplyGetReview from '../../modules/supply/service/get-review/supply.get-review.js';
+import SupplyGetStatus from '../../modules/supply/service/get-status/supply.get-status.js';
 import SupplyCreateService from '../../modules/supply/service/create/supply.create-service.js';
-import SupplyCreateAcceptService from '../../modules/supply/service/create/supply.create-accept.js';
 import SupplyAddProof from '../../modules/supply/service/add-proof/supply.add-proof.js';
 import SupplyReviewService from '../../modules/supply/service/review/supply.review-service.js';
 import SupplyEditService from '../../modules/supply/service/edit/supply.edit-service.js';
@@ -58,7 +55,6 @@ import EventGetOneService from '../../modules/event/service/get-one/event.get-on
 import EventGetNamesService from '../../modules/event/service/get-names/event.get-names.js';
 import EventCreateService from '../../modules/event/service/create/event.create-service.js';
 import EventGetMineService from '../../modules/event/service/get-mine/event.get-mine-service.js';
-import EventGetAllBySupplyService from '../../modules/event/service/get-all/event.get-all-by-supply.js';
 import MapController from '../../modules/map/map.controller.js';
 import MapFacadeService from '../../modules/map/map.facade-service.js';
 import MapSqlRepository from '../../modules/map/repository/map.sql-repository.js';
@@ -84,6 +80,15 @@ import RequestAddProof from '../../modules/request/service/add-proof/request.add
 import RequestGetMineService from '../../modules/request/service/get-mine/request.get-mine.js';
 import RequestGetOneService from '../../modules/request/service/get-one/request.get-one.js';
 import RequestGetReview from '../../modules/request/service/get-review/request.get-review.js';
+import DeliveryController from '../../modules/delivery/delivery.controller.js';
+import DeliveryFacadeService from '../../modules/delivery/delivery.facade-service.js';
+import DeliverySqlRepository from '../../modules/delivery/repository/delivery.sql-repository.js';
+import DeliveryCreateService from '../../modules/delivery/service/create/delivery.create-service.js';
+import DeliveryGetOneService from '../../modules/delivery/service/get-one/delivery.get-one.js';
+import DeliveryGetMineService from '../../modules/delivery/service/get-mine/delivery.get-mine.js';
+import DeliveryGetAllService from '../../modules/delivery/service/get-all/delivery.get-all.js';
+import DeliveryAddProof from '../../modules/delivery/service/add-proof/delivery.add-proof.js';
+import Injection from './injection.js';
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -104,28 +109,25 @@ container.register({
   db: asValue(db),
   redisClient: asValue(client),
   multerUpload: asValue(upload),
+  multerUploads: asValue(uploads),
   cloudinary: asValue(cloudinary),
   jwtService: asClass(JwtService).singleton(),
   authHandler: asClass(AuthHandler).singleton(),
   containerHandler: asClass(ContainerHandler).singleton(),
   controllerHelper: asClass(ControllerHelper).singleton(),
   imageUploader: asClass(ImageUploader).singleton(),
+  injection: asClass(Injection).singleton(),
 
   supplyRedisRepository: asClass(SupplyRedisRepository).scoped(),
   supplySqlRepository: asClass(SupplySqlRepository).scoped(),
   supplyFacade: asClass(SupplyFacadeService).scoped(),
-  supplyGetAllService: asClass(SupplyGetAllVerified).scoped(),
-  supplyGetAllVerified: asClass(SupplyGetAllVerified).scoped(),
-  supplyGetAllUnverified: asClass(SupplyGetAllUnverified).scoped(),
+  supplyGetAllService: asClass(SupplyGetAllService).scoped(),
   supplyGetAllByEvent: asClass(SupplyGetAllByEvent).scoped(),
-  supplyGetMineService: asClass(SupplyGetMineVerified).scoped(),
-  supplyGetMineVerified: asClass(SupplyGetMineVerified).scoped(),
-  supplyGetMineUnverified: asClass(SupplyGetMineUnverified).scoped(),
-  supplyGetOneService: asClass(SupplyGetOneVerified).scoped(),
-  supplyGetOneVerified: asClass(SupplyGetOneVerified).scoped(),
-  supplyGetOneUnverified: asClass(SupplyGetOneUnverified).scoped(),
+  supplyGetMineService: asClass(SupplyGetMineService).scoped(),
+  supplyGetOneService: asClass(SupplyGetOneService).scoped(),
   supplyGetReviewService: asClass(SupplyGetReview).scoped(),
-  supplyCreateService: asClass(SupplyCreateAcceptService).scoped(),
+  supplyGetStatusService: asClass(SupplyGetStatus).scoped(),
+  supplyCreateService: asClass(SupplyCreateService).scoped(),
   supplyAddProofService: asClass(SupplyAddProof).scoped(),
   supplyReviewService: asClass(SupplyReviewService).scoped(),
   supplyEditService: asClass(SupplyEditService).scoped(),
@@ -160,7 +162,6 @@ container.register({
   eventGetNamesService: asClass(EventGetNamesService).scoped(),
   eventCreateService: asClass(EventCreateService).scoped(),
   eventGetMineService: asClass(EventGetMineService).scoped(),
-  eventGetAllBySupplyService: asClass(EventGetAllBySupplyService).scoped(),
 
   mapController: asClass(MapController).scoped(),
   mapFacade: asClass(MapFacadeService).scoped(),
@@ -187,7 +188,16 @@ container.register({
   requestAddProofService: asClass(RequestAddProof).scoped(),
   requestGetMineService: asClass(RequestGetMineService).scoped(),
   requestGetOneService: asClass(RequestGetOneService).scoped(),
-  requestGetReviewService: asClass(RequestGetReview).scoped()
+  requestGetReviewService: asClass(RequestGetReview).scoped(),
+
+  deliveryController: asClass(DeliveryController).scoped(),
+  deliveryFacade: asClass(DeliveryFacadeService).scoped(),
+  deliverySqlRepository: asClass(DeliverySqlRepository).scoped(),
+  deliveryCreateService: asClass(DeliveryCreateService).scoped(),
+  deliveryGetOneService: asClass(DeliveryGetOneService).scoped(),
+  deliveryGetMineService: asClass(DeliveryGetMineService).scoped(),
+  deliveryGetAllService: asClass(DeliveryGetAllService).scoped(),
+  deliveryAddProofService: asClass(DeliveryAddProof).scoped()
 });
 
 export default container;
