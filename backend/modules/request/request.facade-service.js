@@ -27,10 +27,10 @@ export default class RequestFacadeService {
 
   getStatus = async () => {
     try {
-      const result = await this.getStatusService.getStatus();
+      const status = await this.getStatusService.getStatus();
       return {
         message: `All request status successfully`,
-        ...result
+        status
       };
     }
     catch (err) {

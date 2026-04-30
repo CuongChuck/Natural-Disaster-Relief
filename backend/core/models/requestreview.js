@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      RequestReview.belongsTo(models['Request'], { as: 'review', foreignKey: 'requestId' });
+      RequestReview.belongsTo(models['Request'], { as: 'request', foreignKey: 'requestId' });
       RequestReview.belongsTo(models['User'], { as: 'reviewer', foreignKey: 'reviewerId' });
     }
   }
@@ -79,8 +79,6 @@ export default (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'RequestReview',
-    tableName: 'RequestReview',
-    freezeTableName: true,
     indexes: [
       { fields: ['requestId'] }
     ]

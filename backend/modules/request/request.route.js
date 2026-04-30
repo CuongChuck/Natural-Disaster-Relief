@@ -31,7 +31,7 @@ router.post('/request',
 );
 router.patch('/request/:id',
   authHandler.verifyToken,
-  containerHandler.acceptRequest,
+  containerHandler.accept,
   controllerHelper.invoke('accept', 'requestController')
 );
 router.post('/request/:id/review',

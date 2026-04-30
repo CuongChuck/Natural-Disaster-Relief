@@ -1,7 +1,7 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('RequestReview', {
+  await queryInterface.createTable('RequestReviews', {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
@@ -72,9 +72,9 @@ export async function up(queryInterface, Sequelize) {
     }
   });
 
-  await queryInterface.addIndex('RequestReview', ['requestId']);
-  await queryInterface.addIndex('RequestReview', ['reviewerId']);
+  await queryInterface.addIndex('RequestReviews', ['requestId']);
+  await queryInterface.addIndex('RequestReviews', ['reviewerId']);
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('RequestReview');
+  await queryInterface.dropTable('RequestReviews');
 }
