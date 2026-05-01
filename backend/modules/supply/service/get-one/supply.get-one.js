@@ -10,7 +10,7 @@ export default class SupplyGetOneService extends ISupplyGetOneService {
   getOne = async (data) => {
     try {
       const supply = await this.supplyRepository.getOne({ id: data.id });
-      supply.events = await this.eventGetAll.getAll({ supplyId: data.id, size: 1000, page: 1 });
+      supply.events = await this.eventGetAll.getAll({ supplyId: data.id });
       return supply;
     }
     catch (err) {

@@ -18,7 +18,6 @@ import SupplySqlRepository from '../../modules/supply/repository/supply.sql-repo
 import SupplyRedisRepository from '../../modules/supply/repository/supply.redis-repository.js';
 import SupplyFacadeService from '../../modules/supply/supply.facade-service.js';
 import SupplyGetAllService from '../../modules/supply/service/get-all/supply.get-all.js';
-import SupplyGetAllByEvent from '../../modules/supply/service/get-all/supply.get-all-by-event.js';
 import SupplyGetMineService from '../../modules/supply/service/get-mine/supply.get-mine.js';
 import SupplyGetOneService from '../../modules/supply/service/get-one/supply.get-one.js';
 import SupplyGetReview from '../../modules/supply/service/get-review/supply.get-review.js';
@@ -28,6 +27,7 @@ import SupplyAddProof from '../../modules/supply/service/add-proof/supply.add-pr
 import SupplyReviewService from '../../modules/supply/service/review/supply.review-service.js';
 import SupplyEditService from '../../modules/supply/service/edit/supply.edit-service.js';
 import SupplyDeleteService from '../../modules/supply/service/delete/supply.delete-service.js';
+import SupplyCheckDeliverability from '../../modules/supply/service/check/supply.check-deliverability.js';
 import SupplyController from '../../modules/supply/supply.controller.js';
 import UnitRedisRepository from '../../modules/unit/repository/unit.redis-repository.js';
 import UnitFacadeService from '../../modules/unit/unit.facade-service.js';
@@ -52,9 +52,9 @@ import EventSqlRepository from '../../modules/event/repository/event.sql-reposit
 import EventRedisRepository from '../../modules/event/repository/event.redis-repository.js';
 import EventGetAllService from '../../modules/event/service/get-all/event.get-all-service.js';
 import EventGetOneService from '../../modules/event/service/get-one/event.get-one.js';
-import EventGetNamesService from '../../modules/event/service/get-names/event.get-names.js';
 import EventCreateService from '../../modules/event/service/create/event.create-service.js';
 import EventGetMineService from '../../modules/event/service/get-mine/event.get-mine-service.js';
+import EventEditJourney from '../../modules/event/service/edit/event.edit-journey.js';
 import MapController from '../../modules/map/map.controller.js';
 import MapFacadeService from '../../modules/map/map.facade-service.js';
 import MapSqlRepository from '../../modules/map/repository/map.sql-repository.js';
@@ -122,7 +122,6 @@ container.register({
   supplySqlRepository: asClass(SupplySqlRepository).scoped(),
   supplyFacade: asClass(SupplyFacadeService).scoped(),
   supplyGetAllService: asClass(SupplyGetAllService).scoped(),
-  supplyGetAllByEvent: asClass(SupplyGetAllByEvent).scoped(),
   supplyGetMineService: asClass(SupplyGetMineService).scoped(),
   supplyGetOneService: asClass(SupplyGetOneService).scoped(),
   supplyGetReviewService: asClass(SupplyGetReview).scoped(),
@@ -132,6 +131,7 @@ container.register({
   supplyReviewService: asClass(SupplyReviewService).scoped(),
   supplyEditService: asClass(SupplyEditService).scoped(),
   supplyDeleteService: asClass(SupplyDeleteService).scoped(),
+  supplyCheckService: asClass(SupplyCheckDeliverability).scoped(),
   supplyController: asClass(SupplyController).scoped(),
 
   unitRepository: asClass(UnitRedisRepository).singleton(),
@@ -159,9 +159,9 @@ container.register({
   eventRedisRepository: asClass(EventRedisRepository).scoped(),
   eventGetAllService: asClass(EventGetAllService).scoped(),
   eventGetOneService: asClass(EventGetOneService).scoped(),
-  eventGetNamesService: asClass(EventGetNamesService).scoped(),
   eventCreateService: asClass(EventCreateService).scoped(),
   eventGetMineService: asClass(EventGetMineService).scoped(),
+  eventEditService: asClass(EventEditJourney).scoped(),
 
   mapController: asClass(MapController).scoped(),
   mapFacade: asClass(MapFacadeService).scoped(),

@@ -13,6 +13,21 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     this.db = db;
   }
 
+  checkDeliverability = async (data) => {
+    try {
+      const supply = await this.Supply.findOne({
+        where: {
+          id: data.id
+        }
+      });
+      if (supply.status !== 3) throw new Error('Kiện hàng chưa được xác nhận');
+      if (!supply.proof_url) throw new Error('Chưa có hình ảnh minh chứng kiện hàng');
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Supply deliverability check failed: " + errors);
+    }
+  }
+
   checkOwner = async (data) => {
     try {
       const supply = await this.Supply.findOne({
@@ -21,7 +36,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
           donorId: data.donorId
         }
       });
-      if (request.length === 0) throw new Error('User is not authorized to modify this supply');
+      if (supply.length === 0) throw new Error('Người dùng không được chỉnh sửa kiện hàng');
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Supply owner check failed: " + errors);

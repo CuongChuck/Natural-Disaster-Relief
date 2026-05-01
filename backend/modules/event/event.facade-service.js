@@ -1,23 +1,10 @@
 export default class EventFacadeService {
   constructor(opts) {
-    this.getNamesService = opts.eventGetNamesService;
     this.getAllService = opts.eventGetAllService;
     this.getOneService = opts.eventGetOneService;
     this.createService = opts.eventCreateService;
     this.getMineService = opts.eventGetMineService;
-  }
-
-  getNames = async () => {
-    try {
-      const names = await this.getNamesService.getNames();
-      return {
-        message: `All events retrieved successfully`,
-        names
-      };
-    }
-    catch (err) {
-      throw err;
-    }
+    this.editService = opts.eventEditService;
   }
 
   getAll = async (data) => {
@@ -48,13 +35,10 @@ export default class EventFacadeService {
 
   getOne = async (data) => {
     try {
-      const result = await this.getOneService.getOne(data);
+      const event = await this.getOneService.getOne(data);
       return {
         message: `Event ${data.id} retrieved successfully`,
-        event: result.event,
-        user: result.user,
-        supplies: result.supplies,
-        total_supplies: result.supplies.length
+        event
       };
     }
     catch (err) {
@@ -64,13 +48,23 @@ export default class EventFacadeService {
 
   create = async (data) => {
     try {
-      const result = await this.createService.create(data);
+      const event = await this.createService.create(data);
       return {
         message: `Event created successfully`,
-        event: result.event,
-        user: result.user,
-        supplies: result.supplies,
-        total_supplies: result.supplies.length
+        event
+      };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+  edit = async (data) => {
+    try {
+      const event = await this.editService.edit(data);
+      return {
+        message: `Event edited successfully`,
+        event
       };
     }
     catch (err) {

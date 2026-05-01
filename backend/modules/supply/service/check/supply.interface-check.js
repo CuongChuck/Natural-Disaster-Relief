@@ -1,11 +1,11 @@
-export default class IEventGetNamesService {
+export default class ISupplyCheckService {
   constructor() {
-    if (new.target === IEventGetNamesService) {
+    if (new.target === ISupplyCheckService) {
       throw new Error('Cannot instantiate interface.');
     }
   }
 
-  getNames = async () => {
+  check = async (data) => {
     throw new Error('Method not implemented.');
   }
 }
