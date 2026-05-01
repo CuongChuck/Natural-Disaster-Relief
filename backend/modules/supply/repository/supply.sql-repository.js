@@ -33,7 +33,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       const status = data.status ? `WHERE S."status" IN (${data.status})` : '';
       const order = data.order ? `ORDER BY S."status" ${data.order}` : '';
       return await this.db.sequelize.query(
-        `SELECT S."id", S."name", S."quantity",
+        `SELECT S."id", S."name", S."quantity", S."status",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
         S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
@@ -65,7 +65,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
   getOne = async (data) => {
     try {
       const result = await this.db.sequelize.query(
-        `SELECT S."id", S."name", S."quantity",
+        `SELECT S."id", S."name", S."quantity", S."status",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
         S."updatedAt", "Users"."username" AS "donor", S."proof_url"  AS proof
@@ -87,7 +87,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
       const status = data.status ? `AND S."status" IN (${data.status})` : '';
       const order = data.order ? `ORDER BY S."status" ${data.order}` : '';
       return await this.db.sequelize.query(
-        `SELECT S."id", S."name", S."quantity",
+        `SELECT S."id", S."name", S."quantity", S."status",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
         S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
@@ -120,7 +120,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
   getByEvent = async (data) => {
     try {
       return await this.db.sequelize.query(
-        `SELECT S."id", S."name", S."quantity",
+        `SELECT S."id", S."name", S."quantity", S."status",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
         S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
