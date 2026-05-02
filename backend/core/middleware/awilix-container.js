@@ -80,14 +80,14 @@ import RequestAddProof from '../../modules/request/service/add-proof/request.add
 import RequestGetMineService from '../../modules/request/service/get-mine/request.get-mine.js';
 import RequestGetOneService from '../../modules/request/service/get-one/request.get-one.js';
 import RequestGetReview from '../../modules/request/service/get-review/request.get-review.js';
-// import DeliveryController from '../../modules/delivery/delivery.controller.js';
-// import DeliveryFacadeService from '../../modules/delivery/delivery.facade-service.js';
-// import DeliverySqlRepository from '../../modules/delivery/repository/delivery.sql-repository.js';
-// import DeliveryCreateService from '../../modules/delivery/service/create/delivery.create-service.js';
-// import DeliveryGetOneService from '../../modules/delivery/service/get-one/delivery.get-one.js';
-// import DeliveryGetMineService from '../../modules/delivery/service/get-mine/delivery.get-mine.js';
-// import DeliveryGetAllService from '../../modules/delivery/service/get-all/delivery.get-all.js';
-// import DeliveryAddProof from '../../modules/delivery/service/add-proof/delivery.add-proof.js';
+import DeliveryController from '../../modules/delivery/delivery.controller.js';
+import DeliveryFacadeService from '../../modules/delivery/delivery.facade-service.js';
+import DeliverySqlRepository from '../../modules/delivery/repository/delivery.sql-repository.js';
+import DeliveryCreateService from '../../modules/delivery/service/create/delivery.create-service.js';
+import DeliveryGetOneService from '../../modules/delivery/service/get-one/delivery.get-one.js';
+import DeliveryGetMineService from '../../modules/delivery/service/get-mine/delivery.get-mine.js';
+import DeliveryGetAllService from '../../modules/delivery/service/get-all/delivery.get-all.js';
+import DeliveryAddProof from '../../modules/delivery/service/add-proof/delivery.add-proof.js';
 import Injection from './injection.js';
 
 const container = createContainer({
@@ -190,14 +190,14 @@ container.register({
   requestGetOneService: asClass(RequestGetOneService).scoped(),
   requestGetReviewService: asClass(RequestGetReview).scoped(),
 
-  // deliveryController: asClass(DeliveryController).scoped(),
-  // deliveryFacade: asClass(DeliveryFacadeService).scoped(),
-  // deliverySqlRepository: asClass(DeliverySqlRepository).scoped(),
-  // deliveryCreateService: asClass(DeliveryCreateService).scoped(),
-  // deliveryGetOneService: asClass(DeliveryGetOneService).scoped(),
-  // deliveryGetMineService: asClass(DeliveryGetMineService).scoped(),
-  // deliveryGetAllService: asClass(DeliveryGetAllService).scoped(),
-  // deliveryAddProofService: asClass(DeliveryAddProof).scoped()
+  deliveryController: asClass(DeliveryController).scoped(),
+  deliveryFacade: asClass(DeliveryFacadeService).scoped(),
+  deliverySqlRepository: asClass(DeliverySqlRepository).scoped(),
+  deliveryCreateService: asClass(DeliveryCreateService).scoped(),
+  deliveryGetOneService: asClass(DeliveryGetOneService).scoped(),
+  deliveryGetMineService: asClass(DeliveryGetMineService).scoped(),
+  deliveryGetAllService: asClass(DeliveryGetAllService).scoped(),
+  deliveryAddProofService: asClass(DeliveryAddProof).scoped()
 });
 
 export default container;

@@ -5,6 +5,7 @@ import RequestAcceptService from "../../modules/request/service/edit/request.acc
 import EventGetAllBySupplyService from "../../modules/event/service/get-all/event.get-all-by-supply.js";
 import EventCreateJourney from "../../modules/event/service/create/event.create-journey.js";
 import EventCompleteJourney from "../../modules/event/service/edit/event.complete-journey.js";
+import SupplyUpdateStatus from "../../modules/supply/service/edit/supply.update-status.js";
 
 export default class ContainerHandler {
   accept = (req, res, next) => {
@@ -55,7 +56,8 @@ export default class ContainerHandler {
       const container = req.app.get('container');
       const scope = req.scope || container.createScope();
       scope.register({
-        eventEditService: asClass(EventCompleteJourney).scoped()
+        eventEditService: asClass(EventCompleteJourney).scoped(),
+        supplyEditService: asClass(SupplyUpdateStatus).scoped()
       });
       req.scope = scope;
       next();

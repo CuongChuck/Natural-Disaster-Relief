@@ -11,6 +11,7 @@ export default class EventEditJourney extends IEventEditService {
   edit = async (data) => {
     const transaction = await this.db.sequelize.transaction();
     try {
+      await this.userCheckService.checkOperator({ userId: data.userId });
       await this.eventRepository.edit(data, transaction);
       await this.eventRepository.editJourney(data, transaction);
       transaction.commit();
