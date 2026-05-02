@@ -45,21 +45,23 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   getAll = async (data) => {
     try {
-      const status = data.status ? `WHERE S."status" IN (${data.status})` : '';
-      const order = data.order ? `ORDER BY S."status" ${data.order}` : '';
-      return await this.db.sequelize.query(
-        `SELECT S."id", S."name", S."quantity", S."status",
+      const order = data.order ? ` ORDER BY S."status" ${data.order}` : '';
+      let query = `SELECT S."id", S."name", S."quantity", S."status",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
         S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
-        LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
-        ${status}
-        ${order}
-        LIMIT ${data.limit}
-        OFFSET ${data.offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
-      );
+        LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"`;
+      if (data.status) query += ' WHERE S."status" IN (:status)';
+      query += order + ' LIMIT :limit OFFSET :offset';
+      return await this.db.sequelize.query(query, {
+        replacements: {
+          status: data.status,
+          limit: data.limit,
+          offset: data.offset
+        },
+        type: this.db.sequelize.QueryTypes.SELECT,
+      });
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
@@ -86,9 +88,13 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         S."updatedAt", "Users"."username" AS "donor", S."proof_url"  AS proof
         FROM "Supplies" AS S
         LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
-        WHERE S."id" = ${data.id};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
+        WHERE S."id" = :id;`,
+        {
+          replacements: { id: data.id },
+          type: this.db.sequelize.QueryTypes.SELECT,
+        }
       );
+      if (result.length === 0) throw new Error('Supply not found');
       return result[0];
     }
     catch (err) {
@@ -99,21 +105,25 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   getMine = async (data) => {
     try {
-      const status = data.status ? `AND S."status" IN (${data.status})` : '';
-      const order = data.order ? `ORDER BY S."status" ${data.order}` : '';
-      return await this.db.sequelize.query(
-        `SELECT S."id", S."name", S."quantity", S."status",
+      const order = data.order ? ` ORDER BY S."status" ${data.order}` : '';
+      let query = `SELECT S."id", S."name", S."quantity", S."status",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",
         S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
         LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"
-        WHERE S."donorId" = ${data.donorId} ${status}
-        ${order}
-        LIMIT ${data.limit}
-        OFFSET ${data.offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
-      );
+        WHERE S."donorId" = :donorId`;
+      if (data.status) query += ' AND S."status" IN (:status)';
+      query += order + ' LIMIT :limit OFFSET :offset';
+      return await this.db.sequelize.query(query, {
+        replacements: {
+          donorId: data.donorId,
+          status: data.status,
+          limit: data.limit,
+          offset: data.offset
+        },
+        type: this.db.sequelize.QueryTypes.SELECT,
+      });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("My supplies retrieval failed: " + errors);
@@ -132,63 +142,6 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
     }
   }
 
-  getByEvent = async (data) => {
-    try {
-      return await this.db.sequelize.query(
-        `SELECT S."id", S."name", S."quantity", S."status",
-        S."count", S."category", S."unit", S."address_line",
-        S."ward", S."district", S."city_province", S."createdAt",
-        S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
-        FROM "Supplies" AS S
-		    LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId"
-        LEFT JOIN "Users" ON S."donorId" = "Users"."id"
-        WHERE SE."eventId" = ${data.id}
-        LIMIT ${data.limit}
-        OFFSET ${data.offset};`,
-        {
-          type: this.db.sequelize.QueryTypes.SELECT,
-        }
-      );
-    } catch (err) {
-      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("Supply retrieved by event failed: " + errors);
-    }
-  }
-
-  countByEvent = async (data) => {
-    try {
-      const result = await this.db.sequelize.query(
-        `SELECT COUNT(*)
-        FROM "Supplies" AS S
-		    LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId"
-        WHERE SE."eventId" = ${data.id};`,
-        {
-          type: this.db.sequelize.QueryTypes.SELECT,
-        }
-      );
-      return result[0]['count'];
-    } catch (err) {
-      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("Supplies counted by event failed: " + errors);
-    }
-  }
-
-  getIdByEvent = async (data) => {
-    try {
-      return await this.db.sequelize.query(
-        `SELECT SE."supplyId"
-        FROM "SupplyEvent" SE
-        WHERE SE."eventId" = ${data.id};`,
-        {
-          type: this.db.sequelize.QueryTypes.SELECT,
-        }
-      );
-    } catch (err) {
-      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
-      throw new Error("Supply retrieved by event failed: " + errors);
-    }
-  }
-
   getReview = async (data) => {
     try {
       const result = await this.db.sequelize.query(
@@ -200,8 +153,11 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         LEFT OUTER JOIN "Supplies" S ON SR."supplyId" = S."id"
         LEFT OUTER JOIN "Users" D ON S."donorId" = D."id"
         LEFT OUTER JOIN "Users" R ON SR."reviewerId" = R."id"
-        WHERE SR."supplyId" = ${data.id};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
+        WHERE SR."supplyId" = :id;`,
+        {
+          replacements: { id: data.id },
+          type: this.db.sequelize.QueryTypes.SELECT,
+        }
       );
       return result[0];
     }

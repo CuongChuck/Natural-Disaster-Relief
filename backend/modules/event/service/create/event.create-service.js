@@ -1,22 +1,18 @@
 import IEventCreateService from "./event.interface-create.js";
 
 export default class EventCreateService extends IEventCreateService {
-  constructor({ eventSqlRepository, userCheckService, db }) {
+  constructor({ eventSqlRepository, userCheckService }) {
     super();
     this.eventRepository = eventSqlRepository;
     this.userCheckService = userCheckService;
-    this.db = db;
   }
 
   create = async (data) => {
-    const transaction = await this.db.sequelize.transaction();
     try {
       await this.userCheckService.checkOperator({ userId: data.userId });
       const event = await this.eventRepository.create(data, transaction);
-      await transaction.commit();
       return await this.eventRepository.getOne({ id: event.id });
     } catch (err) {
-      await transaction.rollback();
       throw err;
     }
   }

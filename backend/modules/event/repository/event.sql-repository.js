@@ -22,9 +22,14 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         LEFT JOIN "Journeys" J ON J."eventId" = E."id"
         LEFT JOIN "Users" U ON U."id" = E."userId"
         ORDER BY J."isCompleted" ASC
-        LIMIT ${limit}
-        OFFSET ${offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT },
+        LIMIT :limit OFFSET :offset;`,
+        {
+          replacements: {
+            limit: limit,
+            offset: offset
+          },
+          type: this.db.sequelize.QueryTypes.SELECT
+        },
       );
     }
     catch (err) {
@@ -54,9 +59,12 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         LEFT JOIN "Journeys" J ON J."eventId" = E."id"
         LEFT JOIN "SupplyEvent" SE ON SE."eventId" = E."id"
         LEFT JOIN "Users" U ON U."id" = E."userId"
-        WHERE SE."supplyId" = ${data.supplyId}
+        WHERE SE."supplyId" = :supplyId
         ORDER BY E."createdAt" ASC;`,
-        { type: this.db.sequelize.QueryTypes.SELECT },
+        {
+          replacements: { supplyId: data.supplyId },
+          type: this.db.sequelize.QueryTypes.SELECT
+        },
       );
     }
     catch (err) {
@@ -76,11 +84,17 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         FROM "Events" E
         LEFT JOIN "Journeys" J ON J."eventId" = E."id"
         LEFT JOIN "Users" U ON U."id" = E."userId"
-        WHERE E."userId" = ${data.userId}
+        WHERE E."userId" = :userId
         ORDER BY J."isCompleted" ASC
-        LIMIT ${data.limit}
-        OFFSET ${data.offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT },
+        LIMIT :limit OFFSET :offset;`,
+        {
+          replacements: {
+            userId: data.userId,
+            limit: data.limit,
+            offset: data.offset
+          },
+          type: this.db.sequelize.QueryTypes.SELECT
+        },
       );
     }
     catch (err) {
@@ -129,8 +143,11 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
           ) supply_data) AS supplies
         FROM "Events" E
         LEFT JOIN "Journeys" J ON J."eventId" = E."id"
-        WHERE E."id" = ${data.id};
-      `, { type: this.db.sequelize.QueryTypes.SELECT });
+        WHERE E."id" = :id;`,
+      {
+        replacements: { id: data.id },
+        type: this.db.sequelize.QueryTypes.SELECT
+      });
       if (result.length === 0) throw new Error('Event not found');
       return result[0];
     }

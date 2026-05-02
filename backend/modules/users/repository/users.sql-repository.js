@@ -44,7 +44,7 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  createUser = async (data, transaction) => {
+  createUser = async (data) => {
     try {
       const user = await this.User.create({
         name: data.name,
@@ -57,7 +57,7 @@ class UserSqlRepository extends IUserRepository {
         district: data.district,
         city_province: data.city_province,
         role: data.role
-      }, { transaction });
+      });
       if (!user) throw new Error('Cannot create user');
       return user.toJSON();
     }
@@ -67,9 +67,9 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  findByUsername = async (data, transaction) => {
+  findByUsername = async (data) => {
     try {
-      const user = await this.User.findOne({ where: { username: data.username }, transaction });
+      const user = await this.User.findOne({ where: { username: data.username } });
       if (!user) throw new Error('There is no user with username: ' + data.username);
       return user.toJSON();
     }
@@ -92,7 +92,7 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  updateUser = async (data, transaction) => {
+  updateUser = async (data) => {
     try {
       const user = await this.User.findByPk(data.userId);
       if (!user) throw new Error('There is no such user');
@@ -106,7 +106,7 @@ class UserSqlRepository extends IUserRepository {
         ward: data.ward,
         district: data.district,
         city_province: data.city_province
-      }, { where: { id: data.userId }, transaction });
+      }, { where: { id: data.userId } });
       return await this.User.findByPk(data.userId, { attributes: [
         'email',
         'name',
@@ -116,7 +116,7 @@ class UserSqlRepository extends IUserRepository {
         'ward',
         'district',
         'city_province'
-      ], transaction });
+      ] });
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
@@ -124,11 +124,11 @@ class UserSqlRepository extends IUserRepository {
     }
   }
 
-  deleteUser = async (data, transaction) => {
+  deleteUser = async (data) => {
     try {
       const user = await this.User.findByPk(data.userId);
       if (!user) throw new Error('There is no such user');
-      await this.User.destroy({ where: { id: data.userId }, force: true, transaction: transaction });
+      await this.User.destroy({ where: { id: data.userId }, force: true });
     }
     catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
