@@ -42,9 +42,7 @@ import UserRegisterJwtService from '../../modules/users/service/register/users.r
 import UserSignInJwtService from '../../modules/users/service/signin/users.signin-jwt-service.js';
 import UserCheckOperator from '../../modules/users/service/check-operator/users.check-operator.js';
 import UserEditService from '../../modules/users/service/edit/users.edit-service.js';
-import UserAdminEditService from '../../modules/users/service/edit/users.admin-edit-service.js';
 import UserDeleteService from '../../modules/users/service/delete/users.delete-service.js';
-import UserAdminDeleteService from '../../modules/users/service/delete/users.admin-delete-service.js';
 import UserController from '../../modules/users/users.controller.js';
 import EventController from '../../modules/event/event.controller.js';
 import EventFacadeService from '../../modules/event/event.facade-service.js';
@@ -148,9 +146,7 @@ container.register({
   userSignInJwtService: asClass(UserSignInJwtService).singleton(),
   userCheckService: asClass(UserCheckOperator).singleton(),
   userEditService: asClass(UserEditService).singleton(),
-  userAdminEditService: asClass(UserAdminEditService).singleton(),
   userDeleteService: asClass(UserDeleteService).singleton(),
-  userAdminDeleteService: asClass(UserAdminDeleteService).singleton(),
   userController: asClass(UserController).singleton(),
 
   eventController: asClass(EventController).scoped(),
