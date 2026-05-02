@@ -1505,7 +1505,9 @@ components:
         - type: object
           properties:
             events:
-              $ref: '#/components/schemas/Events'
+              type: array
+              items:
+                $ref: '#/components/schemas/Event'
 
     SupplyGetResponse:
       type: object
