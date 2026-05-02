@@ -1,11 +1,11 @@
-export default class IDeliveryAddProof {
+export default class IDeliveryEditService {
   constructor() {
-    if (new.target === IDeliveryAddProof) {
+    if (new.target === IDeliveryEditService) {
       throw new Error('Cannot instantiate interface.');
     }
   }
 
-  addProof = async (data) => {
+  edit = async (data) => {
     throw new Error('Method not implemented.');
   }
 };

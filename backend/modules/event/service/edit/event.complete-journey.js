@@ -18,10 +18,10 @@ export default class EventCompleteJourney extends IEventEditService {
         const event = await this.eventRepository.getOne({ id: data.id });
         for (const supply of event.supplies) {
           if (
-            event.ward === supply.ward && 
-            event.district === supply.district && 
-            event.city_province === supply.city_province
-          )
+            event.dest_ward === supply.ward && 
+            event.dest_district === supply.district && 
+            event.dest_city_province === supply.city_province
+          ) {
             await this.deliveryCreateService.create({
               id: supply.id,
               address_line: supply.address_line,
@@ -30,6 +30,7 @@ export default class EventCompleteJourney extends IEventEditService {
               city_province: supply.city_province
             });
             await this.supplyEditService.edit({ id: supply.id, status: 4 });
+          }
         }
       });
       return event;

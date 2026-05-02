@@ -16,7 +16,7 @@ import supplyRoutes from './modules/supply/supply.route.js';
 import eventRoutes from './modules/event/event.route.js';
 import mapRoutes from './modules/map/map.route.js';
 import requestRoutes from './modules/request/request.route.js';
-// import deliveryRoutes from './modules/delivery/delivery.route.js';
+import deliveryRoutes from './modules/delivery/delivery.route.js';
 import container from './core/middleware/awilix-container.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,7 +37,7 @@ app.use('/', supplyRoutes);
 app.use('/', eventRoutes);
 app.use('/map', mapRoutes);
 app.use('/', requestRoutes);
-// app.use('/', deliveryRoutes);
+app.use('/', deliveryRoutes);
 
 const swaggerPath = path.join(__dirname, './swagger.yaml');
 const swaggerSpec = yaml.load(fs.readFileSync(swaggerPath, 'utf-8'));

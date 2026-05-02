@@ -38,22 +38,11 @@ export default class DeliveryController {
     }
   }
 
-  addProof = async (req, res, next) => {
+  edit = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const data = { id, operatorId: req.userId, ...req.body };
-      const result = await this.deliveryFacade.addProof(data);
-      res.status(201).json(result);
-    }
-    catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  }
-
-  create = async (req, res, next) => {
-    try {
-      const data = { operatorId: req.userId, ...req.body }
-      const result = await this.deliveryFacade.create(data);
+      const data = { id, userId: req.userId, ...req.body };
+      const result = await this.deliveryFacade.edit(data);
       res.status(201).json(result);
     }
     catch (err) {

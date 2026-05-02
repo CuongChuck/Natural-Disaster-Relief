@@ -7,10 +7,6 @@ export async function up(queryInterface, Sequelize) {
       supplyId: 2,
       operatorId: 1,
       recipientId: 1,
-      address_line: null,
-      ward: 'string',
-      district: 'string',
-      city_province: 'string',
       createdAt: new Date(),
       updatedAt: new Date(),
     }

@@ -10,7 +10,7 @@ export default class EventCreateService extends IEventCreateService {
   create = async (data) => {
     try {
       await this.userCheckService.checkOperator({ userId: data.userId });
-      const event = await this.eventRepository.create(data, transaction);
+      const event = await this.eventRepository.create(data);
       return await this.eventRepository.getOne({ id: event.id });
     } catch (err) {
       throw err;

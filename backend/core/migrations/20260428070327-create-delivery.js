@@ -46,21 +46,6 @@ export async function up(queryInterface, Sequelize) {
     proof_public_id: {
       type: Sequelize.STRING
     },
-    address_line: {
-      type: Sequelize.STRING
-    },
-    ward: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    district: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    city_province: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
     createdAt: {
       type: Sequelize.DATE,
       allowNull: false

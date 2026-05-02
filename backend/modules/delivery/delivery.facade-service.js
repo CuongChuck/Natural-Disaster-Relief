@@ -3,15 +3,14 @@ export default class DeliveryFacadeService {
     this.getAllService = opts.deliveryGetAllService;
     this.getMineService = opts.deliveryGetMineService;
     this.getOneService = opts.deliveryGetOneService;
-    this.createService = opts.deliveryCreateService;
-    this.addProofService = opts.deliveryAddProofService;
+    this.editService = opts.deliveryEditService;
   }
 
   getAll = async (data) => {
     try {
       const result = await this.getAllService.getAll(data);
       return {
-        message: `All deliverys retrieved successfully`,
+        message: `All deliveries retrieved successfully`,
         ...result
       };
     }
@@ -37,7 +36,7 @@ export default class DeliveryFacadeService {
     try {
       const result = await this.getMineService.getMine(data);
       return {
-        message: `My deliverys retrieved successfully`,
+        message: `My deliveries retrieved successfully`,
         ...result
       };
     }
@@ -46,19 +45,10 @@ export default class DeliveryFacadeService {
     }
   }
 
-  create = async (data) => {
+  edit = async (data) => {
     try {
-      const delivery = await this.createService.create(data);
-      return { message: `Delivery created successfully`, delivery };
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  addProof = async (data) => {
-    try {
-      await this.addProofService.addProof(data);
-      return { message: `Delivery proof added successfully` };
+      await this.editService.edit(data);
+      return { message: `Delivery edited successfully` };
     } catch (err) {
       throw err;
     }

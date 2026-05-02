@@ -7,6 +7,7 @@ const controllerHelper = container.resolve('controllerHelper');
 const authHandler = container.resolve('authHandler');
 const uploads = container.resolve('multerUploads');
 const imageUploader = container.resolve('imageUploader');
+const containerHandler = container.resolve('containerHandler');
 
 router.get('/deliveries',
   controllerHelper.invoke('getAll', 'deliveryController')
@@ -18,10 +19,6 @@ router.get('/deliveries/me',
 router.get('/delivery/:id',
   controllerHelper.invoke('getOne', 'deliveryController')
 );
-router.post('/delivery',
-  authHandler.verifyToken,
-  controllerHelper.invoke('create', 'deliveryController')
-);
 router.post('/delivery/:id/proof',
   authHandler.verifyToken,
   uploads([
@@ -32,7 +29,12 @@ router.post('/delivery/:id/proof',
     receipt: 'ndrs/delivery/receipt',
     proof: 'ndrs/delivery/proof'
   }),
-  controllerHelper.invoke('addProof', 'deliveryController')
+  controllerHelper.invoke('edit', 'deliveryController')
+);
+router.post('/delivery/:id/operator',
+  authHandler.verifyToken,
+  containerHandler.assignOperator,
+  controllerHelper.invoke('edit', 'deliveryController')
 );
 
 export default router;

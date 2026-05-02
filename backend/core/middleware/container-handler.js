@@ -6,6 +6,7 @@ import EventGetAllBySupplyService from "../../modules/event/service/get-all/even
 import EventCreateJourney from "../../modules/event/service/create/event.create-journey.js";
 import EventCompleteJourney from "../../modules/event/service/edit/event.complete-journey.js";
 import SupplyUpdateStatus from "../../modules/supply/service/edit/supply.update-status.js";
+import DeliveryAssignOperator from "../../modules/delivery/service/edit/delivery.assign-operator.js";
 
 export default class ContainerHandler {
   accept = (req, res, next) => {
@@ -58,6 +59,20 @@ export default class ContainerHandler {
       scope.register({
         eventEditService: asClass(EventCompleteJourney).scoped(),
         supplyEditService: asClass(SupplyUpdateStatus).scoped()
+      });
+      req.scope = scope;
+      next();
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  assignOperator = (req, res, next) => {
+    try {
+      const container = req.app.get('container');
+      const scope = req.scope || container.createScope();
+      scope.register({
+        deliveryEditService: asClass(DeliveryAssignOperator).scoped()
       });
       req.scope = scope;
       next();

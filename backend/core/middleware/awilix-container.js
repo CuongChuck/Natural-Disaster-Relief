@@ -85,7 +85,7 @@ import DeliveryCreateService from '../../modules/delivery/service/create/deliver
 import DeliveryGetOneService from '../../modules/delivery/service/get-one/delivery.get-one.js';
 import DeliveryGetMineService from '../../modules/delivery/service/get-mine/delivery.get-mine.js';
 import DeliveryGetAllService from '../../modules/delivery/service/get-all/delivery.get-all.js';
-import DeliveryAddProof from '../../modules/delivery/service/add-proof/delivery.add-proof.js';
+import DeliveryAddProof from "../../modules/delivery/service/edit/delivery.add-proof.js";
 import Injection from './injection.js';
 
 const container = createContainer({
@@ -193,7 +193,7 @@ container.register({
   deliveryGetOneService: asClass(DeliveryGetOneService).scoped(),
   deliveryGetMineService: asClass(DeliveryGetMineService).scoped(),
   deliveryGetAllService: asClass(DeliveryGetAllService).scoped(),
-  deliveryAddProofService: asClass(DeliveryAddProof).scoped()
+  deliveryEditService: asClass(DeliveryAddProof).scoped()
 });
 
 export default container;
