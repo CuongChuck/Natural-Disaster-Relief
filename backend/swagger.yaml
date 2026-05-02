@@ -1490,6 +1490,7 @@ components:
             id: { type: integer }
             donor: { type: string }
             proof: { type: string }
+            status: { type: integer }
             createdAt:
               type: string
               format: date-time
