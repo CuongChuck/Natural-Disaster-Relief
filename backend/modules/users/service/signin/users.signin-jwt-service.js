@@ -11,7 +11,7 @@ class UserSignInJwtService extends IUserSignInService {
 
   async signInUser(data) {
     try {
-      const user = await this.userRepository.findByUsername(data, transaction);
+      const user = await this.userRepository.findByUsername(data);
       if (!user) {
         throw new Error("Username is incorrect.");
       }

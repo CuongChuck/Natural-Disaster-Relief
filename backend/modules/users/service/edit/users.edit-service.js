@@ -11,7 +11,7 @@ class UserEditService extends IUserEditService {
   async editUser(data) {
     try {
       data.password = await bcrypt.hash(data.password, 10);
-      const user = await this.userRepository.updateUser(data, transaction);
+      const user = await this.userRepository.updateUser(data);
       return user;
     }
     catch (err) {

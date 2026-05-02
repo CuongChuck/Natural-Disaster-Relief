@@ -12,7 +12,7 @@ class UserRegisterJwtService extends IUserRegisterService {
   async registerUser(data) {
     try {
       data.password = await bcrypt.hash(data.password, 10);
-      const user = await this.userRepository.createUser(data, transaction);
+      const user = await this.userRepository.createUser(data);
       return {
         token: this.jwtService.generateToken({ id: user.id, role: user.role }),
         role: user.role,

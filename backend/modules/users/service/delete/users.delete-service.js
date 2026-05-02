@@ -8,7 +8,7 @@ class UserDeleteService extends IUserDeleteService {
 
   async deleteUser(data) {
     try {
-      await this.userRepository.deleteUser(data, transaction);
+      await this.userRepository.deleteUser(data);
     }
     catch (err) {
       throw err;
