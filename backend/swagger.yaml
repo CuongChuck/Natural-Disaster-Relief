@@ -254,6 +254,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /supplies/me/all:
+    get:
+      summary: Get all current user'ssupply offers
+      operationId: Supply_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all current user's supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /supplies/me:
     get:
       summary: Get all current user's verified supply offers

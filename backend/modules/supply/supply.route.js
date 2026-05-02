@@ -26,6 +26,10 @@ router.get('/supplies/unverified',
   controllerHelper.invoke('getAll', 'supplyController')
 );
 
+router.get('/supplies/me/all',
+  authHandler.verifyToken,
+  controllerHelper.invoke('getMine', 'supplyController')
+);
 router.get('/supplies/me',
   authHandler.verifyToken,
   inject.getVerified,
