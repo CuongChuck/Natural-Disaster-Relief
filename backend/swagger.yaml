@@ -1312,6 +1312,175 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /deliveries:
+    get:
+      summary: Get all deliveries
+      operationId: Delivery_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all deliveries successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveriesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /deliveries/me:
+    get:
+      summary: Get my assigned deliveries
+      operationId: Delivery_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get my assigned deliveries successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveriesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /delivery/{id}:
+    get:
+      summary: Get a delivery's information
+      operationId: Delivery_getOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of delivery
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Delivery retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /delivery/{id}/operator:
+    post:
+      summary: Assign an operator for delivery
+      operationId: Delivery_assignOperator
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of delivery
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Operator'
+      responses:
+        201:
+          description: Delivery edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /delivery/{id}/proof:
+    post:
+      summary: Add receipt and delivery proof
+      operationId: Delivery_addProof
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of delivery
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - receipt
+                - proof
+              properties:
+                receipt:
+                  type: string
+                  format: binary
+                proof:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Delivery edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1883,7 +2052,44 @@ components:
         status:
           $ref: '#/components/schemas/RequestStatus'
 
-    BaseDelivery:
+    Delivery:
+      allOf:
+        - $ref: '#/components/schemas/Supply'
+        - type: object
+          properties:
+            id: { type: integer }
+            donor: { type: string }
+            status: { type: integer }
+            recipient: { type: string }
+            operator: { type: string }
+            receipt: { type: string }
+            proof: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    DeliveriesResponse:
       type: object
       properties:
-        
+        message: { type: string }
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Delivery'
+
+    DeliveryResponse:
+      type: object
+      properties:
+        message: { type: string }
+        request:
+          $ref: '#/components/schemas/Delivery'
+
+    Operator:
+      type: object
+      properties:
+        operatorId: { type: integer }
