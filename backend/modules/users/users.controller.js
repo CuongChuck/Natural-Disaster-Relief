@@ -15,7 +15,19 @@ class UserController {
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
+
+  getMany = async (req, res, next) => {
+    try {
+      const data = req.body || {};
+      data.userId = req.userId;
+      if (req.role) data.role = req.role;
+      const result = await this.userFacade.getUsers(data);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
 
   register = async (req, res, next) => {
     try {
@@ -25,7 +37,7 @@ class UserController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   signIn = async (req, res, next) => {
     try {
@@ -35,7 +47,7 @@ class UserController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   edit = async (req, res, next) => {
     try {;
@@ -48,7 +60,7 @@ class UserController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 
   delete = async (req, res, next) => {
     try {
@@ -60,7 +72,7 @@ class UserController {
     catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+  }
 }
 
 export default UserController;

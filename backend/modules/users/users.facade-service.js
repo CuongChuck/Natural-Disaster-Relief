@@ -5,6 +5,7 @@ class UserFacadeService {
     this.signInService = opts.userSignInJwtService;
     this.editService = opts.userEditService;
     this.deleteService = opts.userDeleteService;
+    this.getManyService = opts.userGetManyService;
   }
 
   getUser = async (data) => {
@@ -13,6 +14,18 @@ class UserFacadeService {
       return {
         message: `User profile retrieval successfully`,
         user
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  getUsers = async (data) => {
+    try {
+      const users = await this.getManyService.getUsers(data);
+      return {
+        message: `Users retrieval successfully`,
+        users
       };
     } catch (err) {
       throw err;

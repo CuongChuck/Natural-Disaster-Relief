@@ -6,13 +6,10 @@ export default class UserGetMany extends IUserGetMany {
     this.userRepository = userRepository;
   }
 
-  format = (data) => {
-    return Object.fromEntries(data.map((record) => [record.id, record.username]));
-  }
-
   getUsers = async (data) => {
     try {
-      return this.format(await this.userRepository.getUsers(data));
+      await this.userRepository.checkOperator(data);
+      return await this.userRepository.getUsers(data);
     } catch (err) {
       throw err;
     }

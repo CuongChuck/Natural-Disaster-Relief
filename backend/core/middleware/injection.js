@@ -27,4 +27,13 @@ export default class Injection {
       res.status(500).json({ message: err.message });
     }
   }
+
+  getOperators = (req, res, next) => {
+    try {
+      req.role = ['ADMIN', 'VOLUNTEER'];
+      next();
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
 }

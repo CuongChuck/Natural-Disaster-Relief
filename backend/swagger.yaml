@@ -7,6 +7,26 @@ servers:
   - url: http://localhost:3000
 
 paths:
+  /users/operator:
+    get:
+      summary: Get all admin & volunteer users
+      security:
+        - bearerAuth: []
+      operationId: User_getUsers
+      responses:
+        201:
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /user:
     get:
       summary: Get User profile
@@ -1456,13 +1476,6 @@ paths:
     post:
       summary: Add receipt and delivery proof
       operationId: Delivery_addProof
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of delivery
-          schema:
-            type: integer
       security:
         - bearerAuth: []
       parameters:
@@ -1542,6 +1555,25 @@ components:
         - type: object
           properties:
             password: { type: string }
+
+    Users:
+      type: object
+      properties:
+        id: { type: integer }
+        email: { type: string }
+        name: { type: string }
+        username: { type: string }
+        phone: { type: string }
+        role: { type: string }
+
+    UsersResponse:
+      type: object
+      properties:
+        message: { type: string }
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/Users'
 
     UserAuthentication:
       type: object
