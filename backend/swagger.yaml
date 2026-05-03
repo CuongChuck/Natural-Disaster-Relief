@@ -745,6 +745,13 @@ paths:
     post:
       summary: Complete a journey event
       operationId: Event_complete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of event
+          schema:
+            type: integer
       security:
         - bearerAuth: []
       responses:
@@ -764,6 +771,13 @@ paths:
     patch:
       summary: Edit a journey event
       operationId: Event_edit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of event
+          schema:
+            type: integer
       security:
         - bearerAuth: []
       requestBody:
@@ -1442,6 +1456,13 @@ paths:
     post:
       summary: Add receipt and delivery proof
       operationId: Delivery_addProof
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of delivery
+          schema:
+            type: integer
       security:
         - bearerAuth: []
       parameters:
@@ -2093,3 +2114,4 @@ components:
       type: object
       properties:
         operatorId: { type: integer }
+        recipientId: { type: integer }
