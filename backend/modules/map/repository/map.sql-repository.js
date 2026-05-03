@@ -37,9 +37,14 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
 		    ST_AsGeoJSON(ST_PointOnSurface(D."area"))::json AS center
         FROM "Disasters" D
         LEFT JOIN "Users" U ON D."userId" = U."id"
-        LIMIT ${limit}
-        OFFSET ${offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT },
+        LIMIT :limit OFFSET :offset;`,
+        {
+          replacements: {
+            limit: limit,
+            offset: offset
+          },
+          type: this.db.sequelize.QueryTypes.SELECT
+        },
       );
     }
     catch (err) {
@@ -67,10 +72,16 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         ST_AsGeoJSON(ST_PointOnSurface(D."area"))::json AS center
         FROM "Disasters" D
         LEFT JOIN "Users" U ON D."userId" = U."id"
-        WHERE D."userId" = ${data.userId}
-        LIMIT ${data.limit}
-        OFFSET ${data.offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT },
+        WHERE D."userId" = :userId
+        LIMIT :limit OFFSET :offset;`,
+        {
+          replacements: {
+            userId: data.userId,
+            limit: data.limit,
+            offset: data.offset
+          },
+          type: this.db.sequelize.QueryTypes.SELECT
+        },
       );
     }
     catch (err) {
@@ -104,9 +115,13 @@ export default class MapSqlRepository extends IMapStorageRepository(IMapReposito
         ST_AsGeoJSON(ST_PointOnSurface(D."area"))::json AS center
         FROM "Disasters" D
         LEFT JOIN "Users" U ON D."userId" = U."id"
-        WHERE D."id" = ${data.id};`,
-        { type: this.db.sequelize.QueryTypes.SELECT },
+        WHERE D."id" = :id;`,
+        {
+          replacements: { id: data.id },
+          type: this.db.sequelize.QueryTypes.SELECT
+        },
       );
+      if (result.length === 0) throw new Error('Disaster not found');
       return result[0];
     }
     catch (err) {
