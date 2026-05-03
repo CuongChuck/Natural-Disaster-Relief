@@ -2138,21 +2138,9 @@ components:
         - $ref: '#/components/schemas/Supply'
         - type: object
           properties:
-            id: { type: integer }
-            donor: { type: string }
-            status: { type: integer }
             recipient: { type: string }
             operator: { type: string }
             receipt: { type: string }
-            proof: { type: string }
-            createdAt:
-              type: string
-              format: date-time
-              example: "2025-12-28T21:23:27Z"
-            updatedAt:
-              type: string
-              format: date-time
-              example: "2025-12-28T21:23:27Z"
 
     DeliveriesResponse:
       type: object
