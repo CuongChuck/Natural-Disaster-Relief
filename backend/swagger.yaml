@@ -1041,6 +1041,34 @@ paths:
           schema:
             type: integer
             default: null
+        - name: category
+          in: query
+          description: The category of requests
+          required: false
+          schema:
+            type: integer
+            default: null
+        - name: ward
+          in: query
+          description: The ward of request location
+          required: false
+          schema:
+            type: string
+            default: null
+        - name: district
+          in: query
+          description: The district of request location
+          required: false
+          schema:
+            type: string
+            default: null
+        - name: city_province
+          in: query
+          description: The city_province of request location
+          required: false
+          schema:
+            type: string
+            default: null
       responses:
         200:
           description: Get all requests successfully

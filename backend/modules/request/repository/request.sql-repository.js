@@ -26,29 +26,62 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
 
   getAll = async (data) => {
     try {
-      const type_condition = data.type ? `WHERE R."status" = ${data.type}` : '';
-      return await this.db.sequelize.query(
-        `SELECT R."id", R."name", R."quantity", R."priority",
+      let query = `SELECT R."id", R."name", R."quantity", R."priority",
         R."status", R."category", R."unit", R."address_line",
         R."ward", R."district", R."city_province", R."createdAt",
         R."updatedAt", "Users"."username" AS "recipient", R."proof_url" AS proof
         FROM "Requests" AS R
-        LEFT OUTER JOIN "Users" ON R."recipientId" = "Users"."id"
-        ${type_condition}
-        LIMIT ${data.limit}
-        OFFSET ${data.offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
-      );
-    }
-    catch (err) {
+        LEFT OUTER JOIN "Users" ON R."recipientId" = "Users"."id"`;
+      const conditions = [];
+      const replacements = {
+        limit: data.limit,
+        offset: data.offset
+      };
+      if (data.status) {
+        conditions.push('R."status" = :status');
+        replacements.status = data.status;
+      }
+      if (data.category) {
+        conditions.push('R."category" = :category');
+        replacements.category = data.category;
+      }
+      if (data.ward) {
+        conditions.push('R."ward" = :ward');
+        replacements.ward = data.ward;
+      }
+      if (data.district) {
+        conditions.push('R."district" = :district');
+        replacements.district = data.district;
+      }
+      if (data.city_province) {
+        conditions.push('R."city_province" = :city_province');
+        replacements.city_province = data.city_province;
+      }
+      if (conditions.length > 0) {
+        query += ' WHERE ' + conditions.join(' AND ');
+      }
+      query += ' ORDER BY R."createdAt" ASC LIMIT :limit OFFSET :offset';
+      return await this.db.sequelize.query(query, {
+        replacements,
+        type: this.db.sequelize.QueryTypes.SELECT,
+      });
+    } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("All requests retrieval failed: " + errors);
     }
   }
 
-  countAll = async () => {
+  countAll = async (data) => {
     try {
-      return await this.Request.count();
+      return await this.Request.count({
+        where: {
+          ...(data.status && { status: data.type }),
+          ...(data.category && { category: data.category }),
+          ...(data.ward && { ward: data.ward }),
+          ...(data.district && { district: data.district }),
+          ...(data.city_province && { city_province: data.city_province })
+        }
+      });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("All requests counted failed: " + errors);
@@ -64,11 +97,13 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
         R."updatedAt", "Users"."username" AS "recipient", R."proof_url" AS proof
         FROM "Requests" AS R
         LEFT OUTER JOIN "Users" ON R."recipientId" = "Users"."id"
-        WHERE R."id" = ${data.id};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
+        WHERE R."id" = :id;`,
+        {
+          replacements: { id: data.id },
+          type: this.db.sequelize.QueryTypes.SELECT,
+        }
       );
-      if (result.length === 0)
-        throw new Error('Request not found');
+      if (result.length === 0) throw new Error('Request not found');
       return result[0];
     }
     catch (err) {
@@ -79,20 +114,24 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
 
   getMine = async (data) => {
     try {
-      const type_condition = data.type ? ` AND R."status" = ${data.type}` : '';
-      return await this.db.sequelize.query(
-        `SELECT R."id", R."name", R."quantity", R."priority",
+      let query = `SELECT R."id", R."name", R."quantity", R."priority",
         R."status", R."category", R."unit", R."address_line",
         R."ward", R."district", R."city_province", R."createdAt",
         R."updatedAt", "Users"."username" AS "recipient", R."proof_url" AS proof
         FROM "Requests" AS R
         LEFT OUTER JOIN "Users" ON R."recipientId" = "Users"."id"
-        WHERE R."recipientId" = ${data.recipientId}${type_condition}
-        ${type_condition}
-        LIMIT ${data.limit}
-        OFFSET ${data.offset};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
-      );
+        WHERE R."recipientId" = :recipientId`;
+      if (data.type) query += ' AND R."status" = :status';
+      query += ' LIMIT :limit OFFSET :offset';
+      return await this.db.sequelize.query(query, {
+        replacements: {
+          recipientId: data.recipientId,
+          status: data.type,
+          limit: data.limit,
+          offset: data.offset
+        },
+        type: this.db.sequelize.QueryTypes.SELECT,
+      });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("My requests retrieval failed: " + errors);
@@ -121,8 +160,11 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
         R."updatedAt", "Users"."username" AS "reviewer"
         FROM "RequestReview" AS R
         LEFT OUTER JOIN "Users" ON R."reviewerId" = "Users"."id"
-        WHERE R."requestId" = ${data.id};`,
-        { type: this.db.sequelize.QueryTypes.SELECT, }
+        WHERE R."requestId" = :id;`,
+        {
+          replacements: { id: data.id },
+          type: this.db.sequelize.QueryTypes.SELECT,
+        }
       );
       return result[0];
     }

@@ -8,11 +8,12 @@ export default class RequestGetAllService extends IRequestGetAllService {
 
   getAll = async (data) => {
     try {
-      const limit = parseInt(data.size, 10);
-      const offset = (parseInt(data.page, 10) - 1) * limit;
+      const { size, page, ...input } = data;
+      const limit = parseInt(size, 10);
+      const offset = (parseInt(page, 10) - 1) * limit;
       const [requests, count] = await Promise.all([
-        this.requestRepository.getAll({ offset, limit, type: data.type }),
-        this.requestRepository.countAll()
+        this.requestRepository.getAll({ offset, limit, ...input }),
+        this.requestRepository.countAll(input)
       ]);
       return { requests, total_records: count };
     }

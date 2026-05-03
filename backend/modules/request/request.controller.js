@@ -5,8 +5,12 @@ export default class RequestController {
 
   getAll = async (req, res, next) => {
     try {
-      let { page = 1, size = 100, type = null } = req.query;
-      const data = { page, size, type };
+      let {
+        page = 1, size = 100, type = null,
+        category = null, ward = null,
+        district = null, city_province = null
+      } = req.query;
+      const data = { page, size, type, category, district, city_province };
       const result = await this.requestFacade.getAll(data);
       res.status(200).json(result);
     }
