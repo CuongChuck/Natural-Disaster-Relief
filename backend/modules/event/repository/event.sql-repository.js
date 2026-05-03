@@ -135,7 +135,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
               S."id", S."name", S."quantity", S."count", S."category", S."unit", 
               S."address_line", S."ward", S."district", S."city_province", 
               S."createdAt", S."updatedAt", S."proof_url" AS proof,
-              D."username" AS donor
+              D."username" AS donor, S."status"
             FROM "Supplies" S 
             LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId" 
             LEFT JOIN "Users" D ON S."donorId" = D."id"
