@@ -7,6 +7,9 @@ const controllerHelper = container.resolve('controllerHelper');
 const authHandler = container.resolve('authHandler');
 const containerHandler = container.resolve('containerHandler');
 
+router.get('/event/names',
+  controllerHelper.invoke('getNames', 'eventController')
+);
 router.get('/events',
   controllerHelper.invoke('getAll', 'eventController')
 );

@@ -53,6 +53,7 @@ import EventGetOneService from '../../modules/event/service/get-one/event.get-on
 import EventCreateService from '../../modules/event/service/create/event.create-service.js';
 import EventGetMineService from '../../modules/event/service/get-mine/event.get-mine-service.js';
 import EventEditJourney from '../../modules/event/service/edit/event.edit-journey.js';
+import EventGetNamesService from '../../modules/event/service/get-names/event.get-mine-service.js';
 import MapController from '../../modules/map/map.controller.js';
 import MapFacadeService from '../../modules/map/map.facade-service.js';
 import MapSqlRepository from '../../modules/map/repository/map.sql-repository.js';
@@ -158,6 +159,7 @@ container.register({
   eventCreateService: asClass(EventCreateService).scoped(),
   eventGetMineService: asClass(EventGetMineService).scoped(),
   eventEditService: asClass(EventEditJourney).scoped(),
+  eventGetNamesService: asClass(EventGetNamesService).scoped(),
 
   mapController: asClass(MapController).scoped(),
   mapFacade: asClass(MapFacadeService).scoped(),

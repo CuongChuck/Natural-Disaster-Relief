@@ -3,6 +3,16 @@ export default class EventController {
     this.eventFacade = eventFacade;
   }
 
+  getNames = async (req, res, next) => {
+    try {
+      const result = await this.eventFacade.getNames();
+      res.status(200).json(result);
+    }
+    catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
   getAll = async (req, res, next) => {
     try {
       let { page = 1, size = 100 } = req.query;

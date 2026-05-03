@@ -628,6 +628,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /event/names:
+    get:
+      summary: Get all event names
+      operationId: Event_getNames
+      responses:
+        200:
+          description: Get all event names successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventNamesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /events:
     get:
       summary: Get all events
@@ -1743,6 +1761,23 @@ components:
                   items:
                     $ref: '#/components/schemas/Supply'
 
+    EventNames:
+      type: object
+      description: "A map of IDs to event names"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Yêu cầu chỉnh sửa kiện hàng"
+        "2": "Chấp nhận kiện hàng"
+        "3": "Vận chuyển kiện hàng"
+        "4": "Giao hàng đến người nhận"
+
+    EventNamesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        names:
+          $ref: '#/components/schemas/EventNames'
     
     UnitsResponse:
       type: object

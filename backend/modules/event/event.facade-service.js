@@ -5,6 +5,20 @@ export default class EventFacadeService {
     this.createService = opts.eventCreateService;
     this.getMineService = opts.eventGetMineService;
     this.editService = opts.eventEditService;
+    this.getNamesService = opts.eventGetNamesService;
+  }
+
+  getNames = async () => {
+    try {
+      const names = await this.getNamesService.getNames();
+      return {
+        message: `All events retrieved successfully`,
+        names
+      };
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   getAll = async (data) => {
