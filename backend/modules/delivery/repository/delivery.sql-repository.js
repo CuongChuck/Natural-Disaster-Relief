@@ -8,6 +8,18 @@ export default class DeliverySqlRepository extends IDeliveryStorageRepository(ID
     this.db = db;
   }
 
+  getSupplyId = async (data) => {
+    try {
+      const result = await this.Delivery.findByPk(data.id, {
+        attributes: [ 'supplyId' ]
+      });
+      return result.supplyId;
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Delivery owner check failed: " + errors);
+    }
+  }
+
   checkOwner = async (data) => {
     try {
       const delivery = await this.Delivery.findOne({
@@ -149,7 +161,8 @@ export default class DeliverySqlRepository extends IDeliveryStorageRepository(ID
   assignOperator = async (data) => {
     try {
       await this.Delivery.update({
-        operatorId: data.operatorId
+        operatorId: data.operatorId,
+        recipientId: data.recipientId
       }, { where: { id: data.id }, },);
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;

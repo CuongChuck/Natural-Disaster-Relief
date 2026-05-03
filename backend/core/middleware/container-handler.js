@@ -57,8 +57,7 @@ export default class ContainerHandler {
       const container = req.app.get('container');
       const scope = req.scope || container.createScope();
       scope.register({
-        eventEditService: asClass(EventCompleteJourney).scoped(),
-        supplyEditService: asClass(SupplyUpdateStatus).scoped()
+        eventEditService: asClass(EventCompleteJourney).scoped()
       });
       req.scope = scope;
       next();
@@ -73,6 +72,20 @@ export default class ContainerHandler {
       const scope = req.scope || container.createScope();
       scope.register({
         deliveryEditService: asClass(DeliveryAssignOperator).scoped()
+      });
+      req.scope = scope;
+      next();
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+
+  updateSupplyStatus = (req, res, next) => {
+    try {
+      const container = req.app.get('container');
+      const scope = req.scope || container.createScope();
+      scope.register({
+        supplyEditService: asClass(SupplyUpdateStatus).scoped()
       });
       req.scope = scope;
       next();

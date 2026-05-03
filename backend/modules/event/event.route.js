@@ -29,6 +29,7 @@ router.patch('/event/journey/:id',
 router.post('/event/journey/:id',
   authHandler.verifyToken,
   containerHandler.completeJourney,
+  containerHandler.updateSupplyStatus,
   controllerHelper.invoke('edit', 'eventController')
 );
 

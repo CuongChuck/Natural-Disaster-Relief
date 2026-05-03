@@ -29,11 +29,13 @@ router.post('/delivery/:id/proof',
     receipt: 'ndrs/delivery/receipt',
     proof: 'ndrs/delivery/proof'
   }),
+  containerHandler.updateSupplyStatus,
   controllerHelper.invoke('edit', 'deliveryController')
 );
 router.post('/delivery/:id/operator',
   authHandler.verifyToken,
   containerHandler.assignOperator,
+  containerHandler.updateSupplyStatus,
   controllerHelper.invoke('edit', 'deliveryController')
 );
 
