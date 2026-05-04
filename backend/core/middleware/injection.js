@@ -27,13 +27,4 @@ export default class Injection {
       res.status(500).json({ message: err.message });
     }
   }
-
-  getVolunteers = (req, res, next) => {
-    try {
-      req.role = ['VOLUNTEER'];
-      next();
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  }
 }

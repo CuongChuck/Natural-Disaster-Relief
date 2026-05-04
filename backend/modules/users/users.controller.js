@@ -19,10 +19,8 @@ class UserController {
 
   getMany = async (req, res, next) => {
     try {
-      const data = req.body || {};
-      data.userId = req.userId;
-      if (req.role) data.role = req.role;
-      const result = await this.userFacade.getUsers(data);
+      let { role = null } = req.query;
+      const result = await this.userFacade.getUsers({ role, userId: req.userId });
       res.status(200).json(result);
     } catch (err) {
       res.status(500).json({ message: err.message });

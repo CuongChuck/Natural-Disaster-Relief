@@ -7,12 +7,23 @@ servers:
   - url: http://localhost:3000
 
 paths:
-  /users/volunteer:
+  /users:
     get:
-      summary: Get all volunteer users
+      summary: Get all users
       security:
         - bearerAuth: []
       operationId: User_getUsers
+      parameters:
+        - name: role
+          in: query
+          description: List of role names
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         200:
           description: Users retrieved successfully

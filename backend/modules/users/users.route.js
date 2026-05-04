@@ -8,9 +8,8 @@ const authHandler = container.resolve('authHandler');
 const inject = container.resolve('injection');
 
 router.get('/user', authHandler.verifyToken, controllerHelper.invoke('get', 'userController'));
-router.get('/users/volunteer',
+router.get('/users',
 	authHandler.verifyToken,
-	inject.getVolunteers,
 	controllerHelper.invoke('getMany', 'userController')
 );
 router.post('/user/register', controllerHelper.invoke('register', 'userController'));

@@ -30,11 +30,11 @@ class UserSqlRepository extends IUserRepository {
   }
 
   getUsers = async (data) => {
-    try {
+    try { 
       return await this.User.findAll({ 
         attributes: [ 'id', 'username', 'name', 'phone', 'email', 'role' ],
         where: {
-          role: data.role
+          ...(data.role && { role: data.role })
         },
         raw: true
       });
