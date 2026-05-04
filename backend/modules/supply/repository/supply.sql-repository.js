@@ -20,7 +20,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
           id: data.id
         }
       });
-      if (supply.status !== 3) throw new Error('Kiện hàng chưa được xác nhận');
+      if (supply.status !== 3) throw new Error('Kiện hàng chưa đủ điều kiện để vận chuyển');
       // if (!supply.proof_url) throw new Error('Chưa có hình ảnh minh chứng kiện hàng');
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;

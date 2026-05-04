@@ -23,6 +23,7 @@ router.get('/event/:id',
 router.post('/event/journey',
   authHandler.verifyToken,
   containerHandler.journey,
+  containerHandler.updateSupplyStatus,
   controllerHelper.invoke('create', 'eventController')
 );
 router.patch('/event/journey/:id',
@@ -37,6 +38,7 @@ router.post('/event/journey/:id',
 );
 router.delete('/event/:id',
   authHandler.verifyToken,
+  containerHandler.updateSupplyStatus,
   controllerHelper.invoke('delete', 'eventController')
 );
 export default router;

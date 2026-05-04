@@ -238,6 +238,12 @@ paths:
           schema:
             type: integer
             default: 100
+        - name: status
+          in: query
+          description: The code of supply status to return
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: Get all supply offers successfully

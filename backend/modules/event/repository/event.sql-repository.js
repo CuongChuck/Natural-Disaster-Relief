@@ -10,6 +10,22 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     this.db = db;
   }
 
+  getSupplyIds = async (data) => {
+    try {
+      return await this.SupplyEvent.findAll({ 
+        attributes: [ 'supplyId' ],
+        where: {
+          eventId: data.id
+        },
+        raw: true
+      });
+    }
+    catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("All events retrieval failed: " + errors);
+    }
+  }
+
   getAll = async (offset, limit) => {
     try {
       return await this.db.sequelize.query(`

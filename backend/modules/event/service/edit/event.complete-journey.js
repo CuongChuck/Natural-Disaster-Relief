@@ -31,6 +31,7 @@ export default class EventCompleteJourney extends IEventEditService {
             });
             await this.supplyEditService.edit({ id: supply.id, status: 4 });
           }
+          else await this.supplyEditService.edit({ id: supply.id, status: 3 });
         }
       });
       return event;
