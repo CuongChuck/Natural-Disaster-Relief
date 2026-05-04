@@ -71,8 +71,12 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   countAll = async (data) => {
     try {
-      const whereClause = data.status ? { status: { [Op.in]: data.status } } : {};
-      return await this.Supply.count({ where: whereClause });
+      const whereClause = {};
+      if (data.status) {
+        const status = Array.isArray(data.status) ? data.status : [data.status];
+        whereClause.status = { [Op.in]: status };
+      }
+      return await this.Supply.count({ whereClause });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("All supplies count failed: " + errors);
