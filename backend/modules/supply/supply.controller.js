@@ -15,8 +15,8 @@ export default class SupplyController {
 
   getAll = async (req, res, next) => {
     try {
-      let { page = 1, size = 100 } = req.query;
-      const data = { page, size, status: req.status, order: req.order };
+      let { page = 1, size = 100, status = null } = req.query;
+      const data = { page, size, status: req.status || status, order: req.order };
       const result = await this.supplyFacade.getAll(data);
       res.status(200).json(result);
     }
