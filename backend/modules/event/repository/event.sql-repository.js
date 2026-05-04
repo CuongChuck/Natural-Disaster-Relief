@@ -157,7 +157,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
   }
 
-  create = async (data, transaction) => {
+  create = async (data) => {
     try {
       const event = await this.Event.create({
         userId: data.userId,
@@ -168,12 +168,12 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         ward: data.ward,
         district: data.district,
         city_province: data.city_province
-      }, { transaction });
+      });
       const records = data.supplies.map(id => ({
         eventId: event.id,
         supplyId: id
       }));
-      await this.SupplyEvent.bulkCreate(records, { transaction });
+      await this.SupplyEvent.bulkCreate(records);
       return event;
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
@@ -181,7 +181,7 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
   }
 
-  createJourney = async (data, transaction) => {
+  createJourney = async (data) => {
     try {
       await this.Journey.create({
         eventId: data.id,
@@ -190,14 +190,14 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         dest_ward: data.dest_ward,
         dest_district: data.dest_district,
         dest_city_province: data.dest_city_province
-      }, { transaction });
+      });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Journey creation failed: " + errors);
     }
   }
 
-  editJourney = async (data, transaction) => {
+  editJourney = async (data) => {
     try {
       await this.Journey.update({
         plate: data.plate,
@@ -205,38 +205,47 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
         dest_ward: data.dest_ward,
         dest_district: data.dest_district,
         dest_city_province: data.dest_city_province
-      }, { where: { eventId: data.id }, transaction });
+      }, { where: { eventId: data.id } });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Journey edit failed: " + errors);
     }
   }
 
-  edit = async (data, transaction) => {
+  edit = async (data) => {
     try {
       await this.Event.update({
         description: data.description,
-        name: data.name,
         startTime: data.startTime || new Date(),
         address_line: data.address_line,
         ward: data.ward,
         district: data.district,
         city_province: data.city_province
-      }, { where: { id: data.id }, transaction });
+      }, { where: { id: data.id } });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Event edit failed: " + errors);
     }
   }
 
-  updateJourneyStatus = async (data, transaction) => {
+  updateJourneyStatus = async (data) => {
     try {
       await this.Journey.update({
         isCompleted: data.status
-      }, { where: { eventId: data.id }, transaction });
+      }, { where: { eventId: data.id } });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Journey status update failed: " + errors);
+    }
+  }
+
+  delete = async (data) => {
+    try {
+      await this.Journey.destroy({ where: { eventId: data.id, isCompleted: false }, force: true });
+      await this.Event.destroy({ where: { id: data.id }, force: true });
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Event deletion failed: " + errors);
     }
   }
 }

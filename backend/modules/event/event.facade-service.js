@@ -6,6 +6,7 @@ export default class EventFacadeService {
     this.getMineService = opts.eventGetMineService;
     this.editService = opts.eventEditService;
     this.getNamesService = opts.eventGetNamesService;
+    this.deleteService = opts.eventDeleteService;
   }
 
   getNames = async () => {
@@ -80,6 +81,16 @@ export default class EventFacadeService {
         message: `Event edited successfully`,
         event
       };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
+
+  delete = async (data) => {
+    try {
+      await this.deleteService.delete(data);
+      return { message: `Event deleted successfully` };
     }
     catch (err) {
       throw err;

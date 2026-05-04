@@ -7,7 +7,7 @@ export async function up(queryInterface, Sequelize) {
       userId: 1,
       description: null,
       startTime: new Date(),
-      name: 3,
+      name: 4,
       address_line: null,
       ward: 'string',
       district: 'string',

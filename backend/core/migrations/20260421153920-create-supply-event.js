@@ -27,15 +27,7 @@ export async function up(queryInterface, Sequelize) {
         key: 'id'
       },
       onUpdate: 'CASCADE',
-      onDelete: 'RESTRICT'
-    },
-    createdAt: {
-      type: Sequelize.DATE,
-      allowNull: false
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-      allowNull: false
+      onDelete: 'CASCADE'
     }
   });
 

@@ -88,6 +88,7 @@ import DeliveryGetMineService from '../../modules/delivery/service/get-mine/deli
 import DeliveryGetAllService from '../../modules/delivery/service/get-all/delivery.get-all.js';
 import DeliveryAddProof from "../../modules/delivery/service/edit/delivery.add-proof.js";
 import Injection from './injection.js';
+import EventDeleteService from '../../modules/event/service/delete/event.delete-service.js';
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -160,6 +161,7 @@ container.register({
   eventGetMineService: asClass(EventGetMineService).scoped(),
   eventEditService: asClass(EventEditJourney).scoped(),
   eventGetNamesService: asClass(EventGetNamesService).scoped(),
+  eventDeleteService: asClass(EventDeleteService).scoped(),
 
   mapController: asClass(MapController).scoped(),
   mapFacade: asClass(MapFacadeService).scoped(),

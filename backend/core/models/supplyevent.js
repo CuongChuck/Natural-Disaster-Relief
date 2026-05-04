@@ -30,6 +30,7 @@ export default (sequelize, DataTypes) => {
     sequelize,
     modelName: 'SupplyEvent',
     tableName: 'SupplyEvent',
+    timestamps: false,
     freezeTableName: true,
     indexes: [
       { fields: ['supplyId'] },
