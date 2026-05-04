@@ -7,14 +7,14 @@ servers:
   - url: http://localhost:3000
 
 paths:
-  /users/operator:
+  /users/volunteer:
     get:
-      summary: Get all admin & volunteer users
+      summary: Get all volunteer users
       security:
         - bearerAuth: []
       operationId: User_getUsers
       responses:
-        201:
+        200:
           description: Users retrieved successfully
           content:
             application/json:
@@ -34,7 +34,7 @@ paths:
         - bearerAuth: []
       operationId: User_getUser
       responses:
-        201:
+        200:
           description: User profile retrieved successfully
           content:
             application/json:

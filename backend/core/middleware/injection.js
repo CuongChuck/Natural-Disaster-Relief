@@ -28,9 +28,9 @@ export default class Injection {
     }
   }
 
-  getOperators = (req, res, next) => {
+  getVolunteers = (req, res, next) => {
     try {
-      req.role = ['ADMIN', 'VOLUNTEER'];
+      req.role = ['VOLUNTEER'];
       next();
     } catch (err) {
       res.status(500).json({ message: err.message });
