@@ -68,7 +68,9 @@ services:
     volumes:
       - ./backend:/usr/src/backend
       - /usr/src/backend/node_modules
+      - setup-state:/usr/src/setup
     command: ["sh", "/usr/local/bin/docker-entrypoint.sh"]
 
 volumes:
   db:
+  setup-state:

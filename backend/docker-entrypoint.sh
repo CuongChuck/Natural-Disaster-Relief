@@ -3,7 +3,7 @@
 echo "Starting docker entrypoint for backend"
 
 # Define the path for the marker file inside your persistent volume
-MARKER_FILE="/usr/src/backend/.setup_complete"
+MARKER_FILE="/usr/src/setup/.setup_complete"
 
 # Allow overriding the sequelize CLI binary
 SEQUELIZE_CMD=${SEQUELIZE_CMD:-npx sequelize-cli}
