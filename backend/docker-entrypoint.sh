@@ -2,7 +2,10 @@
 
 echo "Starting docker entrypoint for backend"
 
-# Allow overriding the sequelize CLI binary (use shipped devDependency by default via npx)
+# Define the path for the marker file inside your persistent volume
+MARKER_FILE="/usr/src/backend/.setup_complete"
+
+# Allow overriding the sequelize CLI binary
 SEQUELIZE_CMD=${SEQUELIZE_CMD:-npx sequelize-cli}
 
 MAX_ATTEMPTS=6
@@ -22,21 +25,28 @@ run_with_retries() {
     echo "Waiting ${SLEEP_SECONDS}s before retrying..."
     sleep "${SLEEP_SECONDS}"
   done
-
-  echo "Command failed after ${MAX_ATTEMPTS} attempts: ${cmd}"
   return 1
 }
 
-echo "Running migrations"
-if ! run_with_retries "${SEQUELIZE_CMD} db:migrate"; then
-  echo "Migrations failed. Exiting."
-  exit 1
-fi
+# --- CHECK FOR MARKER FILE ---
+if [ -f "$MARKER_FILE" ]; then
+  echo "Database already initialized (found $MARKER_FILE). Skipping migrations and seeds."
+else
+  echo "First run detected. Running migrations..."
+  if ! run_with_retries "${SEQUELIZE_CMD} db:migrate"; then
+    echo "Migrations failed. Exiting."
+    exit 1
+  fi
 
-echo "Running seeders"
-if ! run_with_retries "${SEQUELIZE_CMD} db:seed:all"; then
-  echo "Seeders failed. Exiting."
-  exit 1
+  echo "Running seeders..."
+  if ! run_with_retries "${SEQUELIZE_CMD} db:seed:all"; then
+    echo "Seeders failed. Exiting."
+    exit 1
+  fi
+
+  # Create the marker file so this block is skipped next time
+  touch "$MARKER_FILE"
+  echo "Initialization complete. Marker file created."
 fi
 
 echo "Starting application"

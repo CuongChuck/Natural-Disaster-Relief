@@ -1,3 +1,4 @@
 /backend/node_modules/
 .env
 *.pem
+.setup_complete

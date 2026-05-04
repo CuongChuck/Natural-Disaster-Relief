@@ -9,6 +9,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
+      - db:/var/lib/postgresql/data
       - ./docker-init:/docker-entrypoint-initdb.d
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
@@ -68,3 +69,6 @@ services:
       - ./backend:/usr/src/backend
       - /usr/src/backend/node_modules
     command: ["sh", "/usr/local/bin/docker-entrypoint.sh"]
+
+volumes:
+  db:
