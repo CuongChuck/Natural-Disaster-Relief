@@ -46,24 +46,70 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
   getAll = async (data) => {
     try {
       const order = data.order ? ` ORDER BY S."status" ${data.order}` : '';
-      let query = `SELECT S."id", S."name", S."quantity", S."status",
-        S."count", S."category", S."unit", S."address_line",
-        S."ward", S."district", S."city_province", S."createdAt",
-        S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
+      let query = `
+        WITH LatestRecords AS (
+          SELECT DISTINCT ON (S."id")
+            S."id", 
+            J."dest_ward", 
+            J."dest_district", 
+            J."dest_city_province",
+            E."updatedAt" as "event_updated_at"
+          FROM "Supplies" AS S
+          LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId"
+          LEFT JOIN "Events" E ON SE."eventId" = E."id"
+          LEFT JOIN "Journeys" J ON J."eventId" = E."id"
+          ORDER BY S."id", E."updatedAt" DESC
+        )
+        SELECT S."id", S."name", S."quantity", S."status",
+          S."count", S."category", S."unit", S."address_line",
+          S."ward", S."district", S."city_province", S."createdAt",
+          S."updatedAt", "Users"."username" AS "donor", S."proof_url" AS proof
         FROM "Supplies" AS S
-        LEFT OUTER JOIN "Users" ON S."donorId" = "Users"."id"`;
-      if (data.status) query += ' WHERE S."status" IN (:status)';
+        LEFT JOIN "Users" ON S."donorId" = "Users"."id"
+        JOIN LatestRecords LR ON S."id" = LR."id"
+      `;
+      const conditions = [];
+      const replacements = {
+        limit: data.limit,
+        offset: data.offset
+      };
+      if (data.status) {
+        conditions.push('S."status" IN (:status)');
+        replacements.status = data.status;
+      }
+      if (data.category) {
+        conditions.push('S."category" = :category');
+        replacements.category = data.category;
+      }
+      if (typeof data.ward !== 'undefined' || typeof data.district !== 'undefined' || typeof data.city_province !== 'undefined') {
+        if (data.ward === null && data.district === null && data.city_province === null) {
+          conditions.push('LR."dest_ward" IS NULL AND LR."dest_district" IS NULL AND LR."dest_city_province" IS NULL');
+        } else {
+          const locCond = [];
+          if (data.ward) {
+            locCond.push('LR."dest_ward" = :ward');
+            replacements.ward = data.ward;
+          }
+          if (data.district) {
+            locCond.push('LR."dest_district" = :district');
+            replacements.district = data.district;
+          }
+          if (data.city_province) {
+            locCond.push('LR."dest_city_province" = :city_province');
+            replacements.city_province = data.city_province;
+          }
+          if (locCond.length > 0) conditions.push(`(${locCond.join(' AND ')})`);
+        }
+      }
+      if (conditions.length > 0) {
+        query += ' WHERE ' + conditions.join(' AND ');
+      }
       query += order + ' LIMIT :limit OFFSET :offset';
       return await this.db.sequelize.query(query, {
-        replacements: {
-          status: data.status,
-          limit: data.limit,
-          offset: data.offset
-        },
+        replacements,
         type: this.db.sequelize.QueryTypes.SELECT,
       });
-    }
-    catch (err) {
+    } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("All supplies retrieval failed: " + errors);
     }
@@ -71,12 +117,63 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   countAll = async (data) => {
     try {
-      const whereClause = {};
+      const replacements = {};
+      const conditions = [];
+      let query = `
+        WITH LatestRecords AS (
+          SELECT DISTINCT ON (S."id")
+            S."id", 
+            J."dest_ward", 
+            J."dest_district", 
+            J."dest_city_province",
+            E."updatedAt"
+          FROM "Supplies" AS S
+          LEFT JOIN "SupplyEvent" SE ON S."id" = SE."supplyId"
+          LEFT JOIN "Events" E ON SE."eventId" = E."id"
+          LEFT JOIN "Journeys" J ON J."eventId" = E."id"
+          ORDER BY S."id", E."updatedAt" DESC
+        )
+        SELECT COUNT(*) AS total
+        FROM "Supplies" AS S
+        JOIN LatestRecords LR ON S."id" = LR."id"
+      `;
       if (data.status) {
-        const status = Array.isArray(data.status) ? data.status : [data.status];
-        whereClause.status = { [Op.in]: status };
+        conditions.push('S."status" IN (:status)');
+        replacements.status = [].concat(data.status);
       }
-      return await this.Supply.count({ whereClause });
+      if (data.category) {
+        conditions.push('S."category" = :category');
+        replacements.category = data.category;
+      }
+      if (typeof data.ward !== 'undefined' || typeof data.district !== 'undefined' || typeof data.city_province !== 'undefined') {
+        if (data.ward === null && data.district === null && data.city_province === null) {
+          conditions.push('LR."dest_ward" IS NULL AND LR."dest_district" IS NULL AND LR."dest_city_province" IS NULL');
+        } else {
+          const locCond = [];
+          if (data.ward) {
+            locCond.push('(S."ward" = :ward OR LR."dest_ward" = :ward)');
+            replacements.ward = data.ward;
+          }
+          if (data.district) {
+            locCond.push('(S."district" = :district OR LR."dest_district" = :district)');
+            replacements.district = data.district;
+          }
+          if (data.city_province) {
+            locCond.push('(S."city_province" = :city_province OR LR."dest_city_province" = :city_province)');
+            replacements.city_province = data.city_province;
+          }
+          if (locCond.length > 0) conditions.push(`(${locCond.join(' AND ')})`);
+        }
+      }
+      if (conditions.length > 0) {
+        query += ' WHERE ' + conditions.join(' AND ');
+      }
+      const result = await this.db.sequelize.query(query, {
+        replacements,
+        type: this.db.sequelize.QueryTypes.SELECT,
+        plain: true
+      });
+      return parseInt(result.total, 10);
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("All supplies count failed: " + errors);

@@ -205,6 +205,24 @@ paths:
           schema:
             type: integer
             default: 100
+        - name: ward
+          in: query
+          description: The ward of current supply location
+          required: false
+          schema:
+            type: string
+        - name: district
+          in: query
+          description: The district of current supply location
+          required: false
+          schema:
+            type: string
+        - name: city_province
+          in: query
+          description: The city_province of current supply location
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: Get all verified supply offers successfully
@@ -2162,6 +2180,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Request'
+        total_records: { type: integer }
 
     RequestResponse:
       type: object

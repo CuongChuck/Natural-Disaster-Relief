@@ -20,9 +20,9 @@ export default class SupplyReviewService extends ISupplyReviewService {
           name: 1,
           startTime: new Date(),
           address_line: null,
-          ward: "admin",
-          district: "admin",
-          city_province: "admin",
+          ward: "",
+          district: "",
+          city_province: "",
           supplies: [data.id]
         });
         await this.supplyRepository.updateStatus({ id: data.id, status: 2 });
