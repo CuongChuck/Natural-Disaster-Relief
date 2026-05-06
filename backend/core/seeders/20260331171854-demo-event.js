@@ -9,9 +9,9 @@ export async function up(queryInterface, Sequelize) {
       startTime: new Date(),
       name: 4,
       address_line: null,
-      ward: 'string',
-      district: 'string',
-      city_province: 'string',
+      ward: "Phường Hà Huy Tập",
+      district: "Thành phố Vinh",
+      city_province: "Tỉnh Nghệ An",
       createdAt: new Date(),
       updatedAt: new Date(),
     }
