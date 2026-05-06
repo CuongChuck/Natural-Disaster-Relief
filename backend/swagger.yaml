@@ -840,7 +840,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /event/journey/:id:
+  /event/journey/{id}:
     post:
       summary: Complete a journey event
       operationId: Event_complete
