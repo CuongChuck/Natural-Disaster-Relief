@@ -9,7 +9,8 @@ module.exports = {
     port: env.DB_PORT,
     dialect: "postgres",
     charset: "UTF8",
-    collate: "unicode"
+    collate: "unicode",
+    seederStorage: "sequelize"
   },
   test: {
     username: "root",
@@ -18,7 +19,8 @@ module.exports = {
     host: "127.0.0.1",
     dialect: "postgres",
     charset: "UTF8",
-    collate: "unicode"
+    collate: "unicode",
+    seederStorage: "sequelize"
   },
   production: {
     username: "root",
