@@ -14,7 +14,7 @@ export default class EventCompleteJourney extends IEventEditService {
     try {
       await this.userCheckService.checkOperator({ userId: data.userId });
       return await this.db.sequelize.transaction(async () => {
-        await this.eventRepository.updateJourneyStatus({ id: data.id, status: true });
+        await this.eventRepository.completeJourney({ id: data.id });
         const event = await this.eventRepository.getOne({ id: data.id });
         for (const supply of event.supplies) {
           if (

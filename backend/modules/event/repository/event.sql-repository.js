@@ -244,11 +244,15 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
     }
   }
 
-  updateJourneyStatus = async (data) => {
+  completeJourney = async (data) => {
     try {
       await this.Journey.update({
-        isCompleted: data.status
+        isCompleted: true,
+        endTime: new Date()
       }, { where: { eventId: data.id } });
+      await this.Event.update({
+        updatedAt: new Date()
+      }, { where: { id: data.id } });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("Journey status update failed: " + errors);
@@ -257,7 +261,6 @@ export default class EventSqlRepository extends IEventStorageRepository(IEventRe
 
   delete = async (data) => {
     try {
-      await this.Journey.destroy({ where: { eventId: data.id, isCompleted: false }, force: true });
       await this.Event.destroy({ where: { id: data.id }, force: true });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
