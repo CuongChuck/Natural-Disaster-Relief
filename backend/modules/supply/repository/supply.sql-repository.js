@@ -122,7 +122,7 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
         const status = Array.isArray(data.status) ? data.status : [data.status];
         whereClause.status = { [Op.in]: status };
       }
-      return await this.Supply.count({ whereClause });
+      return await this.Supply.count({ where: whereClause });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
       throw new Error("All supplies count failed: " + errors);
@@ -182,9 +182,11 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   countMine = async (data) => {
     try {
-      const whereClause = data.status ?
-        { donorId: data.donorId, status: { [Op.in]: data.status } } :
-        { donorId: data.donorId };
+      const whereClause = { donorId: data.donorId };
+      if (data.status) {
+        const status = Array.isArray(data.status) ? data.status : [data.status];
+        whereClause.status = { [Op.in]: status };
+      }
       return await this.Supply.count({ where: whereClause });
     } catch (err) {
       const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
