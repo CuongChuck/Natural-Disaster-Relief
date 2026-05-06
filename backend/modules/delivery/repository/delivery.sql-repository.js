@@ -49,6 +49,7 @@ export default class DeliverySqlRepository extends IDeliveryStorageRepository(ID
 		    LEFT JOIN "Users" O ON D."operatorId" = O."id"
 		    LEFT JOIN "Supplies" S ON D."supplyId" = S."id"
 		    LEFT JOIN "Users" U ON S."donorId" = U."id"
+        ORDER BY S."status" ASC, S."updatedAt" ASC
         LIMIT :limit OFFSET :offset;`,
         {
           replacements: {
@@ -118,6 +119,11 @@ export default class DeliverySqlRepository extends IDeliveryStorageRepository(ID
 		    LEFT JOIN "Supplies" S ON D."supplyId" = S."id"
 		    LEFT JOIN "Users" U ON S."donorId" = U."id"
         WHERE D."operatorId" = :operatorId
+        ORDER BY
+          CASE S."status"
+            WHEN 5 THEN 1
+            WHEN 6 THEN 2
+          END ASC, S."updatedAt" ASC
         LIMIT :limit OFFSET :offset;`,
         {
           replacements: {

@@ -45,7 +45,8 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   getAll = async (data) => {
     try {
-      const order = data.order ? ` ORDER BY S."status" ${data.order}` : '';
+      let order = data.order ? ` ORDER BY S."status" ${data.order}` : ' ORDER BY S."status" ASC';
+      order += ', S."updatedAt" ASC';
       let query = `
         WITH LatestRecords AS (
           SELECT DISTINCT ON (S."id")
@@ -155,7 +156,16 @@ class SupplySqlRepository extends ISupplyStorageRepository(ISupplyRepository) {
 
   getMine = async (data) => {
     try {
-      const order = data.order ? ` ORDER BY S."status" ${data.order}` : '';
+      let order = data.order ?
+        ` ORDER BY S."status" ${data.order}`
+        : ` ORDER BY
+              CASE S."status"
+                WHEN 2 THEN 1
+                WHEN 1 THEN 2
+                WHEN 3 THEN 3
+                WHEN 4 THEN 4
+              END ASC`;
+      order += ', S."updatedAt" ASC';
       let query = `SELECT S."id", S."name", S."quantity", S."status",
         S."count", S."category", S."unit", S."address_line",
         S."ward", S."district", S."city_province", S."createdAt",

@@ -60,7 +60,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
       if (conditions.length > 0) {
         query += ' WHERE ' + conditions.join(' AND ');
       }
-      query += ' ORDER BY R."createdAt" ASC LIMIT :limit OFFSET :offset';
+      query += ' ORDER BY R."status" ASC, R."priority" DESC, R."updatedAt" ASC LIMIT :limit OFFSET :offset';
       return await this.db.sequelize.query(query, {
         replacements,
         type: this.db.sequelize.QueryTypes.SELECT,
@@ -114,6 +114,16 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
 
   getMine = async (data) => {
     try {
+      const order = ` ORDER BY
+        CASE R."status"
+          WHEN 2 THEN 1
+          WHEN 1 THEN 2
+          WHEN 3 THEN 3
+          WHEN 7 THEN 7
+          WHEN 4 THEN 5
+          WHEN 5 THEN 6
+          WHEN 6 THEN 7
+        END ASC, R."priority" DESC, R."updatedAt" ASC`;
       let query = `SELECT R."id", R."name", R."quantity", R."priority",
         R."status", R."category", R."unit", R."address_line",
         R."ward", R."district", R."city_province", R."createdAt",
@@ -122,7 +132,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
         LEFT OUTER JOIN "Users" ON R."recipientId" = "Users"."id"
         WHERE R."recipientId" = :recipientId`;
       if (data.type) query += ' AND R."status" = :status';
-      query += ' LIMIT :limit OFFSET :offset';
+      query += order + ' LIMIT :limit OFFSET :offset';
       return await this.db.sequelize.query(query, {
         replacements: {
           recipientId: data.recipientId,
