@@ -17,7 +17,10 @@ export default class SupplyController {
     try {
       let { page = 1, size = 100, status = null,
             ward = undefined, district = undefined, city_province = undefined } = req.query;
-      const data = { page, size, status: req.status || status, order: req.order };
+      const data = {
+        page, size, status: req.status || status, order: req.order,
+        ward, district, city_province
+      };
       const result = await this.supplyFacade.getAll(data);
       res.status(200).json(result);
     }
