@@ -21,7 +21,7 @@ export default class Injection {
 
   getVerified = (req, res, next) => {
     try {
-      req.status = [3];
+      req.status = [3,4,5,6];
       next();
     } catch (err) {
       res.status(500).json({ message: err.message });
