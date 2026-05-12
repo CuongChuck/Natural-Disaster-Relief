@@ -1355,7 +1355,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BaseRequest'
+              $ref: '#/components/schemas/ReviewRequest'
       responses:
         201:
           description: Create a review for a request successfully
@@ -2189,6 +2189,13 @@ components:
         request:
           $ref: '#/components/schemas/Request'
 
+    ReviewRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            proof: { type: string }
+
     RequestReview:
       allOf:
         - $ref: '#/components/schemas/BaseRequest'
@@ -2196,6 +2203,7 @@ components:
           properties:
             id: { type: integer }
             reviewer: { type: string }
+            proof: { type: string }
             createdAt:
               type: string
               format: date-time

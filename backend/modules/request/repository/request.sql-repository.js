@@ -165,7 +165,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
     try {
       const result = await this.db.sequelize.query(
         `SELECT R."id", R."name", R."quantity", R."priority",
-        R."category", R."unit", R."address_line",
+        R."category", R."unit", R."proof", R."address_line",
         R."ward", R."district", R."city_province", R."createdAt",
         R."updatedAt", "Users"."username" AS "reviewer"
         FROM "RequestReview" AS R
@@ -215,6 +215,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
         name: data.name,
         quantity: data.quantity,
         priority: data.priority,
+        proof: data.proof,
         address_line: data.address_line,
         ward: data.ward,
         district: data.district,

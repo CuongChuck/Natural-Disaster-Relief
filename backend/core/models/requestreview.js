@@ -53,6 +53,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.ENUM('Thấp', 'Trung bình', 'Cao'),
       allowNull: false
     },
+    proof: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     address_line: {
       type: DataTypes.STRING
     },
