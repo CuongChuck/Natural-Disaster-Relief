@@ -119,10 +119,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
           WHEN 2 THEN 1
           WHEN 1 THEN 2
           WHEN 3 THEN 3
-          WHEN 7 THEN 7
-          WHEN 4 THEN 5
-          WHEN 5 THEN 6
-          WHEN 6 THEN 7
+          WHEN 4 THEN 4
         END ASC, R."priority" DESC, R."updatedAt" ASC`;
       let query = `SELECT R."id", R."name", R."quantity", R."priority",
         R."status", R."category", R."unit", R."address_line",
