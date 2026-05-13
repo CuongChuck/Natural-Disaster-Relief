@@ -2217,7 +2217,7 @@ components:
       type: object
       properties:
         message: { type: string }
-        request:
+        review:
           $ref: '#/components/schemas/RequestReview'
 
     RequestStatus:
