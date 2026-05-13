@@ -165,7 +165,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
         R."category", R."unit", R."proof", R."address_line",
         R."ward", R."district", R."city_province", R."createdAt",
         R."updatedAt", "Users"."username" AS "reviewer"
-        FROM "RequestReview" AS R
+        FROM "RequestReviews" AS R
         LEFT OUTER JOIN "Users" ON R."reviewerId" = "Users"."id"
         WHERE R."requestId" = :id;`,
         {
