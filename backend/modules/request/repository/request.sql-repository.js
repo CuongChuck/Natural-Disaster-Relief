@@ -39,7 +39,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
       };
       if (data.status) {
         conditions.push('R."status" = :status');
-        replacements.status = data.status;
+        replacements.status = data.type;
       }
       if (data.category) {
         conditions.push('R."category" = :category');
