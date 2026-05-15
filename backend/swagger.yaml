@@ -2260,6 +2260,7 @@ components:
       type: object
       properties:
         message: { type: string }
+        total_records: { type: integer }
         request:
           $ref: '#/components/schemas/Delivery'
 
