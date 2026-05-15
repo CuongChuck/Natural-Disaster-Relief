@@ -37,7 +37,7 @@ export default class RequestSqlRepository extends IRequestStorageRepository(IReq
         limit: data.limit,
         offset: data.offset
       };
-      if (data.status) {
+      if (data.type) {
         conditions.push('R."status" = :status');
         replacements.status = data.type;
       }
