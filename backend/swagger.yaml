@@ -2251,6 +2251,7 @@ components:
       type: object
       properties:
         message: { type: string }
+        total_records: { type: integer }
         requests:
           type: array
           items:
@@ -2260,7 +2261,6 @@ components:
       type: object
       properties:
         message: { type: string }
-        total_records: { type: integer }
         request:
           $ref: '#/components/schemas/Delivery'
 
