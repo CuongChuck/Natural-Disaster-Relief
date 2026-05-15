@@ -2252,7 +2252,7 @@ components:
       properties:
         message: { type: string }
         total_records: { type: integer }
-        requests:
+        deliveries:
           type: array
           items:
             $ref: '#/components/schemas/Delivery'
@@ -2261,7 +2261,7 @@ components:
       type: object
       properties:
         message: { type: string }
-        request:
+        delivery:
           $ref: '#/components/schemas/Delivery'
 
     Operator:
