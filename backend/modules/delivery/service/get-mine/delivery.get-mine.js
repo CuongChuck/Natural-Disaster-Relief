@@ -14,7 +14,7 @@ export default class DeliveryGetMineService extends IDeliveryGetMineService {
       data.offset = offset;
       delete data.size;
       delete data.page;
-      const [deliveryies, count] = await Promise.all([
+      const [deliveries, count] = await Promise.all([
         this.deliveryRepository.getMine(data),
         this.deliveryRepository.countMine(data)
       ]);
