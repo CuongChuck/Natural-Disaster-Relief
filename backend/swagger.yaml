@@ -1,0 +1,2271 @@
+openapi: 3.0.0
+info:
+  title: Natural Disaster Relief System API
+  version: 1.0.0
+  description: API documentation for Natural Disaster Relief System
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      security:
+        - bearerAuth: []
+      operationId: User_getUsers
+      parameters:
+        - name: role
+          in: query
+          description: List of role names
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user:
+    get:
+      summary: Get User profile
+      security:
+        - bearerAuth: []
+      operationId: User_getUser
+      responses:
+        200:
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    put:
+      summary: User profile edit
+      operationId: User_editUser
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        201:
+          description: User profile edit successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete User
+      operationId: User_deleteUser
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User profile deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/register:
+    post:
+      summary: Register a new user
+      operationId: User_registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        201:
+          description: User signed in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthentication'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/auth:
+    post:
+      summary: User login
+      operationId: User_signInUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignIn'
+      responses:
+        201:
+          description: User signed in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthentication'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /categories:
+    get:
+      summary: Get all categories
+      operationId: Category_getAll
+      responses:
+        200:
+          description: Get all categories successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /units:
+    get:
+      summary: Get all units
+      operationId: Unit_getAll
+      responses:
+        200:
+          description: Get all units successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supplies:
+    get:
+      summary: Get all verified supply offers
+      operationId: Supply_getAllVerified
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: ward
+          in: query
+          description: The ward of current supply location
+          required: false
+          schema:
+            type: string
+        - name: district
+          in: query
+          description: The district of current supply location
+          required: false
+          schema:
+            type: string
+        - name: city_province
+          in: query
+          description: The city_province of current supply location
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get all verified supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supplies/all:
+    get:
+      summary: Get all supply offers
+      operationId: Supply_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: status
+          in: query
+          description: The code of supply status to return
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get all supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supplies/unverified:
+    get:
+      summary: Get all unverified supply offers
+      operationId: Supply_getAllUnverified
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all unverified supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supplies/me/all:
+    get:
+      summary: Get all current user'ssupply offers
+      operationId: Supply_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all current user's supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supplies/me:
+    get:
+      summary: Get all current user's verified supply offers
+      operationId: Supply_getMineVerified
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all current user's verified supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supplies/me/unverified:
+    get:
+      summary: Get all current user's unverified supply offers
+      operationId: Supply_getMineUnverified
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all current user's unverified supply offers successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuppliesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supply:
+    post:
+      summary: Create a new supply offer
+      operationId: Supply_create
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseSupply'
+      responses:
+        201:
+          description: Create a new supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supply/{id}:
+    get:
+      summary: Get a verified supply offer
+      operationId: Supply_getOneVerified
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get a verified supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyGetResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Accept an unverified supply
+      operationId: Supply_accept
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Accept an unverified supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Donor edit an unverified supply offer
+      operationId: Supply_edit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseSupply'
+      responses:
+        201:
+          description: Edit a supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Donor delete an unverified supply offer
+      operationId: Supply_delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Delete a supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /supply/{id}/review:
+    get:
+      summary: Get a review on a supply offer
+      operationId: Supply_getReview
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get a review on a supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyReviewResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create a review for a supply offer
+      operationId: Supply_review
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseSupply'
+      responses:
+        201:
+          description: Create a review for a supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyReviewResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supply/{id}/proof:
+    post:
+      summary: Add a photo url to a supply offer
+      operationId: Supply_addProof
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Add a photo url to a supply offer successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /supply/status:
+    get:
+      summary: Get all supply status types
+      operationId: Supply_getStatus
+      responses:
+        200:
+          description: Get all supply status types successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyStatusResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /event/names:
+    get:
+      summary: Get all event names
+      operationId: Event_getNames
+      responses:
+        200:
+          description: Get all event names successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventNamesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events:
+    get:
+      summary: Get all events
+      operationId: Event_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all events successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/me:
+    get:
+      summary: Get my created events
+      operationId: Event_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get my created events successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /event/{id}:
+    get:
+      summary: Get an event's information
+      operationId: Event_getOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of event
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of event's supplies to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get an event successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete event
+      operationId: Event_delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of event
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Event deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /event/journey:
+    post:
+      summary: Create a new event
+      operationId: Event_create
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+      responses:
+        201:
+          description: Create a new event successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /event/journey/{id}:
+    post:
+      summary: Complete a journey event
+      operationId: Event_complete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of event
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          description: Complete a journey event successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      summary: Edit a journey event
+      operationId: Event_edit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of event
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+      responses:
+        201:
+          description: Edit a journey event successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disaster/types:
+    get:
+      summary: Get all disaster types
+      operationId: Map_getDisasterTypes
+      responses:
+        200:
+          description: Get all disaster types successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterTypesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disasters:
+    get:
+      summary: Get all disasters
+      operationId: Map_getAllDisasters
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all disaster records successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisastersResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disasters/me:
+    get:
+      summary: Get my created disasters
+      operationId: Map_getMyDisasters
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get my created disaster records successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisastersResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disaster/{id}:
+    get:
+      summary: Get a disaster's information
+      operationId: Map_getDisaster
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of disaster
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Disaster retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    patch:
+      summary: Edit a disaster record
+      operationId: Map_editDisaster
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of disaster
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseDisaster'
+      responses:
+        201:
+          description: Disaster edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete disaster
+      operationId: Map_deleteDisaster
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of disaster
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Disaster deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /map/disaster:
+    post:
+      summary: Create a new disaster record
+      operationId: Map_createDisaster
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseDisaster'
+      responses:
+        201:
+          description: Disaster created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisasterResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /requests:
+    get:
+      summary: Get all requests
+      operationId: Request_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: type
+          in: query
+          description: The status of requests
+          required: false
+          schema:
+            type: integer
+            default: null
+        - name: category
+          in: query
+          description: The category of requests
+          required: false
+          schema:
+            type: integer
+            default: null
+        - name: ward
+          in: query
+          description: The ward of request location
+          required: false
+          schema:
+            type: string
+            default: null
+        - name: district
+          in: query
+          description: The district of request location
+          required: false
+          schema:
+            type: string
+            default: null
+        - name: city_province
+          in: query
+          description: The city_province of request location
+          required: false
+          schema:
+            type: string
+            default: null
+      responses:
+        200:
+          description: Get all requests successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /requests/me:
+    get:
+      summary: Get my requests
+      operationId: Request_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: type
+          in: query
+          description: The status of requests
+          required: false
+          schema:
+            type: integer
+            default: null
+      responses:
+        200:
+          description: Get my requests successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestsResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/{id}:
+    get:
+      summary: Get a request's information
+      operationId: Request_getOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Request retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Request edit
+      operationId: Request_edit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseRequest'
+      responses:
+        201:
+          description: Request edit successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      summary: Accept request
+      operationId: Request_accept
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Request accepted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete a request
+      operationId: Request_delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Delete a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/{id}/review:
+    get:
+      summary: Get a review on a request
+      operationId: Request_getReview
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Get a review on a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestReviewResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create a review for a request
+      operationId: Request_review
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of supply offer
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewRequest'
+      responses:
+        201:
+          description: Create a review for a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestReviewResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/{id}/proof:
+    post:
+      summary: Add a photo to a request
+      operationId: Request_addProof
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of request
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Add a photo to a request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request:
+    post:
+      summary: Create a new request
+      operationId: Request_create
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseRequest'
+      responses:
+        201:
+          description: Create a new request successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /request/status:
+    get:
+      summary: Get all request status types
+      operationId: Request_getStatus
+      responses:
+        200:
+          description: Get all request status types successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestStatusResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /deliveries:
+    get:
+      summary: Get all deliveries
+      operationId: Delivery_getAll
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get all deliveries successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveriesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /deliveries/me:
+    get:
+      summary: Get my assigned deliveries
+      operationId: Delivery_getMine
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          description: The number of items to return
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        200:
+          description: Get my assigned deliveries successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveriesResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /delivery/{id}:
+    get:
+      summary: Get a delivery's information
+      operationId: Delivery_getOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of delivery
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Delivery retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryResponse'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /delivery/{id}/operator:
+    post:
+      summary: Assign an operator for delivery
+      operationId: Delivery_assignOperator
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of delivery
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Operator'
+      responses:
+        201:
+          description: Delivery edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /delivery/{id}/proof:
+    post:
+      summary: Add receipt and delivery proof
+      operationId: Delivery_addProof
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of delivery
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - receipt
+                - proof
+              properties:
+                receipt:
+                  type: string
+                  format: binary
+                proof:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Delivery edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        500:
+          description: Error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        email: { type: string }
+        name: { type: string }
+        username: { type: string }
+        phone: { type: string }
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+
+    UserRequest:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            password: { type: string }
+            role: { type: string }
+
+    UserResponse:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            role: { type: string }
+
+    UserProfile:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            password: { type: string }
+
+    Users:
+      type: object
+      properties:
+        id: { type: integer }
+        email: { type: string }
+        name: { type: string }
+        username: { type: string }
+        phone: { type: string }
+        role: { type: string }
+
+    UsersResponse:
+      type: object
+      properties:
+        message: { type: string }
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/Users'
+
+    UserAuthentication:
+      type: object
+      properties:
+        message: { type: string }
+        token: { type: string }
+        role: { type: string }
+        name: { type: string }
+
+    UserSignIn:
+      type: object
+      properties:
+        username: { type: string }
+        password: { type: string }
+
+    Categories:
+      type: object
+      description: "A map of category IDs to unit names"
+      additionalProperties:
+        type: string
+      example:
+        "1": "thuốc"
+        "2": "thực phẩm"
+        "3": "nước"
+        "4": "vật dụng"
+        "5": "tiền"
+
+    CategoriesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        categories:
+          $ref: '#/components/schemas/Categories'
+    
+    Units:
+      type: object
+      description: "A map of unit IDs to unit names"
+      additionalProperties:
+        type: string
+      example:
+        "1": "kg"
+        "2": "l"
+        "3": "phần"
+        "4": "cái"
+        "5": "nghìn VND"
+
+    BaseEvent:
+      type: object
+      properties:
+        description: { type: string }
+        startTime:
+          type: string
+          format: date-time
+          example: "2025-12-28T21:23:27Z"
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+        dest_address_line: { type: string }
+        dest_ward: { type: string }
+        dest_district: { type: string }
+        dest_city_province: { type: string }
+        plate: { type: string }
+
+    Event:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          properties:
+            id: { type: integer }
+            user: { type: string }
+            name: { type: integer }
+            isCompleted: { type: boolean }
+            endTime:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+    
+    EventRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          properties:
+            supplies:
+              type: array
+              items:
+                type: integer
+
+    EventsResponse:
+      type: object
+      properties:
+        message: { type: string }
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        total_records: { type: integer }
+
+    EventResponse:
+      type: object
+      properties:
+        message: { type: string }
+        event:
+          allOf:
+            - $ref: '#/components/schemas/BaseEvent'
+            - type: object
+              properties:
+                id: { type: integer }
+                isCompleted: { type: boolean }
+                endTime:
+                  type: string
+                  format: date-time
+                  example: "2025-12-28T21:23:27Z"
+                createdAt:
+                  type: string
+                  format: date-time
+                  example: "2025-12-28T21:23:27Z"
+                updatedAt:
+                  type: string
+                  format: date-time
+                  example: "2025-12-28T21:23:27Z"
+                user:
+                  type: object
+                  properties:
+                    name: { type: string }
+                    email: { type: string }
+                    phone: { type: string }
+                    role: { type: string }
+                supplies:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Supply'
+
+    EventNames:
+      type: object
+      description: "A map of IDs to event names"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Yêu cầu chỉnh sửa kiện hàng"
+        "2": "Chấp nhận kiện hàng"
+        "3": "Vận chuyển kiện hàng"
+        "4": "Giao hàng đến người nhận"
+
+    EventNamesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        names:
+          $ref: '#/components/schemas/EventNames'
+    
+    UnitsResponse:
+      type: object
+      properties:
+        message: { type: string }
+        units:
+          $ref: '#/components/schemas/Units'
+
+    BaseSupply:
+      type: object
+      properties:
+        name: { type: string }
+        count: { type: integer }
+        category: { type: integer }
+        unit: { type: integer }
+        quantity:
+          type: number
+          format: float
+          example: 19.99
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+
+    Supply:
+      allOf:
+        - $ref: '#/components/schemas/BaseSupply'
+        - type: object
+          properties:
+            id: { type: integer }
+            donor: { type: string }
+            proof: { type: string }
+            status: { type: integer }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    SupplyGet:
+      allOf:
+        - $ref: '#/components/schemas/Supply'
+        - type: object
+          properties:
+            events:
+              type: array
+              items:
+                $ref: '#/components/schemas/Event'
+
+    SupplyGetResponse:
+      type: object
+      properties:
+        message: { type: string }
+        supply:
+          $ref: '#/components/schemas/SupplyGet'
+
+    SuppliesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        supplies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supply'
+        total_records: { type: integer }
+
+    SupplyResponse:
+      type: object
+      properties:
+        message: { type: string }
+        supply:
+          $ref: '#/components/schemas/Supply'
+
+    SupplyReview:
+      allOf:
+        - $ref: '#/components/schemas/BaseSupply'
+        - type: object
+          properties:
+            id: { type: integer }
+            reviewer: { type: string }
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    SupplyReviewResponse:
+      type: object
+      properties:
+        message: { type: string }
+        review:
+          $ref: '#/components/schemas/SupplyReview'
+
+    SupplyStatus:
+      type: object
+      description: "A map of IDs to supply status"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Chờ xác nhận"
+        "2": "Yêu cầu chỉnh sửa"
+        "3": "Đang vận chuyển"
+        "4": "Chờ giao"
+        "5": "Đang giao"
+        "6": "Đã giao"
+
+    SupplyStatusResponse:
+      type: object
+      properties:
+        message: { type: string }
+        status:
+          $ref: '#/components/schemas/SupplyStatus'
+
+    Success:
+      type: object
+      properties:
+        message: { type: string }
+
+    Image:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+          description: The image file to upload
+
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+
+    BaseDisaster:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string }
+        severity: { type: string }
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+        type: { type: integer }
+        area:
+          oneOf:
+            - $ref: '#/components/schemas/GeoJSONPolygon'
+            - $ref: '#/components/schemas/GeoJSONMultiPolygon'
+          discriminator:
+            propertyName: type
+            mapping:
+              Polygon: '#/components/schemas/GeoJSONPolygon'
+              MultiPolygon: '#/components/schemas/GeoJSONMultiPolygon'
+
+    Disaster:
+      allOf:
+        - $ref: '#/components/schemas/BaseDisaster'
+        - type: object
+          properties:
+            id: { type: integer }
+            user_name: { type: string }
+            user_email: { type: string }
+            user_phone: { type: string }
+            user_role: { type: string }
+            center:
+              $ref: '#/components/schemas/GeoJSONPoint'
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    DisasterResponse:
+      type: object
+      properties:
+        message: { type: string }
+        disaster:
+          $ref: '#/components/schemas/Disaster'
+
+    Disasters:
+      allOf:
+        - $ref: '#/components/schemas/BaseDisaster'
+        - type: object
+          properties:
+            id: { type: integer }
+            user: { type: string }
+            center:
+              $ref: '#/components/schemas/GeoJSONPoint'
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    DisastersResponse:
+      type: object
+      properties:
+        message: { type: string }
+        disasters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Disasters'
+        total_records: { type: integer }
+
+    DisasterTypes:
+      type: object
+      description: "A map of IDs to disaster types"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Lũ lụt"
+        "2": "Sạt lở"
+        "3": "Bão"
+        "4": "Hạn hán"
+
+    DisasterTypesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        types:
+          $ref: '#/components/schemas/DisasterTypes'
+
+    GeoJSONPolygon:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Polygon]
+          description: "The geometry type must be Polygon"
+        coordinates:
+          type: array
+          description: "An array of linear rings. The first ring is the exterior boundary."
+          items:
+            type: array
+            description: "A linear ring (array of points). The first and last points must be identical."
+            items:
+              type: array
+              minItems: 2
+              maxItems: 2
+              items:
+                type: number
+              description: "[longitude, latitude]"
+              example: [103.84, 22.33]
+      example:
+        type: "Polygon"
+        coordinates:
+          - - [103.84, 22.33]
+            - [103.86, 22.33]
+            - [103.86, 22.35]
+            - [103.84, 22.35]
+            - [103.84, 22.33]
+
+    GeoJSONMultiPolygon:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [MultiPolygon]
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: array
+                minItems: 2
+                maxItems: 2
+                items: { type: number }
+
+    GeoJSONPoint:
+      type: object
+      required:
+        - type
+        - coordinates
+      properties:
+        type:
+          type: string
+          enum: [Point]
+          description: "The geometry type must be Point"
+        coordinates:
+          type: array
+          minItems: 2
+          maxItems: 2
+          items:
+            type: number
+          description: "[longitude, latitude]"
+          example: [103.84, 22.33]
+
+    BaseRequest:
+      type: object
+      properties:
+        name: { type: string }
+        quantity:
+          type: number
+          format: float
+          example: 19.99
+        category: { type: integer }
+        unit: { type: integer }
+        priority: { type: string }
+        address_line: { type: string }
+        ward: { type: string }
+        district: { type: string }
+        city_province: { type: string }
+
+    Request:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            id: { type: integer }
+            status: { type: integer }
+            proof: { type: string }
+            recipient: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+
+    RequestsResponse:
+      type: object
+      properties:
+        message: { type: string }
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request'
+        total_records: { type: integer }
+
+    RequestResponse:
+      type: object
+      properties:
+        message: { type: string }
+        request:
+          $ref: '#/components/schemas/Request'
+
+    ReviewRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            proof: { type: string }
+
+    RequestReview:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            id: { type: integer }
+            reviewer: { type: string }
+            proof: { type: string }
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-12-28T21:23:27Z"
+    
+    RequestReviewResponse:
+      type: object
+      properties:
+        message: { type: string }
+        review:
+          $ref: '#/components/schemas/RequestReview'
+
+    RequestStatus:
+      type: object
+      description: "A map of IDs to request status"
+      additionalProperties:
+        type: string
+      example:
+        "1": "Chờ xác nhận"
+        "2": "Yêu cầu chỉnh sửa"
+        "3": "Đang thực hiện"
+        "4": "Đã giao"
+
+    RequestStatusResponse:
+      type: object
+      properties:
+        message: { type: string }
+        status:
+          $ref: '#/components/schemas/RequestStatus'
+
+    Delivery:
+      allOf:
+        - $ref: '#/components/schemas/Supply'
+        - type: object
+          properties:
+            recipient: { type: string }
+            operator: { type: string }
+            receipt: { type: string }
+
+    DeliveriesResponse:
+      type: object
+      properties:
+        message: { type: string }
+        total_records: { type: integer }
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Delivery'
+
+    DeliveryResponse:
+      type: object
+      properties:
+        message: { type: string }
+        delivery:
+          $ref: '#/components/schemas/Delivery'
+
+    Operator:
+      type: object
+      properties:
+        operatorId: { type: integer }
+        recipientId: { type: integer }

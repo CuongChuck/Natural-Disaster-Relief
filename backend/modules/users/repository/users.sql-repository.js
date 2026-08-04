@@ -1,30 +1,140 @@
-const IUserRepository = require('../users.interface-repository');
-const bcrypt = require('bcryptjs');
+import IUserRepository from './users.interface-repository.js';
 
 class UserSqlRepository extends IUserRepository {
-  constructor({ userModel }) {
+  constructor({ User }) {
     super();
-    this.userModel = userModel;
+    this.User = User;
   }
 
-  async createUser({ name, username, email, password, role }, transaction){
-    const hashedPassword = await bcrypt.hash(password, 10);
+  getUser = async (data) => {
     try {
-      return await this.userModel.create({ name: name, username: username, email: email, password: hashedPassword, role: role }, { transaction });
-    }
-    catch (err) {
-      throw new Error("User creation failed: " + err.message);
+      const user = await this.User.findByPk(data.userId, {
+        attributes: [
+          'email',
+          'name',
+          'username',
+          'phone',
+          'address_line',
+          'ward',
+          'district',
+          'city_province',
+          'role'
+        ]
+      });
+      if (!user) throw new Error('There is no such user');
+      return user.toJSON();
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
     }
   }
 
-  async findByUsername(username, transaction) {
+  getUsers = async (data) => {
+    try { 
+      return await this.User.findAll({ 
+        attributes: [ 'id', 'username', 'name', 'phone', 'email', 'role' ],
+        where: {
+          ...(data.role && { role: data.role })
+        },
+        raw: true
+      });
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Users retrieval failed: " + errors);
+    }
+  }
+
+  createUser = async (data) => {
     try {
-      return await this.userModel.findOne({ where: { username: username } });
+      const user = await this.User.create({
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        address_line: data.address_line,
+        ward: data.ward,
+        district: data.district,
+        city_province: data.city_province,
+        role: data.role
+      });
+      if (!user) throw new Error('Cannot create user');
+      return user.toJSON();
     }
     catch (err) {
-      throw new Error("User retrieval failed: " + err.message);
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User creation failed: " + errors);
+    }
+  }
+
+  findByUsername = async (data) => {
+    try {
+      const user = await this.User.findOne({ where: { username: data.username } });
+      if (!user) throw new Error('There is no user with username: ' + data.username);
+      return user.toJSON();
+    }
+    catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User retrieval failed: " + errors);
+    }
+  }
+
+  checkOperator = async (data) => {
+    try {
+      const user = await this.User.findByPk(data.userId, {
+        attributes: [ 'role' ]
+      });
+      if (!(['ADMIN', 'VOLUNTEER'].includes(user.role)))
+        throw new Error('User is not authorized to perform this action');
+    } catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("Operator check failed: " + errors);
+    }
+  }
+
+  updateUser = async (data) => {
+    try {
+      const user = await this.User.findByPk(data.userId);
+      if (!user) throw new Error('There is no such user');
+      await this.User.update({
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        address_line: data.address_line,
+        ward: data.ward,
+        district: data.district,
+        city_province: data.city_province
+      }, { where: { id: data.userId } });
+      return await this.User.findByPk(data.userId, { attributes: [
+        'email',
+        'name',
+        'username',
+        'phone',
+        'address_line',
+        'ward',
+        'district',
+        'city_province'
+      ] });
+    }
+    catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User edit failed: " + errors);
+    }
+  }
+
+  deleteUser = async (data) => {
+    try {
+      const user = await this.User.findByPk(data.userId);
+      if (!user) throw new Error('There is no such user');
+      await this.User.destroy({ where: { id: data.userId }, force: true });
+    }
+    catch (err) {
+      const errors = err.errors ? err.errors.reduce((acc, ele) => acc + ele.message + ', ', '') : err.message;
+      throw new Error("User delete failed: " + errors);
     }
   }
 }
 
-module.exports = UserSqlRepository;
+export default UserSqlRepository;

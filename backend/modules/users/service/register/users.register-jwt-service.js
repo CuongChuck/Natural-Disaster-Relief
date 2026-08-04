@@ -1,31 +1,28 @@
-const jwt = require('jsonwebtoken');
-const env = require('../../../../core/config/env');
+import bcrypt from 'bcryptjs';
 
-const IUserRegisterService = require('./users.interface-register');
-const { db } = require('../../../../core/models');
+import IUserRegisterService from './users.interface-register.js';
 
 class UserRegisterJwtService extends IUserRegisterService {
-  constructor({ userRepository }) {
+  constructor({ userRepository, jwtService }) {
     super();
     this.userRepository = userRepository;
+    this.jwtService = jwtService;
   }
 
-  async registerUser({ name, username, email, password, role }) {
-    const transaction = await db.sequelize.transaction();
+  async registerUser(data) {
     try {
-      const user = await this.userRepository.createUser({ name, username, email, password, role }, transaction);
-      await transaction.commit();
-      return { user, token: jwt.sign(
-        { id: user.id, role: user.role },
-        env.PRIVATE_KEY,
-        { expiresIn: '2h', algorithm: 'RS256' }
-      ) };
+      data.password = await bcrypt.hash(data.password, 10);
+      const user = await this.userRepository.createUser(data);
+      return {
+        token: this.jwtService.generateToken({ id: user.id, role: user.role }),
+        role: user.role,
+        name: user.name
+      };
     }
     catch (err) {
-      await transaction.rollback();
       throw err;
     }
   }
 }
 
-module.exports = UserRegisterJwtService;
+export default UserRegisterJwtService;

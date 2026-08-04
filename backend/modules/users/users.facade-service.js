@@ -1,27 +1,43 @@
 class UserFacadeService {
-  constructor({ userRegisterJwtService, userSignInJwtService }) {
-    this.registerStrategy = {
-      jwt: userRegisterJwtService
-    };
-
-    this.signInStrategy = {
-      jwt: userSignInJwtService
-    };
+  constructor(opts) {
+    this.getService = opts.userGetService;
+    this.registerService = opts.userRegisterJwtService;
+    this.signInService = opts.userSignInJwtService;
+    this.editService = opts.userEditService;
+    this.deleteService = opts.userDeleteService;
+    this.getManyService = opts.userGetManyService;
   }
 
-  async registerUser(data) {
+  getUser = async (data) => {
     try {
-      const strategy = this.registerStrategy[data.strategy];
-      const { user, token } = await strategy.registerUser({
-        name: data.name,
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        role: data.role
-      });
+      const user = await this.getService.getUser(data);
       return {
-        message: `User registered via ${data.strategy} strategy`,
-        user, token
+        message: `User profile retrieval successfully`,
+        user
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  getUsers = async (data) => {
+    try {
+      const users = await this.getManyService.getUsers(data);
+      return {
+        message: `Users retrieval successfully`,
+        users
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  registerUser = async (data) => {
+    try {
+      const result = await this.registerService.registerUser(data);
+      return {
+        message: `Người dùng đăng ký thành công`,
+        ...result
       };
     }
     catch (err) {
@@ -29,26 +45,36 @@ class UserFacadeService {
     }
   }
 
-  async signInUser(data) {
+  signInUser = async (data) => {
     try {
-      const strategy = this.signInStrategy(data.strategy);
-      const { user, token } = await strategy.signInUser({
-        username: data.username,
-        password: data.password
-      });
+      const result = await this.signInService.signInUser(data);
       return {
-        message: `User signed in via ${data.strategy} strategy`,
-        user, token
-      }
+        message: `User signed in successfully`,
+        ...result
+      };
     }
     catch (err) {
       throw err;
     }
   }
 
-  async editUser(data) {
+  editUser = async (data) => {
     try {
+      const user = await this.editService.editUser(data);
+      return {
+        message: `User profile edit successfully`,
+        user
+      };
+    }
+    catch (err) {
+      throw err;
+    }
+  }
 
+  deleteUser = async (data) => {
+    try {
+      await this.deleteService.deleteUser(data);
+      return { message: `User deleted successfully` };
     }
     catch (err) {
       throw err;
@@ -56,4 +82,4 @@ class UserFacadeService {
   }
 }
 
-module.exports = UserFacadeService;
+export default UserFacadeService;

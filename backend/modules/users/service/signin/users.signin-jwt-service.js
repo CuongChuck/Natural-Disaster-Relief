@@ -1,31 +1,34 @@
-const jwt = require('jsonwebtoken');
-const env = require('../../../../core/config/env');
+import bcrypt from 'bcryptjs';
 
-const IUserSignIn = require('./users.interface-signin.js');
-const { db } = require('../../../../core/models');
+import IUserSignInService from './users.interface-signin.js';
 
-class UserSignInJwtService extends IUserSignIn {
-  constructor({ userRepository }) {
+class UserSignInJwtService extends IUserSignInService {
+  constructor({ userRepository, jwtService }) {
     super();
     this.userRepository = userRepository;
+    this.jwtService = jwtService;
   }
 
-  async signInUser({ username, password }) {
-    const transaction = db.sequelize.transaction();
+  async signInUser(data) {
     try {
-      const user = await this.userRepository.findByUsername(username, transaction);
-      await transaction.commit();
-      return { user, token: jwt.sign(
-        { id: user.id, role: user.role },
-        env.PRIVATE_KEY,
-        { expiresIn: '2h', algorithm: 'RS256' }
-      ) };
+      const user = await this.userRepository.findByUsername(data);
+      if (!user) {
+        throw new Error("Username is incorrect.");
+      }
+      const isMatch = await bcrypt.compare(data.password, user.password);
+      if (!isMatch) {
+        throw new Error("Password is incorrect.");
+      }
+      return {
+        token: this.jwtService.generateToken({ id: user.id, role: user.role }),
+        role: user.role,
+        name: user.name
+      };
     }
     catch (err) {
-      await transaction.rollback();
       throw err;
     }
   }
 }
 
-module.exports = UserSignInJwtService;
+export default UserSignInJwtService;

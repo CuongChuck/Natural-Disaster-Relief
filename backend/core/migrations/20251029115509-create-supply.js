@@ -1,63 +1,80 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Supplies', {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true,
-        type: Sequelize.INTEGER.UNSIGNED.ZEROFILL
+export async function up(queryInterface, Sequelize) {
+  await queryInterface.createTable('Supplies', {
+    id: {
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      type: Sequelize.INTEGER
+    },
+    donorId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
       },
-      categoryId: {
-        type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
-        allowNull: false,
-        references: {
-          model: 'Categories',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      unitId: {
-        type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
-        allowNull: false,
-        references: {
-          model: 'Units',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      donorId: {
-        type: Sequelize.INTEGER.UNSIGNED.ZEROFILL,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      name: {
-        type: Sequelize.STRING
-      },
-      quantity: {
-        type: Sequelize.FLOAT,
-        allowNull: false
-      },
-      expectedDestination: {
-        type: Sequelize.TEXT,
-        allowNull: false
-      },
-      actualDestination: {
-        type: Sequelize.TEXT,
-        allowNull: false
-      }
-    });
-  },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
+    },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    quantity: {
+      type: Sequelize.FLOAT,
+      allowNull: false
+    },
+    category: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    unit: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    count: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    proof_url: {
+      type: Sequelize.STRING
+    },
+    proof_public_id: {
+      type: Sequelize.STRING,
+    },
+    status: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    },
+    address_line: {
+      type: Sequelize.STRING
+    },
+    ward: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    district: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    city_province: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    }
+  });
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Supplies');
-  }
-};
+  await queryInterface.addIndex('Supplies', ['donorId']);
+}
+export async function down(queryInterface, Sequelize) {
+  await queryInterface.dropTable('Supplies');
+}

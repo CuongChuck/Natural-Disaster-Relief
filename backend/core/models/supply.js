@@ -1,8 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
   class Supply extends Model {
     /**
      * Helper method for defining associations.
@@ -10,14 +8,26 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Supply.belongsTo(models['User'], { as: 'donor' });
-      Supply.belongsTo(models['Category']);
-      Supply.belongsTo(models['Unit']);
-      Supply.belongsToMany(models['Event'], { through: 'SupplyEvent' });
+      Supply.belongsTo(models['User'], { as: 'donor', foreignKey: 'donorId' });
+      Supply.hasOne(models['Delivery'], { foreignKey: 'supplyId' });
+      Supply.hasOne(models['SupplyReview'], { foreignKey: 'supplyId' });
     }
   }
   Supply.init({
-    name: DataTypes.STRING,
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
+    donorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     quantity: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -29,17 +39,59 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    expectedDestination: {
-      type: DataTypes.TEXT,
+    count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isPositive(value) {
+          if (value <= 0) {
+            throw new Error('Count must be a positive integer');
+          }
+        }
+      }
+    },
+    category: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    actualDestination: {
-      type: DataTypes.TEXT,
+    unit: {
+      type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    proof_url: {
+      type: DataTypes.STRING,
+      validate: {
+        isUrl: true
+      }
+    },
+    proof_public_id: {
+      type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    address_line: {
+      type: DataTypes.STRING
+    },
+    ward: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city_province: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'Supply',
+    indexes: [
+      { fields: ['donorId'] },
+    ],
   });
   return Supply;
 };

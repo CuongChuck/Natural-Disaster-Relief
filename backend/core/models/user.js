@@ -1,5 +1,6 @@
 'use strict';
-module.exports = (sequelize, DataTypes, Model) => {
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
   class User extends Model {
     /**
      * Helper method for defining associations.
@@ -7,11 +8,21 @@ module.exports = (sequelize, DataTypes, Model) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.hasMany(models['Supply']);
-      User.hasMany(models['Request']);
+      User.hasMany(models['Supply'], { foreignKey: 'donorId' });
+      User.hasMany(models['SupplyReview'], { foreignKey: 'reviewerId' });
+      User.hasMany(models['Request'], { foreignKey: 'recipientId' });
+      User.hasMany(models['RequestReview'], { foreignKey: 'reviewerId' });
+      User.hasMany(models['Event'], { foreignKey: 'userId' });
+      User.hasMany(models['Delivery'], { foreignKey: 'recipientId' });
+      User.hasMany(models['Delivery'], { foreignKey: 'operatorId' });
     }
   }
   User.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -26,6 +37,7 @@ module.exports = (sequelize, DataTypes, Model) => {
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         isEmail: true
       }
@@ -34,13 +46,36 @@ module.exports = (sequelize, DataTypes, Model) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isNumeric: true,
+        len: [10,10]
+      }
+    },
+    address_line: {
+      type: DataTypes.STRING
+    },
+    ward: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city_province: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     role: {
-      type: DataTypes.ENUM('admin', 'recipient', 'donor', 'volunteer'),
+      type: DataTypes.ENUM('ADMIN', 'RECIPIENT', 'DONOR', 'VOLUNTEER'),
       allowNull: false
     }
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'User'
   });
   return User;
 };

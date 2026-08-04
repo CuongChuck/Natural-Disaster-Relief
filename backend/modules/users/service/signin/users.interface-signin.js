@@ -1,13 +1,13 @@
-class IUserSignIn {
+class IUserSignInService {
   constructor() {
-    if (new.target === IUserSignIn) {
+    if (new.target === IUserSignInService) {
       throw new Error('Cannot instantiate interface.');
     }
   }
 
-  async signInUser() {
+  async signInUser(data) {
     throw new Error('Method not implemented.');
   }
 }
 
-module.exports = IUserSignIn;
+export default IUserSignInService;

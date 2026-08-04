@@ -1,12 +1,20 @@
-const express = require('express');
+import express from 'express';
 
-const container = require('../../core/di/user-container');
+import container from '../../core/middleware/awilix-container.js';
 
 const router = express.Router();
-const userController = container.resolve('userController');
+const controllerHelper = container.resolve('controllerHelper');
+const authHandler = container.resolve('authHandler');
+const inject = container.resolve('injection');
 
-router.post('/register', userController.register);
-router.get('/auth', userController.signIn);
-router.put('/edit', userController.edit)
+router.get('/user', authHandler.verifyToken, controllerHelper.invoke('get', 'userController'));
+router.get('/users',
+	authHandler.verifyToken,
+	controllerHelper.invoke('getMany', 'userController')
+);
+router.post('/user/register', controllerHelper.invoke('register', 'userController'));
+router.post('/user/auth', controllerHelper.invoke('signIn', 'userController'));
+router.put('/user', authHandler.verifyToken, controllerHelper.invoke('edit', 'userController'));
+router.delete('/user', authHandler.verifyToken, controllerHelper.invoke('delete', 'userController'));
 
-module.exports = router;
+export default router;
